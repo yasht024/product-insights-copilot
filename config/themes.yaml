@@ -1,0 +1,7 @@
+version: v1
+status: placeholder
+description: >-
+  No production taxonomy is fixed in Phase 0. Phase 2 may use this file for
+  approved seed labels without changing historical analysis versions.
+themes: []
+

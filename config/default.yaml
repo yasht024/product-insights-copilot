@@ -1,0 +1,78 @@
+config_version: v1
+environment: development
+
+product:
+  name: "Groww"
+  google_play_package: "com.nextbillion.groww"
+  apple_app_store_id: "1404871703"
+
+sources:
+  google_play:
+    adapter: "approved_csv"
+    format: "csv"
+    provider: "python_scraper"
+    approval_status: "approved"
+    provenance_required: true
+    sample_path: "var/imports/google_play_reviews.csv"
+  apple_app_store:
+    adapter: "approved_json"
+    format: "json"
+    provider: "python_scraper"
+    approval_status: "approved"
+    provenance_required: true
+    sample_path: "var/imports/app_store_reviews.json"
+
+reporting:
+  lookback_weeks: 10
+  timezone: Asia/Kolkata
+  schedule: "0 9 * * 1"
+  minimum_eligible_reviews: 1
+  max_themes: 5
+  highlighted_themes: 3
+  quote_count: 3
+  action_count: 3
+  max_words: 250
+  naming_convention: "Groww Product Pulse - {reporting_week_end}"
+
+analysis:
+  framework: "langchain"
+  provider: "google_genai"
+  model: "gemini-3.5-pro"
+  approved_for_production: true
+  temperature: 0.0
+  max_concurrency: 4
+  prompt_version: "v1"
+  schema_version: "v1"
+
+workflow:
+  framework: langgraph
+  checkpointer: sqlite
+
+mcp:
+  client: "langchain-mcp-adapters"
+  server_alias: "remote-mcp-server"
+  transport: "sse"
+  server_url: "https://mcp-server-production-9aac.up.railway.app/sse"
+  capabilities_confirmed: true
+  tool_roles:
+    document_upsert: "google_docs_append_text"
+    draft_create: "gmail_create_draft"
+
+delivery:
+  google_drive_folder_id: "Groww Product Insights"
+  allowed_drive_folder_ids: ["Groww Product Insights"]
+  target_document_id: "1huBpx812sw11crg6urd3KFj7xaZx1NgU-4JICmLQDxY"
+  sharing_policy: "internal"
+  recipient: "yash887120@gmail.com"
+  allowed_recipients: ["yash887120@gmail.com"]
+  create_email_draft_only: true
+
+retention:
+  raw_import_days: 7
+  sanitized_review_days: 180
+  audit_days: 365
+  policy_approved: true
+
+persistence:
+  database_path: var/product_insights.sqlite3
+  fingerprint_key_environment_variable: PRODUCT_INSIGHTS_FINGERPRINT_KEY

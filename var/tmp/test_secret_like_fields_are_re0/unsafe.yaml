@@ -1,0 +1,68 @@
+analysis:
+  api_key: synthetic-value
+  approved_for_production: false
+  framework: langchain
+  max_concurrency: 4
+  model: deterministic-fixture
+  prompt_version: v1
+  provider: fake
+  schema_version: v1
+  temperature: 0
+config_version: v1
+delivery:
+  allowed_drive_folder_ids: []
+  allowed_recipients: []
+  create_email_draft_only: true
+  google_drive_folder_id: pending-drive-folder
+  recipient: pending-recipient
+  sharing_policy: pending-approval
+environment: development
+mcp:
+  capabilities_confirmed: false
+  client: langchain-mcp-adapters
+  docs_server_alias: pending-docs-server
+  gmail_server_alias: pending-gmail-server
+  tool_roles:
+    document_upsert: docs_upsert
+    draft_create: gmail_create_draft
+persistence:
+  database_path: var/product_insights.sqlite3
+  fingerprint_key_environment_variable: PRODUCT_INSIGHTS_FINGERPRINT_KEY
+product:
+  apple_app_store_id: '1404871703'
+  google_play_package: com.nextbillion.groww
+  name: Groww
+reporting:
+  action_count: 3
+  highlighted_themes: 3
+  lookback_weeks: 10
+  max_themes: 5
+  max_words: 250
+  minimum_eligible_reviews: 20
+  naming_convention: Groww Product Pulse - {reporting_week_end}
+  quote_count: 3
+  schedule: 0 9 * * 1
+  timezone: Asia/Kolkata
+retention:
+  audit_days: 365
+  policy_approved: false
+  raw_import_days: 7
+  sanitized_review_days: 180
+sources:
+  apple_app_store:
+    adapter: fixture_json
+    approval_status: fixture_only
+    format: json
+    provenance_required: true
+    provider: synthetic-phase0-fixture
+    sample_path: tests/fixtures/app_store/reviews.json
+  google_play:
+    adapter: fixture_csv
+    approval_status: fixture_only
+    format: csv
+    provenance_required: true
+    provider: synthetic-phase0-fixture
+    sample_path: tests/fixtures/google_play/reviews.csv
+workflow:
+  checkpointer: sqlite
+  framework: langgraph

@@ -1,0 +1,69 @@
+[build-system]
+requires = ["hatchling==1.27.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "product-insights-copilot"
+version = "0.1.0"
+description = "Privacy-safe weekly product insights from approved app-store review exports"
+readme = "README.md"
+requires-python = ">=3.12,<3.15"
+dependencies = [
+  "langchain==1.3.18",
+  "langchain-groq",
+  "langchain-mcp-adapters==0.3.2",
+  "langgraph==1.2.11",
+  "pydantic==2.13.5",
+  "PyYAML==6.0.3",
+  "tzdata==2025.2",
+  "sentence-transformers>=3.0.0",
+  "scikit-learn>=1.4.0",
+  "python-json-logger>=2.0.7",
+  "croniter>=2.0.5",
+  "google-play-scraper>=1.2.4",
+  "app-store-scraper>=0.1.1",
+]
+
+[project.scripts]
+product-insights = "product_insights.cli:main"
+
+[project.optional-dependencies]
+dev = [
+  "detect-secrets==1.5.0",
+  "mypy==2.3.1",
+  "pip-audit==2.10.1",
+  "pytest==9.1.1",
+  "pytest-cov==7.0.0",
+  "pytest-asyncio>=0.23.0",
+  "ruff==0.16.5",
+  "types-PyYAML==6.0.12.20250915",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/product_insights"]
+
+[tool.pytest.ini_options]
+addopts = "--strict-config --strict-markers --cov=product_insights --cov-report=term-missing --cov-fail-under=90"
+testpaths = ["tests"]
+asyncio_mode = "auto"
+markers = [
+  "asyncio: mark test as an asyncio coroutine",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["*.md"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "S", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101"]
+"src/product_insights/persistence/repository.py" = ["E501"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+packages = ["product_insights"]
+mypy_path = "src"

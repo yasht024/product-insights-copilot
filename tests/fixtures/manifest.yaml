@@ -1,0 +1,25 @@
+dataset_version: phase0-v1
+classification: synthetic-non-production
+created_at: "2026-09-02T00:00:00+05:30"
+source_approval: fixture_only
+collection_period:
+  start: "2026-08-23"
+  end: "2026-08-30"
+filters:
+  - exact approved product identifier
+  - public rows only
+  - reviewer identity never enters the domain model
+expected_cases:
+  valid: true
+  malformed: true
+  duplicates: true
+  multilingual: true
+  synthetic_pii: true
+  prompt_injection: true
+files:
+  google_play/reviews.csv:
+    row_count: 10
+    sha256: 748e9e7fef6d796c95dff067300616a085af43be1091ad9af9610efaf9d40c55
+  app_store/reviews.json:
+    row_count: 8
+    sha256: 23cc530b8ac3e2e526e060fe28555648dda76c34f305d8ceb36a28acfe90aa02

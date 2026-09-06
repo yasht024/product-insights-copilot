@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      "colors": {
+        "surface-bright": "#383941",
+        "surface-container-high": "#292931",
+        "surface": "#12131a",
+        "on-background": "#e3e1ec",
+        "on-primary": "#1000a9",
+        "on-secondary-container": "#d6a9ff",
+        "on-tertiary-fixed-variant": "#004e5c",
+        "on-secondary": "#490080",
+        "tertiary": "#4cd7f6",
+        "on-secondary-fixed": "#2c0051",
+        "on-primary-fixed": "#07006c",
+        "surface-tint": "#c0c1ff",
+        "primary-fixed": "#e1e0ff",
+        "background": "#12131a",
+        "on-secondary-fixed-variant": "#6900b3",
+        "tertiary-fixed-dim": "#4cd7f6",
+        "secondary-fixed-dim": "#ddb7ff",
+        "tertiary-fixed": "#acedff",
+        "primary": "#c0c1ff",
+        "surface-container-low": "#1a1b22",
+        "on-tertiary-container": "#002f38",
+        "on-primary-fixed-variant": "#2f2ebe",
+        "primary-fixed-dim": "#c0c1ff",
+        "on-tertiary-fixed": "#001f26",
+        "outline": "#908fa0",
+        "surface-dim": "#12131a",
+        "primary-container": "#8083ff",
+        "on-primary-container": "#0d0096",
+        "on-error": "#690005",
+        "surface-variant": "#33343c",
+        "surface-container-highest": "#33343c",
+        "on-surface": "#e3e1ec",
+        "tertiary-container": "#009eb9",
+        "inverse-on-surface": "#2f3038",
+        "error": "#ffb4ab",
+        "secondary-fixed": "#f0dbff",
+        "surface-container-lowest": "#0d0e15",
+        "inverse-surface": "#e3e1ec",
+        "on-tertiary": "#003640",
+        "outline-variant": "#464554",
+        "on-error-container": "#ffdad6",
+        "secondary": "#ddb7ff",
+        "inverse-primary": "#494bd6",
+        "on-surface-variant": "#c7c4d7",
+        "secondary-container": "#6f00be",
+        "surface-container": "#1e1f26",
+        "error-container": "#93000a"
+      },
+      "borderRadius": {
+        "DEFAULT": "0.125rem",
+        "lg": "0.25rem",
+        "xl": "0.5rem",
+        "full": "0.75rem"
+      },
+      "spacing": {
+        "space-lg": "1.5rem",
+        "space-xs": "0.5rem",
+        "sidebar-w": "16rem",
+        "space-xl": "2rem",
+        "space-2xs": "0.25rem",
+        "margin-desktop": "2rem",
+        "space-2xl": "3rem",
+        "gutter-desktop": "1.5rem",
+        "space-sm": "0.75rem",
+        "space-md": "1rem",
+        "inspector-w": "26rem"
+      },
+      "fontFamily": {
+        "label-caps": ["JetBrains Mono"],
+        "title-md": ["Inter"],
+        "display-sm": ["Inter"],
+        "body-md": ["Inter"],
+        "body-lg": ["Inter"],
+        "body-sm": ["Inter"],
+        "title-lg": ["Inter"],
+        "display-lg": ["Inter"],
+        "display-sm-mobile": ["Inter"],
+        "mono-metric": ["JetBrains Mono"]
+      },
+      "fontSize": {
+        "label-caps": ["0.6875rem", {"lineHeight": "1.2", "letterSpacing": "0.06em", "fontWeight": "600"}],
+        "title-md": ["1.0625rem", {"lineHeight": "1.45", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+        "display-sm": ["2rem", {"lineHeight": "1.2", "letterSpacing": "-0.025em", "fontWeight": "600"}],
+        "body-md": ["0.875rem", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}],
+        "body-lg": ["1rem", {"lineHeight": "1.6", "letterSpacing": "-0.005em", "fontWeight": "400"}],
+        "body-sm": ["0.75rem", {"lineHeight": "1.45", "letterSpacing": "0.005em", "fontWeight": "400"}],
+        "title-lg": ["1.25rem", {"lineHeight": "1.4", "letterSpacing": "-0.015em", "fontWeight": "600"}],
+        "display-lg": ["3rem", {"lineHeight": "1.15", "letterSpacing": "-0.03em", "fontWeight": "700"}],
+        "display-sm-mobile": ["1.5rem", {"lineHeight": "1.25", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+        "mono-metric": ["0.8125rem", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "500"}]
+      }
+    }
+  }
+}</script></head><body class="bg-background font-body-md text-body-md text-on-surface"><aside class="fixed left-0 top-0 h-full w-sidebar-w bg-surface-container-lowest/90 backdrop-blur-xl z-50 flex flex-col justify-between py-space-md shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col gap-space-md"><div class="px-space-md flex items-center justify-between"><div class="flex items-center gap-space-xs"><div class="w-8 h-8 rounded-xl bg-primary-container flex items-center justify-center text-on-primary-container font-title-lg text-title-lg"><span class="material-symbols-outlined text-[18px]">psychology</span></div><div class="flex flex-col"><span class="font-title-md text-title-md font-semibold text-on-surface tracking-tight">Insights Copilot</span><span class="font-label-caps text-label-caps text-on-surface-variant">v2.4 Enterprise</span></div></div></div><div class="px-space-md"><button class="w-full flex items-center justify-between px-space-sm py-space-xs rounded-xl bg-surface-container-low hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors"><div class="flex items-center gap-space-xs overflow-hidden"><span class="material-symbols-outlined text-[18px] text-tertiary">layers</span><span class="font-body-sm text-body-sm font-medium text-on-surface truncate">Acme Mobile App</span></div><span class="material-symbols-outlined text-[16px] text-on-surface-variant">unfold_more</span></button></div><nav class="flex flex-col gap-space-2xs px-space-sm" data-active-classes="bg-primary-container text-on-primary-container font-semibold rounded-xl"><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[20px]">grid_view</span><span class="font-body-md text-body-md">Dashboard</span></a><a aria-current="page" class="flex items-center justify-between px-space-sm py-space-xs transition-colors bg-primary-container text-on-primary-container font-semibold rounded-xl" data-path="reviews-inbox" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">inbox</span><span class="font-body-md text-body-md">Reviews Inbox</span></div><span class="px-space-xs py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-mono-metric text-mono-metric">24</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="analytics" href="#"><span class="material-symbols-outlined text-[20px]">monitoring</span><span class="font-body-md text-body-md">Analytics</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="categories" href="#"><span class="material-symbols-outlined text-[20px]">category</span><span class="font-body-md text-body-md">Categories</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="word-cloud" href="#"><span class="material-symbols-outlined text-[20px]">cloud</span><span class="font-body-md text-body-md">Word Cloud</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="ideation" href="#"><span class="material-symbols-outlined text-[20px]">lightbulb</span><span class="font-body-md text-body-md">Ideation</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="reporting" href="#"><span class="material-symbols-outlined text-[20px]">description</span><span class="font-body-md text-body-md">Reporting</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="settings" href="#"><span class="material-symbols-outlined text-[20px]">settings</span><span class="font-body-md text-body-md">Settings</span></a></nav></div><div class="px-space-md pt-space-sm"><div class="p-space-xs rounded-xl bg-surface-container-low flex items-center justify-between"><div class="flex items-center gap-space-xs overflow-hidden"><div class="relative"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-tertiary-container ring-2 ring-surface-container-low"></span></div><div class="flex flex-col overflow-hidden"><span class="font-body-sm text-body-sm font-medium text-on-surface truncate">Dev Lead</span><span class="font-label-caps text-label-caps text-tertiary truncate">Online</span></div></div><button class="text-on-surface-variant hover:text-on-surface p-space-2xs"><span class="material-symbols-outlined text-[18px]">more_vert</span></button></div></div></aside><div class="pl-sidebar-w"><header class="fixed top-0 left-sidebar-w right-0 h-16 bg-surface-container-lowest/80 backdrop-blur-xl z-40 shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 w-full px-space-lg flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs font-body-sm text-body-sm text-on-surface-variant"><span class="material-symbols-outlined text-[16px]">home</span><span>/</span><span class="text-on-surface font-medium">Workspace</span></div><div class="h-4 w-px bg-surface-container-highest"></div><div class="flex items-center gap-space-2xs"><span class="w-2 h-2 rounded-full bg-tertiary-container animate-pulse"></span><span class="font-mono-metric text-mono-metric text-on-surface-variant">Synced 4m ago</span></div></div><div class="flex items-center gap-space-sm"><div class="flex items-center bg-surface-container-low p-1 rounded-xl"><button class="px-space-xs py-1 rounded-lg bg-surface-container-high text-on-surface font-body-sm text-body-sm font-medium transition-colors">All Platforms</button><button class="px-space-xs py-1 rounded-lg text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm transition-colors">iOS</button><button class="px-space-xs py-1 rounded-lg text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm transition-colors">Android</button></div><div class="flex items-center bg-surface-container-low px-space-sm py-1.5 rounded-xl gap-space-xs text-on-surface-variant hover:text-on-surface cursor-pointer"><span class="material-symbols-outlined text-[16px]">calendar_today</span><span class="font-body-sm text-body-sm">Last 30 Days</span><span class="material-symbols-outlined text-[16px]">expand_more</span></div><button class="flex items-center gap-space-2xs px-space-sm py-1.5 rounded-xl bg-primary-container hover:bg-primary text-on-primary-container font-body-sm text-body-sm font-semibold transition-all shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><span class="material-symbols-outlined text-[16px]">sync</span><span>Refresh Feeds</span></button><div class="h-4 w-px bg-surface-container-highest"></div><button class="p-space-2xs text-on-surface-variant hover:text-on-surface relative rounded-lg hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-tertiary-container"></span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-16 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<!-- Top Ambient Glow Field -->
+<div class="relative w-full overflow-hidden">
+<div class="absolute -top-24 left-1/4 w-[36rem] h-48 bg-primary-container/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute -top-28 right-1/4 w-[28rem] h-44 bg-tertiary-container/10 rounded-full blur-3xl pointer-events-none"></div>
+<!-- Page Header & Metrics Strip -->
+<div class="px-space-lg py-space-md flex flex-col gap-space-md">
+<!-- Title Row -->
+<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-space-sm">
+<div class="flex flex-col gap-space-2xs">
+<div class="flex items-center gap-space-xs">
+<span class="font-display-sm text-display-sm text-on-surface tracking-tight font-semibold">Reviews Inbox</span>
+<span class="px-space-xs py-0.5 rounded-full bg-surface-container-high text-tertiary font-mono-metric text-mono-metric uppercase tracking-widest flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></span>
+              Live Feed
+            </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-3xl">
+            Live multi-platform customer feedback stream with automated neural triage, cluster taxonomy, and instant response synthesizing.
+          </p>
+</div>
+<div class="flex items-center gap-space-xs shrink-0 flex-wrap">
+<button class="flex items-center gap-space-xs px-space-sm py-2 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-body-sm text-body-sm transition-all shadow-sm" id="btn-bulk-classify">
+<span class="material-symbols-outlined text-[16px] text-tertiary">auto_fix_high</span>
+<span>Bulk AI Classify</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-sm py-2 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-body-sm text-body-sm transition-all shadow-sm">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">download</span>
+<span>Export CSV</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-sm py-2 rounded-xl bg-primary-container text-on-primary-container font-body-sm text-body-sm font-semibold hover:bg-primary transition-all shadow-md">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+<span>Filter Presets</span>
+</button>
+</div>
+</div>
+<!-- KPI Stats Banner -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-space-sm">
+<!-- KPI 1 -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex items-center justify-between shadow-sm">
+<div class="flex flex-col gap-0.5">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Total Synced</span>
+<span class="font-mono-metric text-title-lg text-on-surface font-bold">24,648</span>
+<span class="font-body-sm text-body-sm text-tertiary flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>+1,240 this week
+            </span>
+</div>
+<div class="w-10 h-10 rounded-xl bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">sync_alt</span>
+</div>
+</div>
+<!-- KPI 2 -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex items-center justify-between shadow-sm">
+<div class="flex flex-col gap-0.5">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Unread / Pending</span>
+<span class="font-mono-metric text-title-lg text-secondary-fixed-dim font-bold">142</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">32 waiting on drafts</span>
+</div>
+<div class="w-10 h-10 rounded-xl bg-secondary-container/40 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[20px]">mark_email_unread</span>
+</div>
+</div>
+<!-- KPI 3 -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex items-center justify-between shadow-sm">
+<div class="flex flex-col gap-0.5">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Critical Alerts (1★)</span>
+<span class="font-mono-metric text-title-lg text-error font-bold">18</span>
+<span class="font-body-sm text-body-sm text-error flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">priority_high</span>Requires triage &lt; 2h
+            </span>
+</div>
+<div class="w-10 h-10 rounded-xl bg-error-container/40 flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-[20px]">warning</span>
+</div>
+</div>
+<!-- KPI 4 -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex items-center justify-between shadow-sm">
+<div class="flex flex-col gap-0.5">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Avg Response Time</span>
+<span class="font-mono-metric text-title-lg text-on-surface font-bold">4.2 hrs</span>
+<span class="font-body-sm text-body-sm text-tertiary flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_down</span>-1.8 hrs vs SLA
+            </span>
+</div>
+<div class="w-10 h-10 rounded-xl bg-surface-container-high flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[20px]">speed</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Search & Filter Ribbon -->
+<div class="px-space-lg pb-space-xs flex flex-col gap-space-xs">
+<div class="p-space-xs rounded-xl bg-surface-container-low flex flex-col xl:flex-row gap-space-xs items-stretch xl:items-center shadow-sm">
+<!-- Search Box -->
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-on-surface-variant">search</span>
+<input class="w-full pl-9 pr-14 py-2 bg-surface-container rounded-lg text-on-surface placeholder:text-on-surface-variant font-body-sm text-body-sm outline-none transition-all" id="reviews-search-input" placeholder="Search by keyword, user ID, or review text..." type="text"/>
+<kbd class="absolute right-2.5 top-1/2 -translate-y-1/2 px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-mono-metric text-[10px]">⌘K</kbd>
+</div>
+<!-- Filters Row -->
+<div class="flex items-center gap-space-2xs flex-wrap">
+<!-- Platform -->
+<div class="relative">
+<select class="appearance-none bg-surface-container hover:bg-surface-container-high text-on-surface font-body-sm text-body-sm pl-2.5 pr-7 py-2 rounded-lg outline-none cursor-pointer">
+<option>All Platforms</option>
+<option>Apple App Store</option>
+<option>Google Play Store</option>
+</select>
+<span class="material-symbols-outlined pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[16px] text-on-surface-variant">expand_more</span>
+</div>
+<!-- Version -->
+<div class="relative">
+<select class="appearance-none bg-surface-container hover:bg-surface-container-high text-on-surface font-body-sm text-body-sm pl-2.5 pr-7 py-2 rounded-lg outline-none cursor-pointer">
+<option>v2.4.0 (Latest)</option>
+<option>v2.3.9</option>
+<option>v2.3.8</option>
+<option>All Versions</option>
+</select>
+<span class="material-symbols-outlined pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[16px] text-on-surface-variant">expand_more</span>
+</div>
+<!-- Sentiment -->
+<div class="relative">
+<select class="appearance-none bg-surface-container hover:bg-surface-container-high text-on-surface font-body-sm text-body-sm pl-2.5 pr-7 py-2 rounded-lg outline-none cursor-pointer">
+<option>All Sentiments</option>
+<option>Positive</option>
+<option>Neutral</option>
+<option>Negative</option>
+<option>Mixed</option>
+</select>
+<span class="material-symbols-outlined pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[16px] text-on-surface-variant">expand_more</span>
+</div>
+<!-- Star Rating -->
+<div class="relative">
+<select class="appearance-none bg-surface-container hover:bg-surface-container-high text-on-surface font-body-sm text-body-sm pl-2.5 pr-7 py-2 rounded-lg outline-none cursor-pointer">
+<option>All Stars</option>
+<option>5 Stars</option>
+<option>4 Stars</option>
+<option>3 Stars</option>
+<option>2 Stars</option>
+<option>1 Star</option>
+</select>
+<span class="material-symbols-outlined pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[16px] text-on-surface-variant">expand_more</span>
+</div>
+<!-- Tags -->
+<div class="relative">
+<select class="appearance-none bg-surface-container hover:bg-surface-container-high text-on-surface font-body-sm text-body-sm pl-2.5 pr-7 py-2 rounded-lg outline-none cursor-pointer">
+<option>All Tags</option>
+<option>Crash / Bug</option>
+<option>Feature Request</option>
+<option>Billing &amp; Subscriptions</option>
+<option>UX &amp; Usability</option>
+<option>Performance</option>
+</select>
+<span class="material-symbols-outlined pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[16px] text-on-surface-variant">expand_more</span>
+</div>
+<!-- Status -->
+<div class="relative">
+<select class="appearance-none bg-surface-container hover:bg-surface-container-high text-on-surface font-body-sm text-body-sm pl-2.5 pr-7 py-2 rounded-lg outline-none cursor-pointer">
+<option>Status: Unread</option>
+<option>Status: Replied</option>
+<option>Status: Flagged</option>
+<option>Status: Archived</option>
+</select>
+<span class="material-symbols-outlined pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[16px] text-on-surface-variant">expand_more</span>
+</div>
+<button class="p-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors" title="Reset Filters">
+<span class="material-symbols-outlined text-[18px]">restart_alt</span>
+</button>
+</div>
+</div>
+<!-- Active Selection & Bulk Action Bar -->
+<div class="px-space-md py-space-xs rounded-xl bg-surface-container-high flex flex-wrap items-center justify-between gap-space-sm shadow-md transition-all" id="bulk-action-bar">
+<div class="flex items-center gap-space-sm">
+<label class="inline-flex items-center gap-space-xs cursor-pointer">
+<input class="w-4 h-4 rounded bg-surface-container-lowest text-primary accent-primary" id="check-select-all" type="checkbox"/>
+<span class="font-label-caps text-label-caps text-on-surface font-bold">142 reviews selected</span>
+</label>
+<span class="text-on-surface-variant font-mono-metric text-[12px] hidden sm:inline">| Applied scope: Filtered View</span>
+</div>
+<div class="flex items-center gap-space-2xs flex-wrap">
+<button class="flex items-center gap-1.5 px-space-xs py-1 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface font-body-sm text-body-sm transition-colors">
+<span class="material-symbols-outlined text-[16px] text-tertiary">done_all</span>
+<span>Mark as Reviewed</span>
+</button>
+<button class="flex items-center gap-1.5 px-space-xs py-1 rounded-lg bg-primary-container hover:bg-primary text-on-primary-container font-body-sm text-body-sm font-semibold transition-colors">
+<span class="material-symbols-outlined text-[16px]">smart_toy</span>
+<span>Assign AI Response Draft</span>
+</button>
+<button class="flex items-center gap-1.5 px-space-xs py-1 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface font-body-sm text-body-sm transition-colors">
+<span class="material-symbols-outlined text-[16px] text-secondary">label</span>
+<span>Add Tag</span>
+</button>
+<button class="flex items-center gap-1.5 px-space-xs py-1 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface font-body-sm text-body-sm transition-colors">
+<span class="material-symbols-outlined text-[16px] text-primary">bug_report</span>
+<span>Escalate to Jira</span>
+</button>
+<button class="p-1 rounded-lg bg-surface-container hover:bg-error/20 text-on-surface-variant hover:text-error transition-colors" title="Delete or Flag as Spam">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Main Data Table Container -->
+<div class="px-space-lg py-space-xs">
+<div class="w-full rounded-xl bg-surface-container-lowest overflow-hidden shadow-lg flex flex-col">
+<!-- Table Header -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant font-label-caps text-label-caps uppercase tracking-wider">
+<th class="py-3 px-space-sm w-10 text-center">
+<input class="w-3.5 h-3.5 rounded bg-surface-container-lowest accent-primary" type="checkbox"/>
+</th>
+<th class="py-3 px-space-sm min-w-[180px]">Reviewer &amp; Platform</th>
+<th class="py-3 px-space-sm min-w-[140px]">Rating / Sentiment</th>
+<th class="py-3 px-space-sm min-w-[360px]">Feedback &amp; Content Insights</th>
+<th class="py-3 px-space-sm min-w-[120px]">Version / Date</th>
+<th class="py-3 px-space-sm min-w-[170px]">AI Taxonomy &amp; Cluster</th>
+<th class="py-3 px-space-sm min-w-[130px]">Triage Status</th>
+<th class="py-3 px-space-sm text-right min-w-[130px]">Quick Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container font-body-sm text-body-sm text-on-surface">
+<!-- ROW 1: Alex K. (Critical Crash) - ACTIVE / SELECTED ITEM -->
+<tr class="bg-surface-container-high/40 hover:bg-surface-container-high transition-colors group cursor-pointer" onclick="openCopilotDrawer('Alex K.', 'Crash on RAW upload', 'Frequent crashes on iOS 17.4 when uploading large raw files. Please patch ASAP.', 'iOS 17.4', 'v2.4.0')">
+<td class="py-3.5 px-space-sm text-center" onclick="event.stopPropagation()">
+<input checked="" class="w-3.5 h-3.5 rounded bg-surface-container-lowest accent-primary" type="checkbox"/>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex items-center gap-space-xs">
+<div class="w-7 h-7 rounded-full bg-error-container text-error flex items-center justify-center font-bold text-body-sm">
+                    AK
+                  </div>
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">Alex K.</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-on-surface">phone_iphone</span>
+                      App Store · US
+                    </span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex flex-col gap-1">
+<div class="flex text-error" title="1 out of 5 stars">
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[15px] opacity-20">star</span>
+<span class="material-symbols-outlined text-[15px] opacity-20">star</span>
+<span class="material-symbols-outlined text-[15px] opacity-20">star</span>
+<span class="material-symbols-outlined text-[15px] opacity-20">star</span>
+</div>
+<span class="inline-flex items-center gap-1 font-label-caps text-[10px] text-error font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-error animate-ping"></span>
+                    Severe Negative
+                  </span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex flex-col gap-0.5 max-w-xl">
+<span class="font-title-md text-[13px] font-semibold text-on-surface">
+                    App crash loop with RAW camera assets
+                  </span>
+<p class="text-on-surface-variant line-clamp-2">
+                    "Frequent crashes on <mark class="bg-error/20 text-error px-1 rounded">iOS 17.4</mark> when uploading <mark class="bg-error/20 text-error px-1 rounded">large raw files</mark>. Please patch ASAP. Completely broken for client shoots."
+                  </p>
+<div class="flex items-center gap-space-xs mt-1">
+<span class="px-1.5 py-0.5 rounded bg-error/15 text-error font-mono-metric text-[10px] uppercase font-bold tracking-wider">#Crash</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-mono-metric text-[10px]">#MemoryLeak</span>
+<span class="px-1.5 py-0.5 rounded bg-primary-container/20 text-primary font-mono-metric text-[10px] flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[11px]">bolt</span>AI Draft Ready
+                    </span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm font-mono-metric text-mono-metric text-on-surface-variant">
+<div class="flex flex-col">
+<span class="text-on-surface font-semibold">v2.4.0 (b490)</span>
+<span class="text-[11px]">14 mins ago</span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex flex-col gap-1">
+<span class="px-2 py-0.5 rounded bg-surface-container text-tertiary font-body-sm text-[11px] font-medium w-fit">
+                    Stability · Upload Pipeline
+                  </span>
+<span class="font-label-caps text-[10px] text-on-surface-variant">Cluster: #ERR-RAW-408</span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<span class="px-2 py-1 rounded-full bg-error-container/30 text-error font-mono-metric text-[10px] font-bold uppercase inline-flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                  Needs Reply
+                </span>
+</td>
+<td class="py-3.5 px-space-sm text-right" onclick="event.stopPropagation()">
+<div class="flex items-center justify-end gap-1">
+<button class="p-1.5 rounded-lg bg-primary-container text-on-primary-container hover:bg-primary transition-colors" title="Quick Copilot Reply">
+<span class="material-symbols-outlined text-[16px]">reply</span>
+</button>
+<button class="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors" title="Escalate Jira">
+<span class="material-symbols-outlined text-[16px]">rocket_launch</span>
+</button>
+<button class="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[16px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- ROW 2: Sarah M. (Delight / 5 Stars) -->
+<tr class="hover:bg-surface-container transition-colors group cursor-pointer" onclick="openCopilotDrawer('Sarah M.', 'Export speed delight', 'The new export feature saved our team hours of manual reporting. Flawless update!', 'iOS 17.3', 'v2.4.0')">
+<td class="py-3.5 px-space-sm text-center" onclick="event.stopPropagation()">
+<input class="w-3.5 h-3.5 rounded bg-surface-container-lowest accent-primary" type="checkbox"/>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex items-center gap-space-xs">
+<div class="w-7 h-7 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center font-bold text-body-sm">
+                    SM
+                  </div>
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">Sarah M.</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-on-surface">phone_iphone</span>
+                      App Store · UK
+                    </span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex flex-col gap-1">
+<div class="flex text-tertiary" title="5 out of 5 stars">
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="inline-flex items-center gap-1 font-label-caps text-[10px] text-tertiary font-semibold">
+                    High Delight (+0.94)
+                  </span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex flex-col gap-0.5 max-w-xl">
+<span class="font-title-md text-[13px] font-semibold text-on-surface">
+                    Flawless update - reporting workflow transformed
+                  </span>
+<p class="text-on-surface-variant line-clamp-2">
+                    "The new <mark class="bg-tertiary/20 text-tertiary px-1 rounded">export feature</mark> saved our team hours of manual reporting. Flawless update! Loving the real-time CSV generators."
+                  </p>
+<div class="flex items-center gap-space-xs mt-1">
+<span class="px-1.5 py-0.5 rounded bg-tertiary/15 text-tertiary font-mono-metric text-[10px] uppercase font-bold">#FeaturePraise</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-mono-metric text-[10px]">#UXVelocity</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm font-mono-metric text-mono-metric text-on-surface-variant">
+<div class="flex flex-col">
+<span class="text-on-surface font-semibold">v2.4.0</span>
+<span class="text-[11px]">1 hr ago</span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex flex-col gap-1">
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface font-body-sm text-[11px] font-medium w-fit">
+                    Reporting &amp; Data Out
+                  </span>
+<span class="font-label-caps text-[10px] text-on-surface-variant">Cluster: #EXPO-PRAISE</span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<span class="px-2 py-1 rounded-full bg-surface-container text-tertiary font-mono-metric text-[10px] font-bold uppercase inline-flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                  Reviewed
+                </span>
+</td>
+<td class="py-3.5 px-space-sm text-right" onclick="event.stopPropagation()">
+<div class="flex items-center justify-end gap-1">
+<button class="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors" title="Thank Reviewer">
+<span class="material-symbols-outlined text-[16px]">favorite</span>
+</button>
+<button class="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[16px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- ROW 3: Daniel R. (Constructive Feature Request) -->
+<tr class="hover:bg-surface-container transition-colors group cursor-pointer" onclick="openCopilotDrawer('Daniel R.', 'Keyboard shortcuts inquiry', 'Love the interface fluidity, but really hoping for keyboard shortcuts in the next minor release.', 'Android 14', 'v2.3.9')">
+<td class="py-3.5 px-space-sm text-center" onclick="event.stopPropagation()">
+<input class="w-3.5 h-3.5 rounded bg-surface-container-lowest accent-primary" type="checkbox"/>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex items-center gap-space-xs">
+<div class="w-7 h-7 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center font-bold text-body-sm">
+                    DR
+                  </div>
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">Daniel R.</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-secondary">android</span>
+                      Google Play · DE
+                    </span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex flex-col gap-1">
+<div class="flex text-primary" title="4 out of 5 stars">
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[15px] opacity-20">star</span>
+</div>
+<span class="inline-flex items-center gap-1 font-label-caps text-[10px] text-primary font-semibold">
+                    Positive Constructive
+                  </span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex flex-col gap-0.5 max-w-xl">
+<span class="font-title-md text-[13px] font-semibold text-on-surface">
+                    Fluid UI, awaiting hardware keyboard bindings
+                  </span>
+<p class="text-on-surface-variant line-clamp-2">
+                    "Love the interface fluidity, but really hoping for <mark class="bg-primary/20 text-primary px-1 rounded">keyboard shortcuts</mark> in the next minor release when used on tablets."
+                  </p>
+<div class="flex items-center gap-space-xs mt-1">
+<span class="px-1.5 py-0.5 rounded bg-primary-container/20 text-primary font-mono-metric text-[10px] uppercase font-bold">#FeatureRequest</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-mono-metric text-[10px]">#TabletUX</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm font-mono-metric text-mono-metric text-on-surface-variant">
+<div class="flex flex-col">
+<span class="text-on-surface font-semibold">v2.3.9</span>
+<span class="text-[11px]">3 hrs ago</span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex flex-col gap-1">
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface font-body-sm text-[11px] font-medium w-fit">
+                    Platform · Input Methods
+                  </span>
+<span class="font-label-caps text-[10px] text-on-surface-variant">Cluster: #REQ-HOTKEYS</span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<span class="px-2 py-1 rounded-full bg-surface-container text-on-surface-variant font-mono-metric text-[10px] font-bold uppercase inline-flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-on-surface-variant"></span>
+                  Pending
+                </span>
+</td>
+<td class="py-3.5 px-space-sm text-right" onclick="event.stopPropagation()">
+<div class="flex items-center justify-end gap-1">
+<button class="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors" title="Quick Reply">
+<span class="material-symbols-outlined text-[16px]">reply</span>
+</button>
+<button class="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors" title="Push to Backlog">
+<span class="material-symbols-outlined text-[16px]">bookmark_add</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- ROW 4: Elena Rostova (Battery Performance issue) -->
+<tr class="hover:bg-surface-container transition-colors group cursor-pointer" onclick="openCopilotDrawer('Elena Rostova', 'Battery Drain 5G', 'High battery consumption during background sync over 5G. Drains 25% an hour.', 'Android 14', 'v2.4.0')">
+<td class="py-3.5 px-space-sm text-center" onclick="event.stopPropagation()">
+<input class="w-3.5 h-3.5 rounded bg-surface-container-lowest accent-primary" type="checkbox"/>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex items-center gap-space-xs">
+<div class="w-7 h-7 rounded-full bg-surface-container-high text-secondary flex items-center justify-center font-bold text-body-sm">
+                    ER
+                  </div>
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">Elena Rostova</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-secondary">android</span>
+                      Google Play · CA
+                    </span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex flex-col gap-1">
+<div class="flex text-secondary-container" title="2 out of 5 stars">
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[15px] opacity-20">star</span>
+<span class="material-symbols-outlined text-[15px] opacity-20">star</span>
+<span class="material-symbols-outlined text-[15px] opacity-20">star</span>
+</div>
+<span class="inline-flex items-center gap-1 font-label-caps text-[10px] text-secondary-container font-semibold">
+                    Negative / Bug
+                  </span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex flex-col gap-0.5 max-w-xl">
+<span class="font-title-md text-[13px] font-semibold text-on-surface">
+                    Extreme battery depletion in standby
+                  </span>
+<p class="text-on-surface-variant line-clamp-2">
+                    "High <mark class="bg-secondary/20 text-secondary px-1 rounded">battery consumption</mark> during <mark class="bg-secondary/20 text-secondary px-1 rounded">background sync over 5G</mark>. Dropped 28% in 90 minutes without screen on."
+                  </p>
+<div class="flex items-center gap-space-xs mt-1">
+<span class="px-1.5 py-0.5 rounded bg-secondary/15 text-secondary font-mono-metric text-[10px] uppercase font-bold">#Performance</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-mono-metric text-[10px]">#BatteryDrain</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm font-mono-metric text-mono-metric text-on-surface-variant">
+<div class="flex flex-col">
+<span class="text-on-surface font-semibold">v2.4.0</span>
+<span class="text-[11px]">4 hrs ago</span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex flex-col gap-1">
+<span class="px-2 py-0.5 rounded bg-surface-container text-secondary font-body-sm text-[11px] font-medium w-fit">
+                    Core · Power &amp; Networking
+                  </span>
+<span class="font-label-caps text-[10px] text-on-surface-variant">Cluster: #SYS-DRAIN-5G</span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<span class="px-2 py-1 rounded-full bg-secondary-container/20 text-on-secondary-container font-mono-metric text-[10px] font-bold uppercase inline-flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                  Flagged for QA
+                </span>
+</td>
+<td class="py-3.5 px-space-sm text-right" onclick="event.stopPropagation()">
+<div class="flex items-center justify-end gap-1">
+<button class="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors" title="Create Jira Bug">
+<span class="material-symbols-outlined text-[16px]">bug_report</span>
+</button>
+<button class="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[16px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- ROW 5: Marcus Vance (Praise / AI Model) -->
+<tr class="hover:bg-surface-container transition-colors group cursor-pointer" onclick="openCopilotDrawer('Marcus Vance', 'AI Categorization Delight', 'Best update this year. The AI categorization accuracy is uncanny.', 'iOS 17.4', 'v2.4.0')">
+<td class="py-3.5 px-space-sm text-center" onclick="event.stopPropagation()">
+<input class="w-3.5 h-3.5 rounded bg-surface-container-lowest accent-primary" type="checkbox"/>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex items-center gap-space-xs">
+<div class="w-7 h-7 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-body-sm">
+                    MV
+                  </div>
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">Marcus Vance</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-on-surface">phone_iphone</span>
+                      App Store · US
+                    </span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex flex-col gap-1">
+<div class="flex text-tertiary" title="5 out of 5 stars">
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="inline-flex items-center gap-1 font-label-caps text-[10px] text-tertiary font-semibold">
+                    Promoter (+0.98)
+                  </span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex flex-col gap-0.5 max-w-xl">
+<span class="font-title-md text-[13px] font-semibold text-on-surface">
+                    Best release this fiscal quarter
+                  </span>
+<p class="text-on-surface-variant line-clamp-2">
+                    "Best update this year. The <mark class="bg-tertiary/20 text-tertiary px-1 rounded">AI categorization accuracy</mark> is uncanny. It tagged hundreds of ambiguous feedback notes in minutes."
+                  </p>
+<div class="flex items-center gap-space-xs mt-1">
+<span class="px-1.5 py-0.5 rounded bg-tertiary/15 text-tertiary font-mono-metric text-[10px] uppercase font-bold">#Praise</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-mono-metric text-[10px]">#NLPQuality</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm font-mono-metric text-mono-metric text-on-surface-variant">
+<div class="flex flex-col">
+<span class="text-on-surface font-semibold">v2.4.0</span>
+<span class="text-[11px]">5 hrs ago</span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex flex-col gap-1">
+<span class="px-2 py-0.5 rounded bg-surface-container text-tertiary font-body-sm text-[11px] font-medium w-fit">
+                    Intelligence · Tagging
+                  </span>
+<span class="font-label-caps text-[10px] text-on-surface-variant">Cluster: #AI-ACCURACY</span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<span class="px-2 py-1 rounded-full bg-surface-container text-tertiary font-mono-metric text-[10px] font-bold uppercase inline-flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                  Reviewed
+                </span>
+</td>
+<td class="py-3.5 px-space-sm text-right" onclick="event.stopPropagation()">
+<div class="flex items-center justify-end gap-1">
+<button class="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[16px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- ROW 6: Chloe Bennett (Billing / Urgent P0) -->
+<tr class="hover:bg-surface-container transition-colors group cursor-pointer" onclick="openCopilotDrawer('Chloe Bennett', 'Double Charge on Renewal', 'Charged twice during subscription renewal. Support ticket #9921 unanswered.', 'iOS 17.3', 'v2.4.0')">
+<td class="py-3.5 px-space-sm text-center" onclick="event.stopPropagation()">
+<input class="w-3.5 h-3.5 rounded bg-surface-container-lowest accent-primary" type="checkbox"/>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex items-center gap-space-xs">
+<div class="w-7 h-7 rounded-full bg-error-container text-error flex items-center justify-center font-bold text-body-sm">
+                    CB
+                  </div>
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">Chloe Bennett</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-on-surface">phone_iphone</span>
+                      App Store · AU
+                    </span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex flex-col gap-1">
+<div class="flex text-error" title="1 out of 5 stars">
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[15px] opacity-20">star</span>
+<span class="material-symbols-outlined text-[15px] opacity-20">star</span>
+<span class="material-symbols-outlined text-[15px] opacity-20">star</span>
+<span class="material-symbols-outlined text-[15px] opacity-20">star</span>
+</div>
+<span class="inline-flex items-center gap-1 font-label-caps text-[10px] text-error font-semibold">
+                    Churn Risk · Churn-High
+                  </span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex flex-col gap-0.5 max-w-xl">
+<span class="font-title-md text-[13px] font-semibold text-on-surface">
+                    Double billed on annual renewal with zero reply
+                  </span>
+<p class="text-on-surface-variant line-clamp-2">
+                    "<mark class="bg-error/20 text-error px-1 rounded">Charged twice</mark> during subscription renewal. Support ticket <span class="underline text-primary">#9921</span> unanswered for 48 hours. Fix immediately."
+                  </p>
+<div class="flex items-center gap-space-xs mt-1">
+<span class="px-1.5 py-0.5 rounded bg-error/15 text-error font-mono-metric text-[10px] uppercase font-bold">#Billing</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-mono-metric text-[10px]">#RevenueCritical</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm font-mono-metric text-mono-metric text-on-surface-variant">
+<div class="flex flex-col">
+<span class="text-on-surface font-semibold">v2.4.0</span>
+<span class="text-[11px]">7 hrs ago</span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex flex-col gap-1">
+<span class="px-2 py-0.5 rounded bg-surface-container text-error font-body-sm text-[11px] font-medium w-fit">
+                    Commerce · In-App Subscriptions
+                  </span>
+<span class="font-label-caps text-[10px] text-on-surface-variant">Cluster: #BILLING-RENEWAL</span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<span class="px-2 py-1 rounded-full bg-error-container/40 text-error font-mono-metric text-[10px] font-bold uppercase inline-flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                  Escalated
+                </span>
+</td>
+<td class="py-3.5 px-space-sm text-right" onclick="event.stopPropagation()">
+<div class="flex items-center justify-end gap-1">
+<button class="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors" title="Lookup Stripe Invoice">
+<span class="material-symbols-outlined text-[16px]">receipt_long</span>
+</button>
+<button class="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[16px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- ROW 7: Liam O'Connor (UX Ergonomics) -->
+<tr class="hover:bg-surface-container transition-colors group cursor-pointer" onclick="openCopilotDrawer('Liam O\'Connor', 'Navigation ergonomics', 'New navigation tab is harder to reach with one hand on Pixel 8 Pro.', 'Android 14', 'v2.3.8')">
+<td class="py-3.5 px-space-sm text-center" onclick="event.stopPropagation()">
+<input class="w-3.5 h-3.5 rounded bg-surface-container-lowest accent-primary" type="checkbox"/>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex items-center gap-space-xs">
+<div class="w-7 h-7 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center font-bold text-body-sm">
+                    LO
+                  </div>
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">Liam O'Connor</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-secondary">android</span>
+                      Google Play · IE
+                    </span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex flex-col gap-1">
+<div class="flex text-on-surface-variant" title="3 out of 5 stars">
+<span class="material-symbols-outlined text-[15px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[15px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[15px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[15px] opacity-20">star</span>
+<span class="material-symbols-outlined text-[15px] opacity-20">star</span>
+</div>
+<span class="inline-flex items-center gap-1 font-label-caps text-[10px] text-on-surface-variant font-semibold">
+                    Mixed Neutral
+                  </span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex flex-col gap-0.5 max-w-xl">
+<span class="font-title-md text-[13px] font-semibold text-on-surface">
+                    Reachability issue on large display flagships
+                  </span>
+<p class="text-on-surface-variant line-clamp-2">
+                    "New <mark class="bg-surface-variant text-on-surface px-1 rounded">navigation tab</mark> is harder to reach with one hand on Pixel 8 Pro. Preferred the old bottom bar arrangement."
+                  </p>
+<div class="flex items-center gap-space-xs mt-1">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface font-mono-metric text-[10px] uppercase font-bold">#UXDesign</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-mono-metric text-[10px]">#ThumbZone</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm font-mono-metric text-mono-metric text-on-surface-variant">
+<div class="flex flex-col">
+<span class="text-on-surface font-semibold">v2.3.8</span>
+<span class="text-[11px]">8 hrs ago</span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex flex-col gap-1">
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface font-body-sm text-[11px] font-medium w-fit">
+                    Interface · Navigation
+                  </span>
+<span class="font-label-caps text-[10px] text-on-surface-variant">Cluster: #UI-REACHABILITY</span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<span class="px-2 py-1 rounded-full bg-primary-container/20 text-primary font-mono-metric text-[10px] font-bold uppercase inline-flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                  In Progress
+                </span>
+</td>
+<td class="py-3.5 px-space-sm text-right" onclick="event.stopPropagation()">
+<div class="flex items-center justify-end gap-1">
+<button class="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors" title="Quick Reply">
+<span class="material-symbols-outlined text-[16px]">reply</span>
+</button>
+<button class="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[16px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- ROW 8: Priya Patel (Enterprise Standup Integration) -->
+<tr class="hover:bg-surface-container transition-colors group cursor-pointer" onclick="openCopilotDrawer('Priya Patel', 'Daily Standup Fit', 'Integrated into our daily standup review triage seamlessly. High productivity boost.', 'iOS 17.4', 'v2.4.0')">
+<td class="py-3.5 px-space-sm text-center" onclick="event.stopPropagation()">
+<input class="w-3.5 h-3.5 rounded bg-surface-container-lowest accent-primary" type="checkbox"/>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex items-center gap-space-xs">
+<div class="w-7 h-7 rounded-full bg-surface-container-high text-tertiary flex items-center justify-center font-bold text-body-sm">
+                    PP
+                  </div>
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">Priya Patel</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-on-surface">phone_iphone</span>
+                      App Store · IN
+                    </span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex flex-col gap-1">
+<div class="flex text-tertiary" title="5 out of 5 stars">
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="inline-flex items-center gap-1 font-label-caps text-[10px] text-tertiary font-semibold">
+                    Advocate (+0.96)
+                  </span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex flex-col gap-0.5 max-w-xl">
+<span class="font-title-md text-[13px] font-semibold text-on-surface">
+                    Essential tool for cross-functional sprint reviews
+                  </span>
+<p class="text-on-surface-variant line-clamp-2">
+                    "Integrated into our <mark class="bg-tertiary/20 text-tertiary px-1 rounded">daily standup review triage</mark> seamlessly. Our product managers cut backlog grooming in half."
+                  </p>
+<div class="flex items-center gap-space-xs mt-1">
+<span class="px-1.5 py-0.5 rounded bg-tertiary/15 text-tertiary font-mono-metric text-[10px] uppercase font-bold">#Workflow</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-mono-metric text-[10px]">#Enterprise</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm font-mono-metric text-mono-metric text-on-surface-variant">
+<div class="flex flex-col">
+<span class="text-on-surface font-semibold">v2.4.0</span>
+<span class="text-[11px]">11 hrs ago</span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="flex flex-col gap-1">
+<span class="px-2 py-0.5 rounded bg-surface-container text-tertiary font-body-sm text-[11px] font-medium w-fit">
+                    Team · Collaboration
+                  </span>
+<span class="font-label-caps text-[10px] text-on-surface-variant">Cluster: #STANDUP-TRIAGE</span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<span class="px-2 py-1 rounded-full bg-surface-container text-tertiary font-mono-metric text-[10px] font-bold uppercase inline-flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                  Reviewed
+                </span>
+</td>
+<td class="py-3.5 px-space-sm text-right" onclick="event.stopPropagation()">
+<div class="flex items-center justify-end gap-1">
+<button class="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors" title="Highlight Case Study">
+<span class="material-symbols-outlined text-[16px]">grade</span>
+</button>
+<button class="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[16px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination & Footer Strip -->
+<div class="p-space-sm bg-surface-container-low flex flex-col md:flex-row items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-md">
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+            Showing <strong class="text-on-surface font-mono-metric">1 - 25</strong> of <strong class="text-on-surface font-mono-metric">24,648</strong> customer reviews
+          </span>
+<div class="flex items-center gap-space-2xs">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Rows per page:</span>
+<select class="bg-surface-container text-on-surface font-body-sm text-body-sm rounded-lg px-2 py-1 outline-none">
+<option>25</option>
+<option>50</option>
+<option>100</option>
+</select>
+</div>
+</div>
+<!-- Page Selector Buttons -->
+<div class="flex items-center gap-1 font-mono-metric text-mono-metric">
+<button class="p-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface disabled:opacity-40 transition-colors" disabled="">
+<span class="material-symbols-outlined text-[16px]">chevron_left</span>
+</button>
+<button class="w-7 h-7 rounded-lg bg-primary-container text-on-primary-container font-bold flex items-center justify-center">1</button>
+<button class="w-7 h-7 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors flex items-center justify-center">2</button>
+<button class="w-7 h-7 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors flex items-center justify-center">3</button>
+<span class="px-1 text-on-surface-variant">...</span>
+<button class="px-2 h-7 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors flex items-center justify-center">986</button>
+<button class="p-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Slide-Out / Interactive AI Copilot Quick-Reply Drawer -->
+<div class="fixed bottom-4 right-4 max-w-xl w-full z-50 transition-all transform translate-y-0" id="copilot-drawer">
+<div class="rounded-xl bg-surface-container-high shadow-2xl p-space-md flex flex-col gap-space-sm backdrop-blur-2xl">
+<!-- Drawer Header -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<div class="w-8 h-8 rounded-xl bg-primary-container text-on-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">psychology</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-2xs">
+<span class="font-title-md text-title-md text-on-surface font-semibold" id="drawer-reviewer-name">AI Copilot Quick Reply</span>
+<span class="px-1.5 py-0.2 rounded bg-tertiary-container/30 text-tertiary font-mono-metric text-[10px] uppercase font-bold">Empathetic Tone</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant" id="drawer-context">Triage Target: Alex K. (iOS 17.4 · v2.4.0)</span>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<button class="p-1 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors" onclick="minimizeCopilotDrawer()">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</div>
+<!-- Synthesis Banner -->
+<div class="p-space-xs rounded-lg bg-surface-container flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-primary text-[18px]">bolt</span>
+<span>Matching root-cause <strong class="text-on-surface font-mono-metric">#ERR-RAW-408</strong> (HEIC/RAW buffer overflow in iOS photo picker).</span>
+</div>
+<!-- AI Draft Textarea -->
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase flex items-center justify-between">
+<span>Drafted Response (Friendly &amp; Empathetic Engineer)</span>
+<span class="text-tertiary font-mono-metric text-[11px]">99.2% confidence</span>
+</label>
+<div class="relative">
+<textarea class="w-full bg-surface-container-lowest text-on-surface p-space-sm rounded-lg font-body-sm text-body-sm outline-none resize-none" id="copilot-draft-text" rows="4">Hi Alex, thanks for flagging this. Our iOS engineering team just isolated the memory spike on large RAW image uploads in v2.4.0. We have hotfix v2.4.1 in TestFlight today with the patched memory allocator. We would love to get you direct early access to verify it resolves your client workflow!</textarea>
+<div class="absolute bottom-2.5 right-2.5 flex items-center gap-1">
+<button class="px-2 py-0.5 rounded bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface font-mono-metric text-[10px]" title="Re-phrase shorter">Concise</button>
+<button class="px-2 py-0.5 rounded bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface font-mono-metric text-[10px]" title="Re-phrase formal">Formal</button>
+</div>
+</div>
+</div>
+<!-- Action Footer -->
+<div class="flex items-center justify-between gap-space-xs pt-space-2xs flex-wrap">
+<div class="flex items-center gap-space-2xs">
+<button class="flex items-center gap-1 px-space-xs py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-highest text-on-surface font-body-sm text-body-sm transition-colors" onclick="regenerateDraft()">
+<span class="material-symbols-outlined text-[16px] text-tertiary">autorenew</span>
+<span>Regenerate Draft</span>
+</button>
+<button class="flex items-center gap-1 px-space-xs py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-highest text-on-surface font-body-sm text-body-sm transition-colors">
+<span class="material-symbols-outlined text-[16px]">edit_note</span>
+<span>Edit Manually</span>
+</button>
+</div>
+<button class="flex items-center gap-space-xs px-space-md py-1.5 rounded-lg bg-primary-container hover:bg-primary text-on-primary-container font-body-sm text-body-sm font-semibold shadow-md transition-all" onclick="sendApprovedReply()">
+<span class="material-symbols-outlined text-[16px]">send</span>
+<span>Approve &amp; Send to Store</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Micro-Interactions Script -->
+<script>
+    function minimizeCopilotDrawer() {
+      const drawer = document.getElementById('copilot-drawer');
+      if (drawer) {
+        drawer.classList.add('hidden');
+      }
+    }
+
+    function openCopilotDrawer(reviewer, title, snippet, os, version) {
+      const drawer = document.getElementById('copilot-drawer');
+      const nameElem = document.getElementById('drawer-reviewer-name');
+      const contextElem = document.getElementById('drawer-context');
+      const textElem = document.getElementById('copilot-draft-text');
+
+      if (drawer) drawer.classList.remove('hidden');
+      if (nameElem) nameElem.textContent = 'Reply to ' + reviewer;
+      if (contextElem) contextElem.textContent = 'Feedback: ' + title + ' (' + os + ' · ' + version + ')';
+
+      if (textElem) {
+        if (reviewer.includes('Alex')) {
+          textElem.value = 'Hi Alex, thanks for flagging this. Our iOS engineering team just isolated the memory spike on large RAW image uploads in v2.4.0. We have hotfix v2.4.1 in TestFlight today with the patched memory allocator. We would love to get you direct early access to verify it resolves your client workflow!';
+        } else if (reviewer.includes('Sarah')) {
+          textElem.value = 'Hi Sarah, team here! We are absolutely thrilled that the new reporting CSV export saved hours of manual work for your team. Look out for the custom scheduled templates coming next sprint!';
+        } else if (reviewer.includes('Daniel')) {
+          textElem.value = 'Hi Daniel, appreciate the review! Full hardware keyboard shortcuts for Android tablets are currently in active staging for release v2.5. Stay tuned!';
+        } else {
+          textElem.value = 'Hi ' + reviewer.split(' ')[0] + ', thank you for your detailed feedback on ' + version + '. Our team is actively reviewing your notes in our engineering standup today!';
+        }
+      }
+    }
+
+    function regenerateDraft() {
+      const textElem = document.getElementById('copilot-draft-text');
+      if (textElem) {
+        textElem.value = 'Generating updated neural variation with escalated technical empathy...';
+        setTimeout(() => {
+          textElem.value = 'Hello! We truly apologize for the disruption caused during your workflow. A hotfix build addressing this exact crash vector is undergoing smoke tests right now and will roll out automatically within 6 hours.';
+        }, 400);
+      }
+    }
+
+    function sendApprovedReply() {
+      const drawer = document.getElementById('copilot-drawer');
+      const textElem = document.getElementById('copilot-draft-text');
+      if (drawer) {
+        alert('Response dispatched successfully to App Store Connect / Google Play Developer API!');
+        drawer.classList.add('hidden');
+      }
+    }
+
+    // Select all toggle
+    const selectAllBox = document.getElementById('check-select-all');
+    if (selectAllBox) {
+      selectAllBox.addEventListener('change', function(e) {
+        const boxes = document.querySelectorAll('tbody input[type="checkbox"]');
+        boxes.forEach(cb => cb.checked = e.target.checked);
+      });
+    }
+  </script>
+</div></main></div></body></html>

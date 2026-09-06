@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      "colors": {
+        "surface-bright": "#383941",
+        "surface-container-high": "#292931",
+        "surface": "#12131a",
+        "on-background": "#e3e1ec",
+        "on-primary": "#1000a9",
+        "on-secondary-container": "#d6a9ff",
+        "on-tertiary-fixed-variant": "#004e5c",
+        "on-secondary": "#490080",
+        "tertiary": "#4cd7f6",
+        "on-secondary-fixed": "#2c0051",
+        "on-primary-fixed": "#07006c",
+        "surface-tint": "#c0c1ff",
+        "primary-fixed": "#e1e0ff",
+        "background": "#12131a",
+        "on-secondary-fixed-variant": "#6900b3",
+        "tertiary-fixed-dim": "#4cd7f6",
+        "secondary-fixed-dim": "#ddb7ff",
+        "tertiary-fixed": "#acedff",
+        "primary": "#c0c1ff",
+        "surface-container-low": "#1a1b22",
+        "on-tertiary-container": "#002f38",
+        "on-primary-fixed-variant": "#2f2ebe",
+        "primary-fixed-dim": "#c0c1ff",
+        "on-tertiary-fixed": "#001f26",
+        "outline": "#908fa0",
+        "surface-dim": "#12131a",
+        "primary-container": "#8083ff",
+        "on-primary-container": "#0d0096",
+        "on-error": "#690005",
+        "surface-variant": "#33343c",
+        "surface-container-highest": "#33343c",
+        "on-surface": "#e3e1ec",
+        "tertiary-container": "#009eb9",
+        "inverse-on-surface": "#2f3038",
+        "error": "#ffb4ab",
+        "secondary-fixed": "#f0dbff",
+        "surface-container-lowest": "#0d0e15",
+        "inverse-surface": "#e3e1ec",
+        "on-tertiary": "#003640",
+        "outline-variant": "#464554",
+        "on-error-container": "#ffdad6",
+        "secondary": "#ddb7ff",
+        "inverse-primary": "#494bd6",
+        "on-surface-variant": "#c7c4d7",
+        "secondary-container": "#6f00be",
+        "surface-container": "#1e1f26",
+        "error-container": "#93000a"
+      },
+      "borderRadius": {
+        "DEFAULT": "0.125rem",
+        "lg": "0.25rem",
+        "xl": "0.5rem",
+        "full": "0.75rem"
+      },
+      "spacing": {
+        "space-lg": "1.5rem",
+        "space-xs": "0.5rem",
+        "sidebar-w": "16rem",
+        "space-xl": "2rem",
+        "space-2xs": "0.25rem",
+        "margin-desktop": "2rem",
+        "space-2xl": "3rem",
+        "gutter-desktop": "1.5rem",
+        "space-sm": "0.75rem",
+        "space-md": "1rem",
+        "inspector-w": "26rem"
+      },
+      "fontFamily": {
+        "label-caps": ["JetBrains Mono"],
+        "title-md": ["Inter"],
+        "display-sm": ["Inter"],
+        "body-md": ["Inter"],
+        "body-lg": ["Inter"],
+        "body-sm": ["Inter"],
+        "title-lg": ["Inter"],
+        "display-lg": ["Inter"],
+        "display-sm-mobile": ["Inter"],
+        "mono-metric": ["JetBrains Mono"]
+      },
+      "fontSize": {
+        "label-caps": ["0.6875rem", {"lineHeight": "1.2", "letterSpacing": "0.06em", "fontWeight": "600"}],
+        "title-md": ["1.0625rem", {"lineHeight": "1.45", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+        "display-sm": ["2rem", {"lineHeight": "1.2", "letterSpacing": "-0.025em", "fontWeight": "600"}],
+        "body-md": ["0.875rem", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}],
+        "body-lg": ["1rem", {"lineHeight": "1.6", "letterSpacing": "-0.005em", "fontWeight": "400"}],
+        "body-sm": ["0.75rem", {"lineHeight": "1.45", "letterSpacing": "0.005em", "fontWeight": "400"}],
+        "title-lg": ["1.25rem", {"lineHeight": "1.4", "letterSpacing": "-0.015em", "fontWeight": "600"}],
+        "display-lg": ["3rem", {"lineHeight": "1.15", "letterSpacing": "-0.03em", "fontWeight": "700"}],
+        "display-sm-mobile": ["1.5rem", {"lineHeight": "1.25", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+        "mono-metric": ["0.8125rem", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "500"}]
+      }
+    }
+  }
+}</script></head><body class="bg-background font-body-md text-body-md text-on-surface"><aside class="fixed left-0 top-0 h-full w-sidebar-w bg-surface-container-lowest/90 backdrop-blur-xl z-50 flex flex-col justify-between py-space-md shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col gap-space-md"><div class="px-space-md flex items-center justify-between"><div class="flex items-center gap-space-xs"><div class="w-8 h-8 rounded-xl bg-primary-container flex items-center justify-center text-on-primary-container font-title-lg text-title-lg"><span class="material-symbols-outlined text-[18px]">psychology</span></div><div class="flex flex-col"><span class="font-title-md text-title-md font-semibold text-on-surface tracking-tight">Insights Copilot</span><span class="font-label-caps text-label-caps text-on-surface-variant">v2.4 Enterprise</span></div></div></div><div class="px-space-md"><button class="w-full flex items-center justify-between px-space-sm py-space-xs rounded-xl bg-surface-container-low hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors"><div class="flex items-center gap-space-xs overflow-hidden"><span class="material-symbols-outlined text-[18px] text-tertiary">layers</span><span class="font-body-sm text-body-sm font-medium text-on-surface truncate">Acme Mobile App</span></div><span class="material-symbols-outlined text-[16px] text-on-surface-variant">unfold_more</span></button></div><nav class="flex flex-col gap-space-2xs px-space-sm" data-active-classes="bg-primary-container text-on-primary-container font-semibold rounded-xl"><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[20px]">grid_view</span><span class="font-body-md text-body-md">Dashboard</span></a><a aria-current="page" class="flex items-center justify-between px-space-sm py-space-xs transition-colors bg-primary-container text-on-primary-container font-semibold rounded-xl" data-path="reviews-inbox" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">inbox</span><span class="font-body-md text-body-md">Reviews Inbox</span></div><span class="px-space-xs py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-mono-metric text-mono-metric">24</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="analytics" href="#"><span class="material-symbols-outlined text-[20px]">monitoring</span><span class="font-body-md text-body-md">Analytics</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="categories" href="#"><span class="material-symbols-outlined text-[20px]">category</span><span class="font-body-md text-body-md">Categories</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="word-cloud" href="#"><span class="material-symbols-outlined text-[20px]">cloud</span><span class="font-body-md text-body-md">Word Cloud</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="ideation" href="#"><span class="material-symbols-outlined text-[20px]">lightbulb</span><span class="font-body-md text-body-md">Ideation</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="reporting" href="#"><span class="material-symbols-outlined text-[20px]">description</span><span class="font-body-md text-body-md">Reporting</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="settings" href="#"><span class="material-symbols-outlined text-[20px]">settings</span><span class="font-body-md text-body-md">Settings</span></a></nav></div><div class="px-space-md pt-space-sm"><div class="p-space-xs rounded-xl bg-surface-container-low flex items-center justify-between"><div class="flex items-center gap-space-xs overflow-hidden"><div class="relative"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-tertiary-container ring-2 ring-surface-container-low"></span></div><div class="flex flex-col overflow-hidden"><span class="font-body-sm text-body-sm font-medium text-on-surface truncate">Dev Lead</span><span class="font-label-caps text-label-caps text-tertiary truncate">Online</span></div></div><button class="text-on-surface-variant hover:text-on-surface p-space-2xs"><span class="material-symbols-outlined text-[18px]">more_vert</span></button></div></div></aside><div class="pl-sidebar-w"><header class="fixed top-0 left-sidebar-w right-0 h-16 bg-surface-container-lowest/80 backdrop-blur-xl z-40 shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 w-full px-space-lg flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs font-body-sm text-body-sm text-on-surface-variant"><span class="material-symbols-outlined text-[16px]">home</span><span>/</span><span class="text-on-surface font-medium">Workspace</span></div><div class="h-4 w-px bg-surface-container-highest"></div><div class="flex items-center gap-space-2xs"><span class="w-2 h-2 rounded-full bg-tertiary-container animate-pulse"></span><span class="font-mono-metric text-mono-metric text-on-surface-variant">Synced 4m ago</span></div></div><div class="flex items-center gap-space-sm"><div class="flex items-center bg-surface-container-low p-1 rounded-xl"><button class="px-space-xs py-1 rounded-lg bg-surface-container-high text-on-surface font-body-sm text-body-sm font-medium transition-colors">All Platforms</button><button class="px-space-xs py-1 rounded-lg text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm transition-colors">iOS</button><button class="px-space-xs py-1 rounded-lg text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm transition-colors">Android</button></div><div class="flex items-center bg-surface-container-low px-space-sm py-1.5 rounded-xl gap-space-xs text-on-surface-variant hover:text-on-surface cursor-pointer"><span class="material-symbols-outlined text-[16px]">calendar_today</span><span class="font-body-sm text-body-sm">Last 30 Days</span><span class="material-symbols-outlined text-[16px]">expand_more</span></div><button class="flex items-center gap-space-2xs px-space-sm py-1.5 rounded-xl bg-primary-container hover:bg-primary text-on-primary-container font-body-sm text-body-sm font-semibold transition-all shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><span class="material-symbols-outlined text-[16px]">sync</span><span>Refresh Feeds</span></button><div class="h-4 w-px bg-surface-container-highest"></div><button class="p-space-2xs text-on-surface-variant hover:text-on-surface relative rounded-lg hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-tertiary-container"></span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-16 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<!-- Ensure Sidebar Navigation highlights 'Analytics' -->
+<script>
+    (function () {
+      const activeClasses = "bg-primary-container text-on-primary-container font-semibold rounded-xl".split(" ");
+      const inactiveClasses = "text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface".split(" ");
+      document.querySelectorAll('aside nav a').forEach(a => {
+        if (a.getAttribute('data-path') === 'analytics') {
+          a.classList.remove(...inactiveClasses);
+          a.classList.add(...activeClasses);
+        } else {
+          a.classList.remove(...activeClasses);
+          a.classList.add(...inactiveClasses);
+        }
+      });
+    })();
+  </script>
+<div class="px-space-lg py-space-xl flex flex-col gap-space-xl max-w-[1720px] mx-auto w-full">
+<!-- 1. Page Header & Control Bar -->
+<div class="flex flex-col gap-space-md">
+<!-- Breadcrumb row with telemetry status -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-xs font-body-sm text-body-sm text-on-surface-variant">
+<span>Workspace</span>
+<span class="text-outline-variant">/</span>
+<span class="text-on-surface font-medium">Analytics &amp; Trends</span>
+</div>
+<div class="flex items-center gap-space-xs px-space-sm py-1 rounded-full bg-surface-container-high shadow-sm">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary"></span>
+</span>
+<span class="font-label-caps text-label-caps text-tertiary tracking-wider">TELEMETRY ACTIVE</span>
+<span class="text-outline-variant mx-1">•</span>
+<span class="font-mono-metric text-mono-metric text-on-surface-variant">Pipeline 99.98% Healthy</span>
+</div>
+</div>
+<!-- Title & Deep Context -->
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-space-md">
+<div class="flex flex-col gap-space-2xs max-w-4xl">
+<h1 class="font-display-sm text-display-sm text-on-surface tracking-tight">Analytics &amp; Trends</h1>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+            Longitudinal review volume time-series, sentiment drift velocity, platform comparative momentum, and churn probability vectors.
+          </p>
+</div>
+<!-- Controls Toolbar -->
+<div class="flex flex-wrap items-center gap-space-xs bg-surface-container-low p-1.5 rounded-xl shadow-sm">
+<!-- Granularity Segmented Pill -->
+<div class="flex items-center bg-surface-container-lowest p-1 rounded-lg">
+<button class="px-space-xs py-1 rounded font-label-caps text-label-caps text-on-surface-variant hover:text-on-surface transition-colors">DAILY</button>
+<button class="px-space-xs py-1 rounded bg-primary-container text-on-primary-container font-label-caps text-label-caps transition-all">WEEKLY</button>
+<button class="px-space-xs py-1 rounded font-label-caps text-label-caps text-on-surface-variant hover:text-on-surface transition-colors">MONTHLY</button>
+<button class="px-space-xs py-1 rounded font-label-caps text-label-caps text-on-surface-variant hover:text-on-surface transition-colors">QUARTERLY</button>
+</div>
+<!-- Range Picker -->
+<div class="flex items-center gap-space-2xs px-space-sm py-1.5 rounded-lg bg-surface-container-high text-on-surface cursor-pointer hover:bg-surface-bright transition-colors">
+<span class="material-symbols-outlined text-[16px] text-tertiary">date_range</span>
+<span class="font-body-sm text-body-sm font-medium">Last 90 Days</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">expand_more</span>
+</div>
+<!-- Platform Pill -->
+<div class="flex items-center gap-space-2xs px-space-sm py-1.5 rounded-lg bg-surface-container-high text-on-surface cursor-pointer hover:bg-surface-bright transition-colors">
+<span class="material-symbols-outlined text-[16px] text-secondary">devices</span>
+<span class="font-body-sm text-body-sm font-medium">All Platforms (iOS + Android)</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">expand_more</span>
+</div>
+<!-- Visual Export Button -->
+<button class="flex items-center gap-space-2xs px-space-sm py-1.5 rounded-lg bg-surface-container-highest text-on-surface hover:bg-surface-bright transition-all shadow-sm">
+<span class="material-symbols-outlined text-[16px]">file_download</span>
+<span class="font-body-sm text-body-sm font-medium">Export Report</span>
+</button>
+</div>
+</div>
+</div>
+<!-- 2. Top KPI Metric Summary Bar -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-space-md">
+<!-- Card 1: Review Velocity -->
+<div class="bg-surface-container-low rounded-xl p-space-md shadow-md flex flex-col justify-between relative overflow-hidden group hover:bg-surface-container transition-colors">
+<div class="flex items-start justify-between">
+<div class="flex flex-col gap-space-2xs">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Review Ingestion Velocity</span>
+<div class="flex items-baseline gap-space-xs">
+<span class="font-display-sm text-display-sm text-on-surface font-bold tracking-tight">842</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">/day</span>
+</div>
+</div>
+<div class="w-9 h-9 rounded-lg bg-primary-container/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">speed</span>
+</div>
+</div>
+<div class="mt-space-md flex items-center justify-between pt-space-xs">
+<div class="flex items-center gap-1 font-mono-metric text-mono-metric text-tertiary">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+<span>+18.4%</span>
+<span class="text-on-surface-variant ml-1 font-body-sm text-body-sm">vs prev 90d</span>
+</div>
+<!-- Upward Sparkline -->
+<svg class="w-24 h-7 overflow-visible" fill="none" viewbox="0 0 100 28">
+<path class="text-tertiary" d="M0 22 Q 15 24, 25 18 T 50 14 T 75 8 T 100 2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path>
+<path class="text-tertiary/10" d="M0 22 Q 15 24, 25 18 T 50 14 T 75 8 T 100 2 L 100 28 L 0 28 Z" fill="currentColor"></path>
+<circle class="text-tertiary" cx="100" cy="2" fill="currentColor" r="3"></circle>
+</svg>
+</div>
+</div>
+<!-- Card 2: Sentiment Drift Score -->
+<div class="bg-surface-container-low rounded-xl p-space-md shadow-md flex flex-col justify-between relative overflow-hidden group hover:bg-surface-container transition-colors">
+<div class="flex items-start justify-between">
+<div class="flex flex-col gap-space-2xs">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Sentiment Drift Velocity</span>
+<div class="flex items-baseline gap-space-xs">
+<span class="font-display-sm text-display-sm text-on-surface font-bold tracking-tight">+0.38</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">pt</span>
+</div>
+</div>
+<div class="w-9 h-9 rounded-lg bg-tertiary-container/20 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[20px]">insights</span>
+</div>
+</div>
+<div class="mt-space-md flex items-center justify-between pt-space-xs">
+<div class="flex items-center gap-1 font-mono-metric text-mono-metric text-tertiary">
+<span class="px-space-xs py-0.5 rounded bg-tertiary-container/30 text-tertiary-fixed font-semibold">4.38 → 4.42</span>
+</div>
+<!-- Multi-step Trend Line -->
+<svg class="w-24 h-7 overflow-visible" fill="none" viewbox="0 0 100 28">
+<path class="text-tertiary" d="M0 20 L 20 18 L 40 22 L 60 12 L 80 14 L 100 4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<circle class="text-tertiary" cx="100" cy="4" fill="currentColor" r="3"></circle>
+</svg>
+</div>
+</div>
+<!-- Card 3: Detractor Churn Exposure -->
+<div class="bg-surface-container-low rounded-xl p-space-md shadow-md flex flex-col justify-between relative overflow-hidden group hover:bg-surface-container transition-colors">
+<div class="flex items-start justify-between">
+<div class="flex flex-col gap-space-2xs">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Detractor Churn Exposure</span>
+<div class="flex items-baseline gap-space-xs">
+<span class="font-display-sm text-display-sm text-on-surface font-bold tracking-tight">3.2%</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">risk volume</span>
+</div>
+</div>
+<div class="w-9 h-9 rounded-lg bg-secondary-container/30 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[20px]">shield_with_heart</span>
+</div>
+</div>
+<div class="mt-space-md flex items-center justify-between pt-space-xs">
+<div class="flex items-center gap-1 font-mono-metric text-mono-metric text-secondary">
+<span class="material-symbols-outlined text-[16px]">trending_down</span>
+<span>-0.8%</span>
+<span class="text-on-surface-variant ml-1 font-body-sm text-body-sm">drop in churn threat</span>
+</div>
+<!-- Risk sparkline -->
+<svg class="w-24 h-7 overflow-visible" fill="none" viewbox="0 0 100 28">
+<path class="text-secondary" d="M0 6 L 25 10 L 50 14 L 75 12 L 100 24" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path>
+<circle class="text-secondary" cx="100" cy="24" fill="currentColor" r="3"></circle>
+</svg>
+</div>
+</div>
+<!-- Card 4: SLA Velocity -->
+<div class="bg-surface-container-low rounded-xl p-space-md shadow-md flex flex-col justify-between relative overflow-hidden group hover:bg-surface-container transition-colors">
+<div class="flex items-start justify-between">
+<div class="flex flex-col gap-space-2xs">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Resolution / SLA Velocity</span>
+<div class="flex items-baseline gap-space-xs">
+<span class="font-display-sm text-display-sm text-on-surface font-bold tracking-tight">3.4</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">hrs avg</span>
+</div>
+</div>
+<div class="w-9 h-9 rounded-lg bg-primary-container/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">timer</span>
+</div>
+</div>
+<div class="mt-space-md flex items-center justify-between pt-space-xs">
+<div class="flex items-center gap-1 font-mono-metric text-mono-metric text-primary">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span>Target 4.0h</span>
+<span class="text-on-surface-variant ml-1 font-body-sm text-body-sm">(Top Quartile)</span>
+</div>
+<!-- Gauge mini bar -->
+<div class="w-20 bg-surface-container-highest h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 85%;"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- 3. Primary Deep Visualizations -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-md">
+<!-- Chart 1: Review Volume & Platform Momentum -->
+<div class="lg:col-span-7 bg-surface-container-low rounded-xl p-space-md shadow-lg flex flex-col justify-between gap-space-md">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">stacked_bar_chart</span>
+<h2 class="font-title-lg text-title-lg text-on-surface">Review Volume &amp; Platform Momentum</h2>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Weekly cross-store ingestion comparison across 12-week release cycles</p>
+</div>
+<!-- Legends -->
+<div class="flex items-center gap-space-sm">
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-3 rounded-full bg-primary"></span>
+<span class="font-body-sm text-body-sm text-on-surface">iOS App Store</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-3 rounded-full bg-secondary"></span>
+<span class="font-body-sm text-body-sm text-on-surface">Google Play</span>
+</div>
+</div>
+</div>
+<!-- High Fidelity SVG Stacked Area Multi-line Graph -->
+<div class="relative w-full h-72 bg-surface-container-lowest/70 rounded-xl p-space-sm flex flex-col justify-between overflow-hidden">
+<!-- Background Grid Lines -->
+<div class="absolute inset-0 px-space-md py-space-sm flex flex-col justify-between pointer-events-none opacity-20">
+<div class="w-full h-px bg-surface-bright"></div>
+<div class="w-full h-px bg-surface-bright"></div>
+<div class="w-full h-px bg-surface-bright"></div>
+<div class="w-full h-px bg-surface-bright"></div>
+<div class="w-full h-px bg-surface-bright"></div>
+</div>
+<!-- Y Axis Labels -->
+<div class="absolute left-2 top-2 bottom-6 flex flex-col justify-between font-mono-metric text-[10px] text-on-surface-variant pointer-events-none">
+<span>3,500</span>
+<span>2,625</span>
+<span>1,750</span>
+<span>875</span>
+<span>0</span>
+</div>
+<!-- Chart Area -->
+<div class="relative w-full h-full pl-8 pb-5 pt-2">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 700 220">
+<defs>
+<!-- iOS Gradient Fill -->
+<lineargradient id="iosGrad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#c0c1ff" stop-opacity="0.35"></stop>
+<stop offset="100%" stop-color="#c0c1ff" stop-opacity="0.0"></stop>
+</lineargradient>
+<!-- Android Gradient Fill -->
+<lineargradient id="androidGrad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#ddb7ff" stop-opacity="0.25"></stop>
+<stop offset="100%" stop-color="#ddb7ff" stop-opacity="0.0"></stop>
+</lineargradient>
+</defs>
+<!-- Android Area (lower stack) -->
+<path d="M 10 180 Q 70 170, 130 165 T 250 155 T 370 140 T 490 125 T 610 120 T 690 110 L 690 210 L 10 210 Z" fill="url(#androidGrad)"></path>
+<path d="M 10 180 Q 70 170, 130 165 T 250 155 T 370 140 T 490 125 T 610 120 T 690 110" fill="none" stroke="#ddb7ff" stroke-width="2"></path>
+<!-- iOS Area (high volume) -->
+<path d="M 10 130 Q 70 115, 130 100 T 250 90 T 370 70 T 450 30 T 530 65 T 610 50 T 690 40 L 690 210 L 10 210 Z" fill="url(#iosGrad)"></path>
+<path d="M 10 130 Q 70 115, 130 100 T 250 90 T 370 70 T 450 30 T 530 65 T 610 50 T 690 40" fill="none" stroke="#c0c1ff" stroke-width="2.5"></path>
+<!-- Milestone Marker W8 Spike -->
+<line stroke="#4cd7f6" stroke-dasharray="4 3" stroke-width="1.5" x1="450" x2="450" y1="30" y2="210"></line>
+<circle cx="450" cy="30" fill="#4cd7f6" r="5" stroke="#12131a" stroke-width="2"></circle>
+</svg>
+<!-- Interactive Marker Tooltip Callout -->
+<div class="absolute left-[62%] top-3 -translate-x-1/2 bg-surface-container-high px-space-xs py-1 rounded shadow-lg flex items-center gap-space-2xs pointer-events-none">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="font-label-caps text-[10px] text-on-surface font-semibold">W8: v2.4.0 Release Spike (+2,840)</span>
+</div>
+</div>
+<!-- X Axis Weeks -->
+<div class="flex justify-between pl-8 pr-2 font-mono-metric text-[10px] text-on-surface-variant">
+<span>W1</span><span>W2</span><span>W3</span><span>W4</span><span>W5</span><span>W6</span><span>W7</span><span class="text-tertiary font-bold">W8</span><span>W9</span><span>W10</span><span>W11</span><span>W12</span>
+</div>
+</div>
+<!-- Breakdown Summary Strip -->
+<div class="grid grid-cols-2 gap-space-sm pt-space-xs">
+<div class="p-space-xs rounded-xl bg-surface-container-lowest flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<div class="w-3 h-3 rounded-full bg-primary"></div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant">APPLE APP STORE TOTAL</span>
+<span class="font-title-md text-title-md font-bold text-on-surface">18,420 <span class="font-body-sm text-body-sm font-normal text-on-surface-variant">(74.7%)</span></span>
+</div>
+</div>
+<span class="font-mono-metric text-mono-metric text-tertiary">+22.4% MoM</span>
+</div>
+<div class="p-space-xs rounded-xl bg-surface-container-lowest flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<div class="w-3 h-3 rounded-full bg-secondary"></div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant">GOOGLE PLAY TOTAL</span>
+<span class="font-title-md text-title-md font-bold text-on-surface">6,228 <span class="font-body-sm text-body-sm font-normal text-on-surface-variant">(25.3%)</span></span>
+</div>
+</div>
+<span class="font-mono-metric text-mono-metric text-tertiary">+8.1% MoM</span>
+</div>
+</div>
+</div>
+<!-- Chart 2: Sentiment Drift & Moving Average -->
+<div class="lg:col-span-5 bg-surface-container-low rounded-xl p-space-md shadow-lg flex flex-col justify-between gap-space-md">
+<div class="flex flex-col gap-space-2xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-tertiary text-[20px]">auto_graph</span>
+<h2 class="font-title-lg text-title-lg text-on-surface">Sentiment Drift vs Releases</h2>
+</div>
+<span class="font-mono-metric text-mono-metric px-space-xs py-0.5 rounded bg-surface-container-high text-tertiary">EMA 14-Day</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Dual-axis smoothed rating score trajectory with version milestones</p>
+</div>
+<!-- Sentiment Milestone Graph -->
+<div class="relative w-full h-72 bg-surface-container-lowest/70 rounded-xl p-space-sm flex flex-col justify-between overflow-hidden">
+<!-- Background bars representing sentiment volume distribution -->
+<div class="absolute inset-0 pl-10 pr-4 pt-4 pb-8 flex items-end justify-between gap-2 pointer-events-none opacity-25">
+<div class="w-full bg-tertiary-container rounded-t h-[40%]"></div>
+<div class="w-full bg-tertiary-container rounded-t h-[52%]"></div>
+<div class="w-full bg-tertiary-container rounded-t h-[48%]"></div>
+<div class="w-full bg-secondary rounded-t h-[68%]"></div>
+<div class="w-full bg-secondary rounded-t h-[60%]"></div>
+<div class="w-full bg-tertiary rounded-t h-[78%]"></div>
+<div class="w-full bg-tertiary rounded-t h-[86%]"></div>
+<div class="w-full bg-primary rounded-t h-[94%]"></div>
+</div>
+<!-- Y Axis -->
+<div class="absolute left-2 top-2 bottom-6 flex flex-col justify-between font-mono-metric text-[10px] text-on-surface-variant pointer-events-none">
+<span>5.0★</span>
+<span>4.5★</span>
+<span>4.0★</span>
+<span>3.5★</span>
+<span>3.0★</span>
+</div>
+<!-- Continuous Line SVG -->
+<div class="relative w-full h-full pl-8 pb-5 pt-2">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 500 220">
+<!-- Smoothed rating trajectory -->
+<path d="M 10 160 C 80 140, 120 170, 180 120 C 240 70, 280 110, 360 60 C 420 30, 460 35, 490 20" fill="none" stroke="#4cd7f6" stroke-linecap="round" stroke-width="3"></path>
+<!-- Milestone points -->
+<circle cx="80" cy="145" fill="#12131a" r="4" stroke="#c0c1ff" stroke-width="2"></circle>
+<circle cx="210" cy="100" fill="#12131a" r="4" stroke="#c0c1ff" stroke-width="2"></circle>
+<circle cx="340" cy="70" fill="#12131a" r="4" stroke="#c0c1ff" stroke-width="2"></circle>
+<circle cx="470" cy="24" fill="#4cd7f6" r="5" stroke="#ffffff" stroke-width="2"></circle>
+</svg>
+<!-- Release Version Anchors -->
+<div class="absolute left-[14%] top-40 bg-surface-container-high px-1.5 py-0.5 rounded font-label-caps text-[9px] text-on-surface-variant">v2.2.0</div>
+<div class="absolute left-[40%] top-28 bg-surface-container-high px-1.5 py-0.5 rounded font-label-caps text-[9px] text-on-surface-variant">v2.3.0</div>
+<div class="absolute left-[65%] top-20 bg-surface-container-high px-1.5 py-0.5 rounded font-label-caps text-[9px] text-on-surface-variant">v2.3.5</div>
+<div class="absolute right-2 top-2 bg-primary-container px-2 py-0.5 rounded font-label-caps text-[10px] text-on-primary-container font-bold">v2.4.0 (4.42★)</div>
+</div>
+<div class="flex justify-between pl-8 pr-2 font-mono-metric text-[10px] text-on-surface-variant">
+<span>May</span><span>Jun</span><span>Jul</span><span>Aug (Current)</span>
+</div>
+</div>
+<!-- Release Impact Summary -->
+<div class="p-space-xs rounded-xl bg-surface-container-lowest flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-tertiary text-[18px]">verified</span>
+<span class="font-body-sm text-body-sm text-on-surface">Release v2.4.0 generated the highest delta:</span>
+</div>
+<span class="font-mono-metric text-mono-metric text-tertiary font-bold">+0.42★ average boost</span>
+</div>
+</div>
+</div>
+<!-- 4. Deep Analytical Breakdown Grid (3 columns) -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-space-md">
+<!-- Card 1: Rating Breakdown Velocity -->
+<div class="bg-surface-container-low rounded-xl p-space-md shadow-md flex flex-col justify-between gap-space-md">
+<div class="flex flex-col gap-space-2xs">
+<div class="flex items-center justify-between">
+<h3 class="font-title-md text-title-md text-on-surface font-semibold">Rating Velocity Matrix</h3>
+<span class="font-label-caps text-label-caps text-on-surface-variant">30D WINDOW DELTA</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Shift in star ratings relative to the previous 30-day baseline</p>
+</div>
+<!-- Velocity Bars -->
+<div class="flex flex-col gap-space-sm">
+<!-- 5 Stars -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between font-body-sm text-body-sm">
+<div class="flex items-center gap-1.5">
+<span class="font-mono-metric text-mono-metric text-on-surface font-semibold">5 Stars</span>
+<span class="text-on-surface-variant">(16,420)</span>
+</div>
+<span class="font-mono-metric text-mono-metric text-tertiary font-medium">+14.2%</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-2 rounded-full overflow-hidden flex">
+<div class="bg-tertiary h-full rounded-full" style="width: 68%;"></div>
+</div>
+</div>
+<!-- 4 Stars -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between font-body-sm text-body-sm">
+<div class="flex items-center gap-1.5">
+<span class="font-mono-metric text-mono-metric text-on-surface font-semibold">4 Stars</span>
+<span class="text-on-surface-variant">(4,190)</span>
+</div>
+<span class="font-mono-metric text-mono-metric text-tertiary font-medium">+4.8%</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-2 rounded-full overflow-hidden flex">
+<div class="bg-primary h-full rounded-full" style="width: 17%;"></div>
+</div>
+</div>
+<!-- 3 Stars -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between font-body-sm text-body-sm">
+<div class="flex items-center gap-1.5">
+<span class="font-mono-metric text-mono-metric text-on-surface font-semibold">3 Stars</span>
+<span class="text-on-surface-variant">(1,950)</span>
+</div>
+<span class="font-mono-metric text-mono-metric text-on-surface-variant">-1.2%</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-2 rounded-full overflow-hidden flex">
+<div class="bg-outline h-full rounded-full" style="width: 8%;"></div>
+</div>
+</div>
+<!-- 2 Stars -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between font-body-sm text-body-sm">
+<div class="flex items-center gap-1.5">
+<span class="font-mono-metric text-mono-metric text-on-surface font-semibold">2 Stars</span>
+<span class="text-on-surface-variant">(860)</span>
+</div>
+<span class="font-mono-metric text-mono-metric text-secondary font-medium">-3.4%</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-2 rounded-full overflow-hidden flex">
+<div class="bg-secondary h-full rounded-full" style="width: 4%;"></div>
+</div>
+</div>
+<!-- 1 Star -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between font-body-sm text-body-sm">
+<div class="flex items-center gap-1.5">
+<span class="font-mono-metric text-mono-metric text-on-surface font-semibold">1 Star</span>
+<span class="text-on-surface-variant">(1,228)</span>
+</div>
+<span class="font-mono-metric text-mono-metric text-secondary font-medium">-8.5% drop</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-2 rounded-full overflow-hidden flex">
+<div class="bg-error h-full rounded-full" style="width: 5%;"></div>
+</div>
+</div>
+</div>
+<div class="p-space-xs rounded-lg bg-surface-container-lowest flex items-center justify-between font-body-sm text-body-sm">
+<span class="text-on-surface-variant">Net Promoter Index</span>
+<span class="font-mono-metric text-mono-metric text-tertiary font-bold">+62 NPS (↑ 7 pts)</span>
+</div>
+</div>
+<!-- Card 2: Churn Risk & Negative Drivers -->
+<div class="bg-surface-container-low rounded-xl p-space-md shadow-md flex flex-col justify-between gap-space-md">
+<div class="flex flex-col gap-space-2xs">
+<div class="flex items-center justify-between">
+<h3 class="font-title-md text-title-md text-on-surface font-semibold">Negative Sentiment Drivers</h3>
+<span class="font-label-caps text-label-caps text-error">CHURN VECTORS</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">AI-isolated clusters with estimated cancellation impact</p>
+</div>
+<!-- Issue Triggers List -->
+<div class="flex flex-col gap-space-xs">
+<!-- Item 1 -->
+<div class="p-space-xs rounded-xl bg-surface-container-lowest flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span class="font-body-md text-body-md font-semibold text-on-surface">Billing &amp; Renewal Friction</span>
+</div>
+<span class="px-space-2xs py-0.5 rounded bg-error-container text-on-error-container font-label-caps text-[9px] uppercase">Under Investigation</span>
+</div>
+<div class="flex items-center justify-between font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+<span>218 mentions • Annual subscription flow</span>
+<span class="font-mono-metric text-mono-metric text-error font-semibold">42% Churn Risk</span>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="p-space-xs rounded-xl bg-surface-container-lowest flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-body-md text-body-md font-semibold text-on-surface">Camera Crash on Launch (v2.4.0)</span>
+</div>
+<span class="px-space-2xs py-0.5 rounded bg-secondary-container text-on-secondary-container font-label-caps text-[9px] uppercase">Patch Deployed</span>
+</div>
+<div class="flex items-center justify-between font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+<span>342 mentions • iOS 17.4+ hardware access</span>
+<span class="font-mono-metric text-mono-metric text-secondary font-semibold">38% Churn Risk</span>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="p-space-xs rounded-xl bg-surface-container-lowest flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-outline"></span>
+<span class="font-body-md text-body-md font-semibold text-on-surface">Navigation Reachability</span>
+</div>
+<span class="px-space-2xs py-0.5 rounded bg-surface-container-high text-on-surface-variant font-label-caps text-[9px] uppercase">Backlog</span>
+</div>
+<div class="flex items-center justify-between font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+<span>95 mentions • Reachability on foldables</span>
+<span class="font-mono-metric text-mono-metric text-on-surface-variant font-semibold">12% Churn Risk</span>
+</div>
+</div>
+</div>
+<button class="w-full py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface font-body-sm text-body-sm font-medium transition-colors flex items-center justify-center gap-space-2xs">
+<span>Inspect All 14 Driver Clusters</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+<!-- Card 3: Sentiment by Geographic Market -->
+<div class="bg-surface-container-low rounded-xl p-space-md shadow-md flex flex-col justify-between gap-space-md">
+<div class="flex flex-col gap-space-2xs">
+<div class="flex items-center justify-between">
+<h3 class="font-title-md text-title-md text-on-surface font-semibold">Market &amp; Locale Breakdown</h3>
+<span class="font-label-caps text-label-caps text-on-surface-variant">TOP 5 TERRITORIES</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Cross-border satisfaction ratings and regional sample size</p>
+</div>
+<!-- Regional Table -->
+<div class="flex flex-col gap-space-2xs">
+<div class="flex items-center justify-between py-1.5 px-space-xs rounded-lg bg-surface-container-lowest">
+<div class="flex items-center gap-space-xs">
+<span class="font-mono-metric text-mono-metric text-primary font-bold">US</span>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">United States</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant">12.4k reviews</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="font-mono-metric text-mono-metric text-tertiary font-bold">4.6★</span>
+<span class="font-mono-metric text-[11px] text-tertiary bg-tertiary-container/20 px-1 rounded">+8% NPS</span>
+</div>
+</div>
+<div class="flex items-center justify-between py-1.5 px-space-xs rounded-lg bg-surface-container-lowest">
+<div class="flex items-center gap-space-xs">
+<span class="font-mono-metric text-mono-metric text-primary font-bold">UK</span>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">United Kingdom</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant">4.1k reviews</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="font-mono-metric text-mono-metric text-on-surface font-bold">4.3★</span>
+<span class="font-mono-metric text-[11px] text-on-surface-variant bg-surface-container-high px-1 rounded">+2% NPS</span>
+</div>
+</div>
+<div class="flex items-center justify-between py-1.5 px-space-xs rounded-lg bg-surface-container-lowest">
+<div class="flex items-center gap-space-xs">
+<span class="font-mono-metric text-mono-metric text-primary font-bold">DE</span>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">Germany</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant">2.8k reviews</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="font-mono-metric text-mono-metric text-on-surface font-bold">4.2★</span>
+<span class="font-mono-metric text-[11px] text-on-surface-variant bg-surface-container-high px-1 rounded">+4% NPS</span>
+</div>
+</div>
+<div class="flex items-center justify-between py-1.5 px-space-xs rounded-lg bg-surface-container-lowest">
+<div class="flex items-center gap-space-xs">
+<span class="font-mono-metric text-mono-metric text-primary font-bold">JP</span>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">Japan</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant">1.9k reviews</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="font-mono-metric text-mono-metric text-tertiary font-bold">4.5★</span>
+<span class="font-mono-metric text-[11px] text-tertiary bg-tertiary-container/20 px-1 rounded">+6% NPS</span>
+</div>
+</div>
+<div class="flex items-center justify-between py-1.5 px-space-xs rounded-lg bg-surface-container-lowest">
+<div class="flex items-center gap-space-xs">
+<span class="font-mono-metric text-mono-metric text-primary font-bold">CA</span>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">Canada</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant">1.6k reviews</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="font-mono-metric text-mono-metric text-on-surface font-bold">4.1★</span>
+<span class="font-mono-metric text-[11px] text-on-surface-variant bg-surface-container-high px-1 rounded">0% NPS</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant font-body-sm text-body-sm pt-1">
+<span>Localization Health: 94.2%</span>
+<span class="text-tertiary font-medium">18 Locales Indexed</span>
+</div>
+</div>
+</div>
+<!-- 5. Cohort Analysis & Retention Correlation Section -->
+<div class="bg-surface-container-low rounded-xl p-space-md shadow-lg flex flex-col gap-space-md">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs">
+<div class="flex flex-col gap-space-2xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">groups</span>
+<h2 class="font-title-lg text-title-lg text-on-surface">Version Cohort Sentiment Trajectory</h2>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">User satisfaction retention over Day 1, Day 7, Day 14, and Day 30 windows post-update</p>
+</div>
+<div class="flex items-center gap-space-xs font-label-caps text-label-caps text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-tertiary"></span> &gt; 4.3★ Optimal</span>
+<span class="flex items-center gap-1 ml-2"><span class="w-2 h-2 rounded-full bg-error"></span> &lt; 3.8★ Critical</span>
+</div>
+</div>
+<!-- Cohort Heatmap Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left font-body-sm text-body-sm">
+<thead>
+<tr class="bg-surface-container-lowest text-on-surface-variant font-label-caps text-label-caps">
+<th class="py-space-xs px-space-sm rounded-l-lg">RELEASE COHORT</th>
+<th class="py-space-xs px-space-sm">ROLLOUT DATE</th>
+<th class="py-space-xs px-space-sm">USERS INDEXED</th>
+<th class="py-space-xs px-space-sm text-center">DAY 1 SENTIMENT</th>
+<th class="py-space-xs px-space-sm text-center">DAY 7 RETENTION</th>
+<th class="py-space-xs px-space-sm text-center">DAY 14 RETENTION</th>
+<th class="py-space-xs px-space-sm text-center rounded-r-lg">DAY 30 STABILIZED</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-high">
+<!-- Row 1: v2.4.0 -->
+<tr class="hover:bg-surface-container transition-colors">
+<td class="py-space-sm px-space-sm font-semibold text-on-surface flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span>v2.4.0 (Latest Release)</span>
+</td>
+<td class="py-space-sm px-space-sm font-mono-metric text-mono-metric text-on-surface-variant">Aug 14, 2024</td>
+<td class="py-space-sm px-space-sm font-mono-metric text-mono-metric text-on-surface">148,200</td>
+<td class="py-space-sm px-space-sm text-center">
+<span class="inline-block px-space-sm py-1 rounded-lg bg-tertiary-container/30 text-tertiary font-mono-metric text-mono-metric font-bold">4.48★</span>
+</td>
+<td class="py-space-sm px-space-sm text-center">
+<span class="inline-block px-space-sm py-1 rounded-lg bg-tertiary-container/30 text-tertiary font-mono-metric text-mono-metric font-bold">4.44★</span>
+</td>
+<td class="py-space-sm px-space-sm text-center">
+<span class="inline-block px-space-sm py-1 rounded-lg bg-tertiary-container/30 text-tertiary font-mono-metric text-mono-metric font-bold">4.42★</span>
+</td>
+<td class="py-space-sm px-space-sm text-center">
+<span class="inline-block px-space-sm py-1 rounded-lg bg-surface-container text-on-surface-variant font-mono-metric text-mono-metric">Tracking...</span>
+</td>
+</tr>
+<!-- Row 2: v2.3.5 -->
+<tr class="hover:bg-surface-container transition-colors">
+<td class="py-space-sm px-space-sm font-semibold text-on-surface flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span>v2.3.5 (Maintenance)</span>
+</td>
+<td class="py-space-sm px-space-sm font-mono-metric text-mono-metric text-on-surface-variant">Jul 28, 2024</td>
+<td class="py-space-sm px-space-sm font-mono-metric text-mono-metric text-on-surface">92,400</td>
+<td class="py-space-sm px-space-sm text-center">
+<span class="inline-block px-space-sm py-1 rounded-lg bg-surface-container-high text-on-surface font-mono-metric text-mono-metric font-medium">4.12★</span>
+</td>
+<td class="py-space-sm px-space-sm text-center">
+<span class="inline-block px-space-sm py-1 rounded-lg bg-surface-container-high text-on-surface font-mono-metric text-mono-metric font-medium">4.18★</span>
+</td>
+<td class="py-space-sm px-space-sm text-center">
+<span class="inline-block px-space-sm py-1 rounded-lg bg-tertiary-container/30 text-tertiary font-mono-metric text-mono-metric font-bold">4.26★</span>
+</td>
+<td class="py-space-sm px-space-sm text-center">
+<span class="inline-block px-space-sm py-1 rounded-lg bg-tertiary-container/30 text-tertiary font-mono-metric text-mono-metric font-bold">4.31★</span>
+</td>
+</tr>
+<!-- Row 3: v2.3.0 -->
+<tr class="hover:bg-surface-container transition-colors">
+<td class="py-space-sm px-space-sm font-semibold text-on-surface flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span>v2.3.0 (Major Redesign)</span>
+</td>
+<td class="py-space-sm px-space-sm font-mono-metric text-mono-metric text-on-surface-variant">Jun 19, 2024</td>
+<td class="py-space-sm px-space-sm font-mono-metric text-mono-metric text-on-surface">210,500</td>
+<td class="py-space-sm px-space-sm text-center">
+<span class="inline-block px-space-sm py-1 rounded-lg bg-error-container/40 text-error font-mono-metric text-mono-metric font-bold">3.72★</span>
+</td>
+<td class="py-space-sm px-space-sm text-center">
+<span class="inline-block px-space-sm py-1 rounded-lg bg-error-container/30 text-error font-mono-metric text-mono-metric font-medium">3.88★</span>
+</td>
+<td class="py-space-sm px-space-sm text-center">
+<span class="inline-block px-space-sm py-1 rounded-lg bg-surface-container-high text-on-surface font-mono-metric text-mono-metric font-medium">4.02★</span>
+</td>
+<td class="py-space-sm px-space-sm text-center">
+<span class="inline-block px-space-sm py-1 rounded-lg bg-surface-container-high text-on-surface font-mono-metric text-mono-metric font-medium">4.15★</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Actionable AI Insights Summary Box -->
+<div class="mt-space-xs bg-surface-container-lowest rounded-xl p-space-md shadow-inner flex flex-col gap-space-md">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs">
+<div class="flex items-center gap-space-xs">
+<div class="w-7 h-7 rounded-lg bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined text-[16px]">psychology</span>
+</div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md font-bold text-on-surface">AI Copilot Trend Synthesis</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Automated longitudinal intelligence summary generated 8 minutes ago</span>
+</div>
+</div>
+<span class="font-label-caps text-label-caps px-space-xs py-1 rounded bg-surface-container-high text-primary font-semibold">HIGH CONFIDENCE (98.4%)</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-sm">
+<!-- Finding 1 -->
+<div class="p-space-sm rounded-xl bg-surface-container-low flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs text-tertiary">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+<span class="font-label-caps text-label-caps font-bold">CAMERA PIPELINE STABILITY</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              v2.4.0 patch released 14 days ago stabilized the AVFoundation pipeline; 1-star crash mentions dropped <span class="text-tertiary font-semibold">72% week-over-week</span> across iPhone 15 devices.
+            </p>
+</div>
+<!-- Finding 2 -->
+<div class="p-space-sm rounded-xl bg-surface-container-low flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs text-secondary">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+<span class="font-label-caps text-label-caps font-bold">ANNUAL RENEWAL CHURN</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Billing friction remains the top detractor across annual renewal cohorts; recommend adding <span class="text-secondary font-semibold">in-app invoice receipts</span> and transparent 7-day cancellation warnings.
+            </p>
+</div>
+<!-- Finding 3 -->
+<div class="p-space-sm rounded-xl bg-surface-container-low flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs text-primary">
+<span class="material-symbols-outlined text-[18px]">storefront</span>
+<span class="font-label-caps text-label-caps font-bold">PLAY STORE ORGANIC LIFT</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Android store organic conversion correlates with a 4.2+ threshold; current <span class="text-primary font-semibold">4.31 rating</span> provides strong organic algorithmic visibility and +11% download boost.
+            </p>
+</div>
+</div>
+<!-- Action triggers row -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm pt-space-xs">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px] text-tertiary">bolt</span>
+<span>Recommended triage cadence: Next audit scheduled in 48 hours</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="flex items-center gap-space-2xs px-space-sm py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface font-body-sm text-body-sm font-medium transition-colors">
+<span class="material-symbols-outlined text-[16px]">schedule_send</span>
+<span>Schedule Automated PDF Digest</span>
+</button>
+<button class="flex items-center gap-space-2xs px-space-sm py-1.5 rounded-lg bg-primary-container hover:bg-primary text-on-primary-container font-body-sm text-body-sm font-semibold transition-all shadow-md">
+<span class="material-symbols-outlined text-[16px]">share</span>
+<span>Share Insights to Slack #product-team</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></main></div></body></html>
