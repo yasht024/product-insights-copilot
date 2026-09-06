@@ -2,131 +2,7 @@ import React from 'react';
 
 export default function Settings() {
   return (
-    <>
-      
-{/* Persistent Sidebar */}
-<aside className="fixed left-0 top-0 h-full w-sidebar-w bg-surface-container-lowest/95 border-r border-surface-container-high/40 backdrop-blur-xl z-50 flex flex-col justify-between py-space-md shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
-<div className="flex flex-col gap-space-md">
-{/* Workspace Brand */}
-<div className="px-space-md flex items-center justify-between">
-<div className="flex items-center gap-space-xs">
-<div className="w-8 h-8 rounded-xl bg-primary-container flex items-center justify-center text-on-primary-container font-title-lg text-title-lg shadow-sm">
-<span className="material-symbols-outlined text-[18px]">psychology</span>
-</div>
-<div className="flex flex-col">
-<span className="font-title-md text-title-md font-semibold text-on-surface tracking-tight">Insights Copilot</span>
-<span className="font-label-caps text-label-caps text-on-surface-variant">v2.4 Enterprise</span>
-</div>
-</div>
-</div>
-{/* Workspace Selector */}
-<div className="px-space-md">
-<button className="w-full flex items-center justify-between px-space-sm py-space-xs rounded-xl bg-surface-container-low hover:bg-surface-container border border-surface-container-highest/40 text-on-surface-variant hover:text-on-surface transition-colors">
-<div className="flex items-center gap-space-xs overflow-hidden">
-<span className="material-symbols-outlined text-[18px] text-tertiary">layers</span>
-<span className="font-body-sm text-body-sm font-medium text-on-surface truncate">Acme Mobile App</span>
-</div>
-<span className="material-symbols-outlined text-[16px] text-on-surface-variant">unfold_more</span>
-</button>
-</div>
-{/* Navigation Items */}
-<nav className="flex flex-col gap-space-2xs px-space-sm">
-<a className="flex items-center gap-space-sm px-space-sm py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" href="#">
-<span className="material-symbols-outlined text-[20px]">grid_view</span>
-<span className="font-body-md text-body-md">Dashboard</span>
-</a>
-<a className="flex items-center justify-between px-space-sm py-space-xs text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors rounded-xl" href="#">
-<div className="flex items-center gap-space-sm">
-<span className="material-symbols-outlined text-[20px]">inbox</span>
-<span className="font-body-md text-body-md">Reviews Inbox</span>
-</div>
-<span className="px-space-xs py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-mono-metric text-mono-metric text-[11px]">24</span>
-</a>
-<a className="flex items-center gap-space-sm px-space-sm py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" href="#">
-<span className="material-symbols-outlined text-[20px]">monitoring</span>
-<span className="font-body-md text-body-md">Analytics</span>
-</a>
-<a className="flex items-center gap-space-sm px-space-sm py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" href="#">
-<span className="material-symbols-outlined text-[20px]">category</span>
-<span className="font-body-md text-body-md">Categories</span>
-</a>
-<a className="flex items-center gap-space-sm px-space-sm py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" href="#">
-<span className="material-symbols-outlined text-[20px]">cloud</span>
-<span className="font-body-md text-body-md">Word Cloud</span>
-</a>
-<a className="flex items-center gap-space-sm px-space-sm py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" href="#">
-<span className="material-symbols-outlined text-[20px]">lightbulb</span>
-<span className="font-body-md text-body-md">Ideation</span>
-</a>
-<a className="flex items-center gap-space-sm px-space-sm py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" href="#">
-<span className="material-symbols-outlined text-[20px]">description</span>
-<span className="font-body-md text-body-md">Reporting</span>
-</a>
-{/* Settings ACTIVE with Indigo Accent */}
-<a aria-current="page" className="flex items-center gap-space-sm px-space-sm py-space-xs bg-primary-container text-on-primary-container font-semibold rounded-xl shadow-sm transition-colors" href="#">
-<span className="material-symbols-outlined text-[20px]">settings</span>
-<span className="font-body-md text-body-md">Settings</span>
-</a>
-</nav>
-</div>
-{/* Bottom Profile */}
-<div className="px-space-md pt-space-sm border-t border-surface-container-high/40">
-<div className="p-space-xs rounded-xl bg-surface-container-low border border-surface-container-highest/30 flex items-center justify-between">
-<div className="flex items-center gap-space-xs overflow-hidden">
-<div className="relative shrink-0">
-<div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary">
-<span className="material-symbols-outlined text-[18px]">person</span>
-</div>
-<span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-surface-container-low"></span>
-</div>
-<div className="flex flex-col overflow-hidden">
-<span className="font-body-sm text-body-sm font-medium text-on-surface truncate">Dev Lead</span>
-<span className="font-label-caps text-label-caps text-emerald-400 truncate">Online</span>
-</div>
-</div>
-<button className="text-on-surface-variant hover:text-on-surface p-space-2xs rounded hover:bg-surface-container transition-colors">
-<span className="material-symbols-outlined text-[18px]">more_vert</span>
-</button>
-</div>
-</div>
-</aside>
-{/* Main View Area */}
-<div className="pl-sidebar-w">
-{/* Top Header Bar */}
-<header className="fixed top-0 left-sidebar-w right-0 h-16 bg-surface-container-lowest/80 border-b border-surface-container-high/40 backdrop-blur-xl z-40">
-<div className="h-16 w-full px-space-xl flex items-center justify-between gap-space-md">
-{/* Breadcrumb & Save Indicator */}
-<div className="flex items-center gap-space-md">
-<div className="flex items-center gap-space-xs font-body-sm text-body-sm text-on-surface-variant">
-<span className="material-symbols-outlined text-[16px]">corporate_fare</span>
-<span className="hover:text-on-surface cursor-pointer">Workspace</span>
-<span className="text-outline-variant">/</span>
-<span className="text-on-surface font-medium">Settings</span>
-</div>
-<div className="h-4 w-px bg-surface-container-highest"></div>
-<div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-surface-container-low border border-surface-container-highest/40">
-<span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-<span className="font-mono-metric text-mono-metric text-[12px] text-on-surface-variant">All changes autosaved</span>
-</div>
-</div>
-{/* Top Right Actions */}
-<div className="flex items-center gap-space-sm">
-<a className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-container-low hover:bg-surface-container-high border border-surface-container-highest/40 text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm font-medium transition-colors" href="#">
-<span className="material-symbols-outlined text-[16px]">menu_book</span>
-<span>Documentation</span>
-</a>
-<button className="p-2 text-on-surface-variant hover:text-on-surface rounded-xl hover:bg-surface-container-high border border-transparent hover:border-surface-container-highest/40 transition-colors" title="Help &amp; Support">
-<span className="material-symbols-outlined text-[20px]">help</span>
-</button>
-<div className="h-4 w-px bg-surface-container-highest"></div>
-<div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary">
-<span className="material-symbols-outlined text-[18px]">person</span>
-</div>
-</div>
-</div>
-</header>
-{/* Main Content Body */}
-<main className="w-full pt-16 bg-surface min-h-screen">
+<div className="w-full pt-16 bg-surface min-h-screen">
 <div className="p-space-xl max-w-5xl mx-auto flex flex-col gap-space-xl pb-24">
 {/* Page Header */}
 <div className="flex flex-col md:flex-row md:items-center justify-between gap-space-md pt-space-xs pb-space-xs border-b border-surface-container-high/40">
@@ -603,10 +479,7 @@ export default function Settings() {
 </div>
 </section>
 </div>
-</main>
 </div>
-
-    </>
-  );
+);
 }
 
