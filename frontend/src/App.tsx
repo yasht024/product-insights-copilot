@@ -1,4 +1,5 @@
 import React from 'react';
+import Layout from './Layout';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Dashboard from './Dashboard';
 import ReviewsInbox from './ReviewsInbox';
@@ -13,15 +14,17 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/inbox" element={<ReviewsInbox />} />
-        <Route path="/categories" element={<Categories />} />
-        <Route path="/analytics" element={<Analytics />} />
-        <Route path="/wordcloud" element={<WordCloud />} />
-        <Route path="/ideation" element={<Ideation />} />
-        <Route path="/reporting" element={<Reporting />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        <Route element={<Layout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/inbox" element={<ReviewsInbox />} />
+          <Route path="/categories" element={<Categories />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/wordcloud" element={<WordCloud />} />
+          <Route path="/ideation" element={<Ideation />} />
+          <Route path="/reporting" element={<Reporting />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Route>
       </Routes>
     </Router>
   );
