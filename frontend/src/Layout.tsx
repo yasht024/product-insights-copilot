@@ -128,8 +128,8 @@ export default function Layout() {
           </div>
         </header>
 
-        <main className="w-full pt-16 bg-surface min-h-screen">
-          <div className="flex flex-col w-full">
+        <main className="w-full pt-16 bg-surface flex-1 flex flex-col">
+          <div className="flex flex-col w-full flex-1">
             <Outlet />
           </div>
         </main>

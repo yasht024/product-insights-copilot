@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
+import ReportGeneratorModal from './components/ReportGeneratorModal';
 
 export default function Reporting() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
 <div className="w-full pt-20 pb-12 px-6 flex flex-col gap-6 max-w-[1720px] mx-auto">
 {/* 1. Hero Title & Context Strip */}
@@ -477,14 +479,15 @@ export default function Reporting() {
 <span className="material-symbols-outlined text-[15px]">description</span>
 <span>Push to Notion / Confluence</span>
 </button>
-<button className="px-3.5 py-1.5 rounded-lg bg-primary-container hover:bg-indigo-500 text-white text-xs font-semibold transition-all flex items-center gap-1.5 shadow-sm">
+<button onClick={() => setIsModalOpen(true)} className="px-3.5 py-1.5 rounded-lg bg-primary-container hover:bg-indigo-500 text-white text-xs font-semibold transition-all flex items-center gap-1.5 shadow-sm">
 <span className="material-symbols-outlined text-[15px]">download</span>
-<span>Download Executive Brief (PDF)</span>
+<span>Generate Report Image</span>
 </button>
 </div>
 </div>
 </div>
 </div>
+<ReportGeneratorModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 {/* 5. Scheduled Automated Deliveries & Distribution Pipeline (matching SCREEN_7's crisp enterprise data table) */}
 <div className="bg-surface-container-low border border-card-border rounded-2xl shadow-sm overflow-hidden flex flex-col">
 {/* Table Filter / Search Header */}
