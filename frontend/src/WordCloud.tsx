@@ -4,11 +4,11 @@ export default function WordCloud() {
   return (
     <>
       <aside className="fixed left-0 top-0 h-full w-sidebar-w bg-surface-container-lowest/90 backdrop-blur-xl z-50 flex flex-col justify-between py-space-md shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div className="flex flex-col gap-space-md"><div className="px-space-md flex items-center justify-between"><div className="flex items-center gap-space-xs"><div className="w-8 h-8 rounded-xl bg-primary-container flex items-center justify-center text-on-primary-container font-title-lg text-title-lg"><span className="material-symbols-outlined text-[18px]">psychology</span></div><div className="flex flex-col"><span className="font-title-md text-title-md font-semibold text-on-surface tracking-tight">Insights Copilot</span><span className="font-label-caps text-label-caps text-on-surface-variant">v2.4 Enterprise</span></div></div></div><div className="px-space-md"><button className="w-full flex items-center justify-between px-space-sm py-space-xs rounded-xl bg-surface-container-low hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors"><div className="flex items-center gap-space-xs overflow-hidden"><span className="material-symbols-outlined text-[18px] text-tertiary">layers</span><span className="font-body-sm text-body-sm font-medium text-on-surface truncate">Acme Mobile App</span></div><span className="material-symbols-outlined text-[16px] text-on-surface-variant">unfold_more</span></button></div><nav className="flex flex-col gap-space-2xs px-space-sm" data-active-classes="bg-primary-container text-on-primary-container font-semibold rounded-xl"><a className="flex items-center gap-space-sm px-space-sm py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="dashboard" href="#"><span className="material-symbols-outlined text-[20px]">grid_view</span><span className="font-body-md text-body-md">Dashboard</span></a><a aria-current="page" className="flex items-center justify-between px-space-sm py-space-xs transition-colors bg-primary-container text-on-primary-container font-semibold rounded-xl" data-path="reviews-inbox" href="#"><div className="flex items-center gap-space-sm"><span className="material-symbols-outlined text-[20px]">inbox</span><span className="font-body-md text-body-md">Reviews Inbox</span></div><span className="px-space-xs py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-mono-metric text-mono-metric">24</span></a><a className="flex items-center gap-space-sm px-space-sm py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="analytics" href="#"><span className="material-symbols-outlined text-[20px]">monitoring</span><span className="font-body-md text-body-md">Analytics</span></a><a className="flex items-center gap-space-sm px-space-sm py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="categories" href="#"><span className="material-symbols-outlined text-[20px]">category</span><span className="font-body-md text-body-md">Categories</span></a><a className="flex items-center gap-space-sm px-space-sm py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="word-cloud" href="#"><span className="material-symbols-outlined text-[20px]">cloud</span><span className="font-body-md text-body-md">Word Cloud</span></a><a className="flex items-center gap-space-sm px-space-sm py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="ideation" href="#"><span className="material-symbols-outlined text-[20px]">lightbulb</span><span className="font-body-md text-body-md">Ideation</span></a><a className="flex items-center gap-space-sm px-space-sm py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="reporting" href="#"><span className="material-symbols-outlined text-[20px]">description</span><span className="font-body-md text-body-md">Reporting</span></a><a className="flex items-center gap-space-sm px-space-sm py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="settings" href="#"><span className="material-symbols-outlined text-[20px]">settings</span><span className="font-body-md text-body-md">Settings</span></a></nav></div><div className="px-space-md pt-space-sm"><div className="p-space-xs rounded-xl bg-surface-container-low flex items-center justify-between"><div className="flex items-center gap-space-xs overflow-hidden"><div className="relative"><div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span className="material-symbols-outlined text-on-primary text-[18px]">person</span></div><span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-tertiary-container ring-2 ring-surface-container-low"></span></div><div className="flex flex-col overflow-hidden"><span className="font-body-sm text-body-sm font-medium text-on-surface truncate">Dev Lead</span><span className="font-label-caps text-label-caps text-tertiary truncate">Online</span></div></div><button className="text-on-surface-variant hover:text-on-surface p-space-2xs"><span className="material-symbols-outlined text-[18px]">more_vert</span></button></div></div></aside><div className="pl-sidebar-w"><header className="fixed top-0 left-sidebar-w right-0 h-16 bg-surface-container-lowest/80 backdrop-blur-xl z-40 shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div className="h-16 w-full px-space-lg flex items-center justify-between gap-space-md"><div className="flex items-center gap-space-md"><div className="flex items-center gap-space-xs font-body-sm text-body-sm text-on-surface-variant"><span className="material-symbols-outlined text-[16px]">home</span><span>/</span><span className="text-on-surface font-medium">Workspace</span></div><div className="h-4 w-px bg-surface-container-highest"></div><div className="flex items-center gap-space-2xs"><span className="w-2 h-2 rounded-full bg-tertiary-container animate-pulse"></span><span className="font-mono-metric text-mono-metric text-on-surface-variant">Synced 4m ago</span></div></div><div className="flex items-center gap-space-sm"><div className="flex items-center bg-surface-container-low p-1 rounded-xl"><button className="px-space-xs py-1 rounded-lg bg-surface-container-high text-on-surface font-body-sm text-body-sm font-medium transition-colors">All Platforms</button><button className="px-space-xs py-1 rounded-lg text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm transition-colors">iOS</button><button className="px-space-xs py-1 rounded-lg text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm transition-colors">Android</button></div><div className="flex items-center bg-surface-container-low px-space-sm py-1.5 rounded-xl gap-space-xs text-on-surface-variant hover:text-on-surface cursor-pointer"><span className="material-symbols-outlined text-[16px]">calendar_today</span><span className="font-body-sm text-body-sm">Last 30 Days</span><span className="material-symbols-outlined text-[16px]">expand_more</span></div><button className="flex items-center gap-space-2xs px-space-sm py-1.5 rounded-xl bg-primary-container hover:bg-primary text-on-primary-container font-body-sm text-body-sm font-semibold transition-all shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><span className="material-symbols-outlined text-[16px]">sync</span><span>Refresh Feeds</span></button><div className="h-4 w-px bg-surface-container-highest"></div><button className="p-space-2xs text-on-surface-variant hover:text-on-surface relative rounded-lg hover:bg-surface-container-high transition-colors"><span className="material-symbols-outlined text-[20px]">notifications</span><span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-tertiary-container"></span></button><div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span className="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main className="w-full pt-16 bg-surface min-h-screen"><div className="flex flex-col w-full">
-<!-- Interactive Script for Filtering and Active States -->
+{/* Interactive Script for Filtering and Active States */}
 
-<!-- Main Content Space -->
+{/* Main Content Space */}
 <div className="w-full px-space-lg py-space-lg flex flex-col gap-space-xl max-w-[1600px] mx-auto">
-<!-- Hero / Header Action Zone -->
+{/* Hero / Header Action Zone */}
 <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-space-md bg-surface-container-low p-space-lg rounded-xl shadow-md">
 <div className="flex flex-col gap-space-xs max-w-3xl">
 <div className="flex items-center gap-space-xs text-on-surface-variant">
@@ -24,7 +24,7 @@ export default function WordCloud() {
           Neural n-gram extraction, sentiment vector clustering, and surging discussion topics synthesised across <span className="text-on-surface font-mono-metric font-medium">24,648</span> customer reviews.
         </p>
 </div>
-<!-- Action & Filter Bar -->
+{/* Action & Filter Bar */}
 <div className="flex flex-wrap items-center gap-space-xs">
 <div className="flex items-center bg-surface-container-high px-space-sm py-1.5 rounded-xl gap-space-xs shadow-sm">
 <span className="material-symbols-outlined text-[16px] text-tertiary">filter_alt</span>
@@ -50,9 +50,9 @@ export default function WordCloud() {
 </button>
 </div>
 </div>
-<!-- 4-Column High Density Stat Cards -->
+{/* 4-Column High Density Stat Cards */}
 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-md">
-<!-- Metric 1: Total Keywords -->
+{/* Metric 1: Total Keywords */}
 <div className="bg-surface-container p-space-md rounded-xl flex flex-col justify-between shadow-sm relative overflow-hidden group hover:bg-surface-container-high transition-colors">
 <div className="flex items-center justify-between">
 <span className="font-label-caps text-label-caps text-on-surface-variant uppercase">Total Distinct Keywords</span>
@@ -69,7 +69,7 @@ export default function WordCloud() {
 <span className="font-mono-metric text-mono-metric text-tertiary">v2.4.0 index</span>
 </div>
 </div>
-<!-- Metric 2: Highest Sentiment -->
+{/* Metric 2: Highest Sentiment */}
 <div className="bg-surface-container p-space-md rounded-xl flex flex-col justify-between shadow-sm relative overflow-hidden group hover:bg-surface-container-high transition-colors">
 <div className="flex items-center justify-between">
 <span className="font-label-caps text-label-caps text-on-surface-variant uppercase">Highest Sentiment Term</span>
@@ -83,7 +83,7 @@ export default function WordCloud() {
 <span className="text-on-surface-variant">1,820 mentions</span>
 </div>
 </div>
-<!-- Metric 3: Top Detractor Vector -->
+{/* Metric 3: Top Detractor Vector */}
 <div className="bg-surface-container p-space-md rounded-xl flex flex-col justify-between shadow-sm relative overflow-hidden group hover:bg-surface-container-high transition-colors">
 <div className="flex items-center justify-between">
 <span className="font-label-caps text-label-caps text-on-surface-variant uppercase">Top Detractor Vector</span>
@@ -97,7 +97,7 @@ export default function WordCloud() {
 <span className="text-on-surface-variant">3,120 mentions</span>
 </div>
 </div>
-<!-- Metric 4: Emerging Velocity -->
+{/* Metric 4: Emerging Velocity */}
 <div className="bg-surface-container p-space-md rounded-xl flex flex-col justify-between shadow-sm relative overflow-hidden group hover:bg-surface-container-high transition-colors">
 <div className="flex items-center justify-between">
 <span className="font-label-caps text-label-caps text-on-surface-variant uppercase">Emerging Phrase Velocity</span>
@@ -113,9 +113,9 @@ export default function WordCloud() {
 </div>
 </div>
 </div>
-<!-- Main Hero: Interactive Semantic Word Cloud & Cluster Canvas -->
+{/* Main Hero: Interactive Semantic Word Cloud & Cluster Canvas */}
 <div className="bg-surface-container p-space-lg rounded-xl shadow-md flex flex-col gap-space-md relative overflow-hidden">
-<!-- Top Cluster Segment Filtering -->
+{/* Top Cluster Segment Filtering */}
 <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-space-sm">
 <div className="flex items-center gap-space-xs">
 <span className="material-symbols-outlined text-primary text-[20px]">bubble_chart</span>
@@ -140,9 +140,9 @@ export default function WordCloud() {
           </button>
 </div>
 </div>
-<!-- Canvas Area for Semantic Map -->
+{/* Canvas Area for Semantic Map */}
 <div className="relative w-full min-h-[460px] bg-surface-container-lowest rounded-xl p-space-xl flex flex-wrap items-center justify-center content-center gap-x-space-lg gap-y-space-md select-none overflow-hidden">
-<!-- Faint dynamic coordinate grid lines in background -->
+{/* Faint dynamic coordinate grid lines in background */}
 <div className="absolute inset-0 pointer-events-none opacity-20 flex flex-col justify-between p-space-md">
 <div className="flex justify-between font-mono-metric text-label-caps text-outline">
 <span>CLUSTER_QUAD_NEG (-1.0)</span>
@@ -157,7 +157,7 @@ export default function WordCloud() {
 <span>VECTOR_SURGE_RADIAL</span>
 </div>
 </div>
-<!-- Huge Red Pill: camera crash -->
+{/* Huge Red Pill: camera crash */}
 <div className="cursor-pointer group relative flex items-center gap-space-xs px-space-lg py-space-sm rounded-full bg-error-container/25 hover:bg-error-container/40 text-error transition-all hover:scale-105 shadow-md" data-pol="-0.88 Detractor" data-tag-target="" data-term="camera crash" data-vol="3,120">
 <span className="w-2.5 h-2.5 rounded-full bg-error animate-pulse"></span>
 <span className="font-title-lg text-title-lg font-bold tracking-tight">camera crash</span>
@@ -166,7 +166,7 @@ export default function WordCloud() {
             Net Polarity: -0.88 • 35% crash reviews
           </div>
 </div>
-<!-- Large Emerald Pill: export feature -->
+{/* Large Emerald Pill: export feature */}
 <div className="cursor-pointer group relative flex items-center gap-space-xs px-space-md py-space-sm rounded-full bg-tertiary-container/30 hover:bg-tertiary-container/50 text-tertiary transition-all hover:scale-105 shadow-sm" data-pol="+0.94 Praise" data-tag-target="" data-term="export feature" data-vol="1,820">
 <span className="w-2 h-2 rounded-full bg-tertiary"></span>
 <span className="font-title-md text-title-md font-semibold">export feature</span>
@@ -175,67 +175,67 @@ export default function WordCloud() {
             Net Polarity: +0.94 • Loved workflow
           </div>
 </div>
-<!-- Large Amber Pill: raw files -->
+{/* Large Amber Pill: raw files */}
 <div className="cursor-pointer group relative flex items-center gap-space-xs px-space-md py-space-sm rounded-full bg-secondary-container/40 hover:bg-secondary-container/60 text-secondary transition-all hover:scale-105 shadow-sm" data-pol="-0.65 Friction" data-tag-target="" data-term="raw files" data-vol="1,890">
 <span className="w-2 h-2 rounded-full bg-secondary"></span>
 <span className="font-title-md text-title-md font-medium">raw files</span>
 <span className="font-mono-metric text-mono-metric bg-surface-container-lowest/80 px-space-xs py-0.5 rounded-full text-on-surface">1,890</span>
 </div>
-<!-- Medium Cyan Pill: dark mode -->
+{/* Medium Cyan Pill: dark mode */}
 <div className="cursor-pointer group relative flex items-center gap-space-xs px-space-sm py-1.5 rounded-full bg-surface-container-high hover:bg-surface-bright text-tertiary-fixed transition-all hover:scale-105 shadow-sm" data-pol="+0.82 Praise" data-tag-target="" data-term="dark mode" data-vol="1,240">
 <span className="material-symbols-outlined text-[16px] text-tertiary">dark_mode</span>
 <span className="font-body-lg text-body-lg font-medium">dark mode</span>
 <span className="font-mono-metric text-mono-metric bg-surface-container-lowest px-1.5 py-0.5 rounded-full text-on-surface-variant">1,240</span>
 </div>
-<!-- Medium Rose Pill: battery drain -->
+{/* Medium Rose Pill: battery drain */}
 <div className="cursor-pointer group relative flex items-center gap-space-xs px-space-sm py-1.5 rounded-full bg-error-container/20 hover:bg-error-container/35 text-error transition-all hover:scale-105 shadow-sm" data-pol="-0.74 Friction" data-tag-target="" data-term="battery drain" data-vol="940">
 <span className="material-symbols-outlined text-[16px]">battery_alert</span>
 <span className="font-body-lg text-body-lg font-medium">battery drain</span>
 <span className="font-mono-metric text-mono-metric bg-surface-container-lowest px-1.5 py-0.5 rounded-full text-on-surface-variant">940</span>
 </div>
-<!-- Medium Amber Pill: annual renewal -->
+{/* Medium Amber Pill: annual renewal */}
 <div className="cursor-pointer group relative flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-surface-container-high hover:bg-surface-bright text-secondary-fixed transition-all hover:scale-105 shadow-sm" data-pol="-0.92 Billing Friction" data-tag-target="" data-term="annual renewal" data-vol="1,180">
 <span className="material-symbols-outlined text-[16px] text-secondary">credit_card_off</span>
 <span className="font-body-lg text-body-lg font-semibold">annual renewal</span>
 <span className="font-mono-metric text-mono-metric bg-surface-container-lowest px-1.5 py-0.5 rounded-full text-on-surface">1,180</span>
 </div>
-<!-- Medium Purple Pill: keyboard shortcuts -->
+{/* Medium Purple Pill: keyboard shortcuts */}
 <div className="cursor-pointer group relative flex items-center gap-space-xs px-space-sm py-1.5 rounded-full bg-primary-container/20 hover:bg-primary-container/40 text-primary transition-all hover:scale-105 shadow-sm" data-pol="+0.71 Feature Request" data-tag-target="" data-term="keyboard shortcuts" data-vol="890">
 <span className="material-symbols-outlined text-[16px]">keyboard</span>
 <span className="font-body-md text-body-md font-medium">keyboard shortcuts</span>
 <span className="font-mono-metric text-mono-metric bg-surface-container-lowest px-1.5 py-0.5 rounded-full text-on-surface-variant">890</span>
 </div>
-<!-- Medium Blue/Indigo Pill: ipad landscape -->
+{/* Medium Blue/Indigo Pill: ipad landscape */}
 <div className="cursor-pointer group relative flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-surface-container-high hover:bg-surface-bright text-primary-fixed transition-all hover:scale-105 shadow-sm" data-pol="+0.65 UI Support" data-tag-target="" data-term="ipad landscape" data-vol="1,450">
 <span className="material-symbols-outlined text-[16px]">tablet_mac</span>
 <span className="font-body-lg text-body-lg font-medium">ipad landscape</span>
 <span className="font-mono-metric text-mono-metric bg-surface-container-lowest px-1.5 py-0.5 rounded-full text-on-surface">1,450</span>
 </div>
-<!-- Small Glowing Violet Pill with NEW tag: heic buffer -->
+{/* Small Glowing Violet Pill with NEW tag: heic buffer */}
 <div className="cursor-pointer group relative flex items-center gap-space-xs px-space-sm py-1 rounded-full bg-secondary-container text-on-secondary-container transition-all hover:scale-105 shadow-md ring-1 ring-secondary/40" data-pol="-0.81 Memory Bug" data-tag-target="" data-term="heic buffer" data-vol="310">
 <span className="px-1 py-0.2 rounded bg-surface-container-lowest text-secondary font-label-caps text-[10px] font-bold">NEW</span>
 <span className="font-body-md text-body-md font-medium">heic buffer</span>
 <span className="font-mono-metric text-mono-metric bg-surface-container-lowest px-1 py-0.5 rounded text-on-surface">310</span>
 </div>
-<!-- Small Neutral Pill: cloud sync -->
+{/* Small Neutral Pill: cloud sync */}
 <div className="cursor-pointer group relative flex items-center gap-space-xs px-space-sm py-1 rounded-full bg-surface-container-low hover:bg-surface-container-high text-on-surface-variant transition-all hover:scale-105" data-pol="+0.12 Neutral" data-tag-target="" data-term="cloud sync" data-vol="620">
 <span className="material-symbols-outlined text-[14px]">cloud_sync</span>
 <span className="font-body-sm text-body-sm">cloud sync</span>
 <span className="font-mono-metric text-mono-metric text-outline">620</span>
 </div>
-<!-- Small Amber Pill: subscription price -->
+{/* Small Amber Pill: subscription price */}
 <div className="cursor-pointer group relative flex items-center gap-space-xs px-space-sm py-1 rounded-full bg-surface-container-high hover:bg-surface-bright text-secondary-fixed-dim transition-all hover:scale-105" data-pol="-0.48 Pricing" data-tag-target="" data-term="subscription price" data-vol="740">
 <span className="material-symbols-outlined text-[14px]">payments</span>
 <span className="font-body-sm text-body-sm font-medium">subscription price</span>
 <span className="font-mono-metric text-mono-metric bg-surface-container-lowest px-1 rounded">740</span>
 </div>
-<!-- Small Emerald Pill: customer support -->
+{/* Small Emerald Pill: customer support */}
 <div className="cursor-pointer group relative flex items-center gap-space-xs px-space-sm py-1 rounded-full bg-tertiary-container/20 hover:bg-tertiary-container/30 text-tertiary transition-all hover:scale-105" data-pol="+0.89 Praise" data-tag-target="" data-term="customer support" data-vol="530">
 <span className="material-symbols-outlined text-[14px]">support_agent</span>
 <span className="font-body-sm text-body-sm font-medium">customer support</span>
 <span className="font-mono-metric text-mono-metric bg-surface-container-lowest px-1 rounded">530</span>
 </div>
-<!-- Additional contextual ambient tags -->
+{/* Additional contextual ambient tags */}
 <div className="cursor-pointer group relative flex items-center gap-1 px-space-xs py-0.5 rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface transition-all" data-pol="+0.77 Delight" data-tag-target="" data-term="haptic feedback" data-vol="410">
 <span className="font-body-sm text-body-sm">haptic feedback</span>
 <span className="font-mono-metric text-label-caps text-outline">410</span>
@@ -249,7 +249,7 @@ export default function WordCloud() {
 <span className="font-mono-metric text-label-caps text-outline">380</span>
 </div>
 </div>
-<!-- Quick Dynamic Inspector Floating Banner -->
+{/* Quick Dynamic Inspector Floating Banner */}
 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-sm bg-surface-container-high px-space-md py-space-sm rounded-xl">
 <div className="flex items-center gap-space-sm">
 <div className="w-8 h-8 rounded-lg bg-surface-bright flex items-center justify-center text-primary">
@@ -276,9 +276,9 @@ export default function WordCloud() {
 </div>
 </div>
 </div>
-<!-- Semantic Drift & Trajectory Matrix (Two Column Split) -->
+{/* Semantic Drift & Trajectory Matrix (Two Column Split) */}
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-space-md">
-<!-- Left Column: Surging Discussion Phrases (Trailing 14 Days) -->
+{/* Left Column: Surging Discussion Phrases (Trailing 14 Days) */}
 <div className="bg-surface-container p-space-lg rounded-xl flex flex-col gap-space-md shadow-md">
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-space-xs">
@@ -290,9 +290,9 @@ export default function WordCloud() {
 </div>
 <span className="font-label-caps text-label-caps text-error bg-error-container/20 px-space-xs py-1 rounded-md uppercase font-mono-metric">Anomaly Alert</span>
 </div>
-<!-- Velocity List -->
+{/* Velocity List */}
 <div className="flex flex-col gap-space-xs">
-<!-- Surge 1 -->
+{/* Surge 1 */}
 <div className="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-colors flex items-center justify-between gap-space-md group">
 <div className="flex items-center gap-space-sm min-w-0">
 <div className="w-8 h-8 rounded-lg bg-error-container/30 text-error flex items-center justify-center font-mono-metric font-semibold text-body-sm">
@@ -307,7 +307,7 @@ export default function WordCloud() {
 </div>
 </div>
 <div className="flex items-center gap-space-md shrink-0">
-<!-- SVG Sparkline -->
+{/* SVG Sparkline */}
 <svg className="w-20 h-6 text-error overflow-visible" fill="none" viewBox="0 0 100 30">
 <path d="M0 25 L20 22 L40 24 L60 14 L80 16 L100 2" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" />
 <circle cx="100" cy="2" fill="currentColor" r="3" />
@@ -321,7 +321,7 @@ export default function WordCloud() {
 </a>
 </div>
 </div>
-<!-- Surge 2 -->
+{/* Surge 2 */}
 <div className="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-colors flex items-center justify-between gap-space-md group">
 <div className="flex items-center gap-space-sm min-w-0">
 <div className="w-8 h-8 rounded-lg bg-error-container/30 text-error flex items-center justify-center font-mono-metric font-semibold text-body-sm">
@@ -349,7 +349,7 @@ export default function WordCloud() {
 </a>
 </div>
 </div>
-<!-- Surge 3 -->
+{/* Surge 3 */}
 <div className="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-colors flex items-center justify-between gap-space-md group">
 <div className="flex items-center gap-space-sm min-w-0">
 <div className="w-8 h-8 rounded-lg bg-surface-container-highest text-primary flex items-center justify-center font-mono-metric font-semibold text-body-sm">
@@ -377,7 +377,7 @@ export default function WordCloud() {
 </a>
 </div>
 </div>
-<!-- Surge 4 -->
+{/* Surge 4 */}
 <div className="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-colors flex items-center justify-between gap-space-md group">
 <div className="flex items-center gap-space-sm min-w-0">
 <div className="w-8 h-8 rounded-lg bg-secondary-container/30 text-secondary flex items-center justify-center font-mono-metric font-semibold text-body-sm">
@@ -405,7 +405,7 @@ export default function WordCloud() {
 </a>
 </div>
 </div>
-<!-- Surge 5 -->
+{/* Surge 5 */}
 <div className="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-colors flex items-center justify-between gap-space-md group">
 <div className="flex items-center gap-space-sm min-w-0">
 <div className="w-8 h-8 rounded-lg bg-tertiary-container/30 text-tertiary flex items-center justify-center font-mono-metric font-semibold text-body-sm">
@@ -435,7 +435,7 @@ export default function WordCloud() {
 </div>
 </div>
 </div>
-<!-- Right Column: Declining / Resolved Discussion Topics -->
+{/* Right Column: Declining / Resolved Discussion Topics */}
 <div className="bg-surface-container p-space-lg rounded-xl flex flex-col gap-space-md shadow-md">
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-space-xs">
@@ -447,9 +447,9 @@ export default function WordCloud() {
 </div>
 <span className="font-label-caps text-label-caps text-tertiary bg-tertiary-container/20 px-space-xs py-1 rounded-md uppercase font-mono-metric">Health Restored</span>
 </div>
-<!-- Declining Topic Cards -->
+{/* Declining Topic Cards */}
 <div className="flex flex-col gap-space-xs">
-<!-- Decline 1 -->
+{/* Decline 1 */}
 <div className="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-colors flex items-center justify-between gap-space-md">
 <div className="flex items-center gap-space-sm min-w-0">
 <div className="w-8 h-8 rounded-lg bg-surface-bright text-tertiary flex items-center justify-center font-mono-metric font-semibold text-body-sm">
@@ -471,7 +471,7 @@ export default function WordCloud() {
 </div>
 </div>
 </div>
-<!-- Decline 2 -->
+{/* Decline 2 */}
 <div className="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-colors flex items-center justify-between gap-space-md">
 <div className="flex items-center gap-space-sm min-w-0">
 <div className="w-8 h-8 rounded-lg bg-surface-bright text-tertiary flex items-center justify-center font-mono-metric font-semibold text-body-sm">
@@ -493,7 +493,7 @@ export default function WordCloud() {
 </div>
 </div>
 </div>
-<!-- Decline 3 -->
+{/* Decline 3 */}
 <div className="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-colors flex items-center justify-between gap-space-md">
 <div className="flex items-center gap-space-sm min-w-0">
 <div className="w-8 h-8 rounded-lg bg-surface-bright text-tertiary flex items-center justify-center font-mono-metric font-semibold text-body-sm">
@@ -515,7 +515,7 @@ export default function WordCloud() {
 </div>
 </div>
 </div>
-<!-- Decline 4 -->
+{/* Decline 4 */}
 <div className="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-colors flex items-center justify-between gap-space-md">
 <div className="flex items-center gap-space-sm min-w-0">
 <div className="w-8 h-8 rounded-lg bg-surface-bright text-tertiary flex items-center justify-center font-mono-metric font-semibold text-body-sm">
@@ -540,7 +540,7 @@ export default function WordCloud() {
 </div>
 </div>
 </div>
-<!-- N-Gram Co-Occurrence & Association Graph Section -->
+{/* N-Gram Co-Occurrence & Association Graph Section */}
 <div className="bg-surface-container p-space-lg rounded-xl flex flex-col gap-space-md shadow-md">
 <div className="flex flex-col md:flex-row md:items-center justify-between gap-space-xs">
 <div className="flex items-center gap-space-xs">
@@ -552,9 +552,9 @@ export default function WordCloud() {
 <span className="font-mono-metric text-mono-metric bg-surface-container-high px-space-xs py-0.5 rounded text-on-surface">r ≥ 0.65</span>
 </div>
 </div>
-<!-- 3 Primary Cluster Nodes Layout -->
+{/* 3 Primary Cluster Nodes Layout */}
 <div className="grid grid-cols-1 md:grid-cols-3 gap-space-md pt-space-xs">
-<!-- Graph Node 1: "camera" -->
+{/* Graph Node 1: "camera" */}
 <div className="bg-surface-container-low p-space-md rounded-xl flex flex-col gap-space-sm shadow-sm relative">
 <div className="flex items-center justify-between pb-space-xs">
 <div className="flex items-center gap-space-xs">
@@ -608,7 +608,7 @@ export default function WordCloud() {
 <span>Create Taxonomy Rule</span>
 </button>
 </div>
-<!-- Graph Node 2: "subscription" -->
+{/* Graph Node 2: "subscription" */}
 <div className="bg-surface-container-low p-space-md rounded-xl flex flex-col gap-space-sm shadow-sm relative">
 <div className="flex items-center justify-between pb-space-xs">
 <div className="flex items-center gap-space-xs">
@@ -662,7 +662,7 @@ export default function WordCloud() {
 <span>Create Taxonomy Rule</span>
 </button>
 </div>
-<!-- Graph Node 3: "export" -->
+{/* Graph Node 3: "export" */}
 <div className="bg-surface-container-low p-space-md rounded-xl flex flex-col gap-space-sm shadow-sm relative">
 <div className="flex items-center justify-between pb-space-xs">
 <div className="flex items-center gap-space-xs">
@@ -718,16 +718,16 @@ export default function WordCloud() {
 </div>
 </div>
 </div>
-<!-- Deep Dive Topic Lexicon Table (Full Enterprise Data Table) -->
+{/* Deep Dive Topic Lexicon Table (Full Enterprise Data Table) */}
 <div className="bg-surface-container p-space-lg rounded-xl flex flex-col gap-space-md shadow-md">
-<!-- Table Header Bar -->
+{/* Table Header Bar */}
 <div className="flex flex-col md:flex-row md:items-center justify-between gap-space-sm">
 <div>
 <h2 className="font-title-lg text-title-lg text-on-surface font-semibold">Indexed Topic Lexicon &amp; N-Gram Registry</h2>
 <p className="font-body-sm text-body-sm text-on-surface-variant">Raw TF-IDF metrics, semantic sentiment ranges, and verbatim quotes</p>
 </div>
 <div className="flex items-center gap-space-xs">
-<!-- Search input -->
+{/* Search input */}
 <div className="flex items-center bg-surface-container-lowest px-space-sm py-1.5 rounded-xl gap-space-xs">
 <span className="material-symbols-outlined text-[18px] text-on-surface-variant">search</span>
 <input className="bg-transparent text-on-surface font-body-sm text-body-sm placeholder:text-outline focus:outline-none w-48 lg:w-64" placeholder="Search n-gram or taxonomy..." type="text"/>
@@ -737,7 +737,7 @@ export default function WordCloud() {
 </button>
 </div>
 </div>
-<!-- Data Table Container -->
+{/* Data Table Container */}
 <div className="w-full overflow-x-auto rounded-xl bg-surface-container-lowest shadow-inner">
 <table className="w-full text-left font-body-sm text-body-sm">
 <thead className="bg-surface-container-high text-on-surface-variant font-label-caps text-label-caps uppercase">
@@ -753,7 +753,7 @@ export default function WordCloud() {
 </tr>
 </thead>
 <tbody className="divide-y divide-surface-container-high font-body-md text-body-md">
-<!-- Row 1: camera crash -->
+{/* Row 1: camera crash */}
 <tr className="hover:bg-surface-container-low transition-colors group">
 <td className="py-space-sm px-space-md font-semibold text-error flex items-center gap-space-2xs">
 <span className="material-symbols-outlined text-[16px]">bug_report</span>
@@ -790,7 +790,7 @@ export default function WordCloud() {
 </div>
 </td>
 </tr>
-<!-- Row 2: export feature -->
+{/* Row 2: export feature */}
 <tr className="hover:bg-surface-container-low transition-colors group">
 <td className="py-space-sm px-space-md font-semibold text-tertiary flex items-center gap-space-2xs">
 <span className="material-symbols-outlined text-[16px]">thumb_up</span>
@@ -827,7 +827,7 @@ export default function WordCloud() {
 </div>
 </td>
 </tr>
-<!-- Row 3: raw export freeze -->
+{/* Row 3: raw export freeze */}
 <tr className="hover:bg-surface-container-low transition-colors group">
 <td className="py-space-sm px-space-md font-semibold text-secondary flex items-center gap-space-2xs">
 <span className="material-symbols-outlined text-[16px]">hourglass_disabled</span>
@@ -864,7 +864,7 @@ export default function WordCloud() {
 </div>
 </td>
 </tr>
-<!-- Row 4: ipad landscape support -->
+{/* Row 4: ipad landscape support */}
 <tr className="hover:bg-surface-container-low transition-colors group">
 <td className="py-space-sm px-space-md font-semibold text-primary flex items-center gap-space-2xs">
 <span className="material-symbols-outlined text-[16px]">tablet</span>
@@ -901,7 +901,7 @@ export default function WordCloud() {
 </div>
 </td>
 </tr>
-<!-- Row 5: annual auto-renew fee -->
+{/* Row 5: annual auto-renew fee */}
 <tr className="hover:bg-surface-container-low transition-colors group">
 <td className="py-space-sm px-space-md font-semibold text-secondary-fixed flex items-center gap-space-2xs">
 <span className="material-symbols-outlined text-[16px]">price_change</span>
@@ -938,7 +938,7 @@ export default function WordCloud() {
 </div>
 </td>
 </tr>
-<!-- Row 6: HEIC photo buffer -->
+{/* Row 6: HEIC photo buffer */}
 <tr className="hover:bg-surface-container-low transition-colors group">
 <td className="py-space-sm px-space-md font-semibold text-secondary-fixed-dim flex items-center gap-space-2xs">
 <span className="material-symbols-outlined text-[16px] text-secondary">memory</span>
@@ -978,7 +978,7 @@ export default function WordCloud() {
 </tbody>
 </table>
 </div>
-<!-- Pagination & Lexicon Meta Footer -->
+{/* Pagination & Lexicon Meta Footer */}
 <div className="flex flex-col sm:flex-row items-center justify-between gap-space-sm pt-space-xs text-on-surface-variant font-body-sm text-body-sm">
 <div className="flex items-center gap-space-xs font-mono-metric text-mono-metric">
 <span>Showing 1-6 of 1,428 extracted terms</span>
@@ -1013,3 +1013,4 @@ export default function WordCloud() {
     </>
   );
 }
+

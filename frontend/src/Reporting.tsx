@@ -4,10 +4,10 @@ export default function Reporting() {
   return (
     <>
       
-<!-- Left Fixed Sidebar matching SCREEN_7 -->
+{/* Left Fixed Sidebar matching SCREEN_7 */}
 <aside className="fixed left-0 top-0 h-full w-64 bg-surface-container-lowest border-r border-card-border/60 z-50 flex flex-col justify-between py-4 select-none">
 <div className="flex flex-col gap-4">
-<!-- App Header / Workspace Selector -->
+{/* App Header / Workspace Selector */}
 <div className="px-4 flex items-center justify-between">
 <div className="flex items-center gap-2.5">
 <div className="w-8 h-8 rounded-xl bg-primary-container flex items-center justify-center text-white shadow-[0_0_12px_rgba(99,102,241,0.35)]">
@@ -28,7 +28,7 @@ export default function Reporting() {
 <span className="material-symbols-outlined text-[16px] text-on-surface-variant">unfold_more</span>
 </button>
 </div>
-<!-- Navigation Links -->
+{/* Navigation Links */}
 <nav className="flex flex-col gap-1 px-3">
 <a className="flex items-center gap-3 px-3 py-2 rounded-xl text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface text-xs font-medium transition-colors" data-path="dashboard" href="#">
 <span className="material-symbols-outlined text-[19px]">grid_view</span>
@@ -57,7 +57,7 @@ export default function Reporting() {
 <span className="material-symbols-outlined text-[19px]">lightbulb</span>
 <span>Ideation</span>
 </a>
-<!-- Active Tab: Reporting -->
+{/* Active Tab: Reporting */}
 <a aria-current="page" className="flex items-center justify-between px-3 py-2 rounded-xl bg-primary-container text-white text-xs font-semibold shadow-md shadow-primary-container/20 transition-all" data-path="reporting" href="#">
 <div className="flex items-center gap-3">
 <span className="material-symbols-outlined text-[19px]">description</span>
@@ -71,7 +71,7 @@ export default function Reporting() {
 </a>
 </nav>
 </div>
-<!-- User Profile Badge -->
+{/* User Profile Badge */}
 <div className="px-3 pt-2">
 <div className="p-2 rounded-xl bg-surface-container-low border border-card-border/60 flex items-center justify-between">
 <div className="flex items-center gap-2.5 overflow-hidden">
@@ -92,11 +92,11 @@ export default function Reporting() {
 </div>
 </div>
 </aside>
-<!-- Main Content Wrapper -->
+{/* Main Content Wrapper */}
 <div className="pl-64 flex flex-col min-h-screen">
-<!-- Top Global Sticky Navigation Bar -->
+{/* Top Global Sticky Navigation Bar */}
 <header className="fixed top-0 left-64 right-0 h-16 bg-surface-container-lowest/90 backdrop-blur-xl border-b border-card-border/60 z-40 flex items-center justify-between px-6">
-<!-- Breadcrumbs & Live Sync Status -->
+{/* Breadcrumbs & Live Sync Status */}
 <div className="flex items-center gap-4">
 <div className="flex items-center gap-2 text-xs text-on-surface-variant font-medium">
 <span className="hover:text-on-surface transition-colors cursor-pointer flex items-center gap-1">
@@ -113,21 +113,21 @@ export default function Reporting() {
 <span className="text-outline">• Last synced 4m ago</span>
 </div>
 </div>
-<!-- Controls & Header Actions -->
+{/* Controls & Header Actions */}
 <div className="flex items-center gap-3">
-<!-- Platform Selector -->
+{/* Platform Selector */}
 <div className="hidden md:flex items-center bg-surface-container-low border border-card-border/60 p-0.5 rounded-xl text-xs">
 <button className="px-2.5 py-1 rounded-lg bg-surface-container-high text-on-surface font-medium">All Deliverables</button>
 <button className="px-2.5 py-1 rounded-lg text-on-surface-variant hover:text-on-surface transition-colors">Executive</button>
 <button className="px-2.5 py-1 rounded-lg text-on-surface-variant hover:text-on-surface transition-colors">Engineering</button>
 </div>
-<!-- Date Range Picker -->
+{/* Date Range Picker */}
 <div className="flex items-center bg-surface-container-low border border-card-border/60 px-3 py-1.5 rounded-xl gap-2 text-xs text-on-surface-variant hover:text-on-surface cursor-pointer transition-colors">
 <span className="material-symbols-outlined text-[15px] text-tertiary">calendar_today</span>
 <span>Trailing 90 Days</span>
 <span className="material-symbols-outlined text-[15px]">expand_more</span>
 </div>
-<!-- Header Action Buttons -->
+{/* Header Action Buttons */}
 <button className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-container-low hover:bg-surface-container border border-card-border/80 text-on-surface text-xs font-medium transition-colors">
 <span className="material-symbols-outlined text-[16px] text-tertiary">schedule</span>
 <span>Schedule Digest</span>
@@ -147,9 +147,9 @@ export default function Reporting() {
 </button>
 </div>
 </header>
-<!-- Main Content Body -->
+{/* Main Content Body */}
 <main className="w-full pt-20 pb-12 px-6 flex flex-col gap-6 max-w-[1720px] mx-auto">
-<!-- 1. Hero Title & Context Strip -->
+{/* 1. Hero Title & Context Strip */}
 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-surface-container-low border border-card-border p-5 rounded-2xl shadow-sm">
 <div className="flex flex-col gap-1.5 max-w-3xl">
 <div className="flex items-center gap-2 text-xs font-mono text-on-surface-variant">
@@ -166,7 +166,7 @@ export default function Reporting() {
             Cross-platform intelligence syntheses delivered automatically to C-suite, Product, and Engineering stakeholders.
           </p>
 </div>
-<!-- View Mode Filter Bar matching Screen 7 -->
+{/* View Mode Filter Bar matching Screen 7 */}
 <div className="flex items-center gap-1 bg-surface-container-lowest p-1 rounded-xl border border-card-border/60 self-start lg:self-center overflow-x-auto">
 <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-bright text-white text-xs font-semibold shadow-sm transition-all">
 <span className="material-symbols-outlined text-[16px] text-tertiary">summarize</span>
@@ -186,9 +186,9 @@ export default function Reporting() {
 </button>
 </div>
 </div>
-<!-- 2. Top Telemetry KPI Cards (Exact 4-card styling matching SCREEN_7) -->
+{/* 2. Top Telemetry KPI Cards (Exact 4-card styling matching SCREEN_7) */}
 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-<!-- KPI 1: Synthesized Executive Briefs -->
+{/* KPI 1: Synthesized Executive Briefs */}
 <div className="bg-surface-container-low border border-card-border p-4 rounded-xl flex flex-col justify-between relative overflow-hidden group hover:border-card-border/90 transition-all">
 <div className="flex items-center justify-between">
 <span className="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant font-semibold">Synthesized Executive Briefs</span>
@@ -205,7 +205,7 @@ export default function Reporting() {
 <span className="text-tertiary font-mono font-medium">100% AI Synthesized</span>
 </div>
 </div>
-<!-- KPI 2: Stakeholder Reach -->
+{/* KPI 2: Stakeholder Reach */}
 <div className="bg-surface-container-low border border-card-border p-4 rounded-xl flex flex-col justify-between relative overflow-hidden group hover:border-card-border/90 transition-all">
 <div className="flex items-center justify-between">
 <span className="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant font-semibold">Stakeholder Reach</span>
@@ -228,7 +228,7 @@ export default function Reporting() {
 <span className="text-emerald-accent font-mono font-semibold">Active Sync</span>
 </div>
 </div>
-<!-- KPI 3: Automated Time Saved -->
+{/* KPI 3: Automated Time Saved */}
 <div className="bg-surface-container-low border border-card-border p-4 rounded-xl flex flex-col justify-between relative overflow-hidden group hover:border-card-border/90 transition-all">
 <div className="flex items-center justify-between">
 <span className="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant font-semibold">Automated Time Saved</span>
@@ -246,7 +246,7 @@ export default function Reporting() {
 <span className="text-on-surface font-mono font-medium">8 Sprints equiv</span>
 </div>
 </div>
-<!-- KPI 4: Synthesized Sentiment -->
+{/* KPI 4: Synthesized Sentiment */}
 <div className="bg-surface-container-low border border-card-border p-4 rounded-xl flex flex-col justify-between relative overflow-hidden group hover:border-card-border/90 transition-all">
 <div className="flex items-center justify-between">
 <span className="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant font-semibold">Synthesized Sentiment</span>
@@ -267,9 +267,9 @@ export default function Reporting() {
 </div>
 </div>
 </div>
-<!-- 3. Two-Column Feature Spotlight Section (65% Deliverables Canvas + 35% Top AI Recommendation) -->
+{/* 3. Two-Column Feature Spotlight Section (65% Deliverables Canvas + 35% Top AI Recommendation) */}
 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-<!-- Left Column: 2x2 Grid of Deliverables (8 cols / ~66%) -->
+{/* Left Column: 2x2 Grid of Deliverables (8 cols / ~66%) */}
 <div className="lg:col-span-8 bg-surface-container-low border border-card-border p-5 rounded-2xl shadow-sm flex flex-col gap-4">
 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-card-border/50">
 <div className="flex items-center gap-2.5">
@@ -281,7 +281,7 @@ export default function Reporting() {
 <p className="text-[11px] text-on-surface-variant">Live syntheses generated from cross-channel voice of customer telemetry</p>
 </div>
 </div>
-<!-- Legend Status Pills -->
+{/* Legend Status Pills */}
 <div className="flex items-center gap-3 text-[11px] font-mono">
 <span className="flex items-center gap-1 text-primary">
 <span className="w-2 h-2 rounded-full bg-primary-container"></span> Board Ready
@@ -294,9 +294,9 @@ export default function Reporting() {
               </span>
 </div>
 </div>
-<!-- 2x2 Grid of Rich Deliverable Cards -->
+{/* 2x2 Grid of Rich Deliverable Cards */}
 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-<!-- Card A: Board Ready -->
+{/* Card A: Board Ready */}
 <div className="bg-surface-container-lowest border border-card-border/70 hover:border-primary-container/60 p-4 rounded-xl flex flex-col justify-between group transition-all shadow-sm">
 <div className="flex flex-col gap-2.5">
 <div className="flex items-center justify-between">
@@ -331,7 +331,7 @@ export default function Reporting() {
 </div>
 </div>
 </div>
-<!-- Card B: Weekly Cadence -->
+{/* Card B: Weekly Cadence */}
 <div className="bg-surface-container-lowest border border-card-border/70 hover:border-tertiary/60 p-4 rounded-xl flex flex-col justify-between group transition-all shadow-sm">
 <div className="flex flex-col gap-2.5">
 <div className="flex items-center justify-between">
@@ -362,7 +362,7 @@ export default function Reporting() {
 </div>
 </div>
 </div>
-<!-- Card C: Incident Post-Mortem -->
+{/* Card C: Incident Post-Mortem */}
 <div className="bg-surface-container-lowest border border-card-border/70 hover:border-crimson-accent/60 p-4 rounded-xl flex flex-col justify-between group transition-all shadow-sm">
 <div className="flex flex-col gap-2.5">
 <div className="flex items-center justify-between">
@@ -393,7 +393,7 @@ export default function Reporting() {
 </div>
 </div>
 </div>
-<!-- Card D: Dev Attribution -->
+{/* Card D: Dev Attribution */}
 <div className="bg-surface-container-lowest border border-card-border/70 hover:border-amber-accent/60 p-4 rounded-xl flex flex-col justify-between group transition-all shadow-sm">
 <div className="flex flex-col gap-2.5">
 <div className="flex items-center justify-between">
@@ -425,7 +425,7 @@ export default function Reporting() {
 </div>
 </div>
 </div>
-<!-- Footer Synthesis Formula Bar -->
+{/* Footer Synthesis Formula Bar */}
 <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs text-on-surface-variant font-mono gap-2 pt-1 border-t border-card-border/50">
 <div className="flex items-center gap-1.5">
 <span className="material-symbols-outlined text-[16px] text-tertiary">functions</span>
@@ -434,7 +434,7 @@ export default function Reporting() {
 <span className="text-primary hover:underline cursor-pointer">Configure Schedules →</span>
 </div>
 </div>
-<!-- Right Column: Top Executive Recommendation Spotlight (4 cols / ~34%) -->
+{/* Right Column: Top Executive Recommendation Spotlight (4 cols / ~34%) */}
 <div className="lg:col-span-4 bg-surface-container-low border border-card-border p-5 rounded-2xl shadow-sm flex flex-col justify-between relative overflow-hidden h-full">
 <div className="flex flex-col gap-3">
 <div className="flex items-center justify-between">
@@ -452,7 +452,7 @@ export default function Reporting() {
                 Synthesized across 12,480 reviews: immediate board briefing on revenue churn risk &amp; customer sentiment turnaround.
               </p>
 </div>
-<!-- Key metrics box matching SCREEN_7 -->
+{/* Key metrics box matching SCREEN_7 */}
 <div className="flex flex-col gap-2 bg-surface-container-lowest border border-card-border/60 p-3 rounded-xl">
 <div className="flex items-center justify-between text-xs">
 <span className="text-on-surface-variant">Annualized Churn Risk Mitigated:</span>
@@ -467,7 +467,7 @@ export default function Reporting() {
 <span className="font-mono text-secondary font-bold">98.4%</span>
 </div>
 </div>
-<!-- Sparkline Trajectory Chart -->
+{/* Sparkline Trajectory Chart */}
 <div className="rounded-xl bg-surface-container-lowest border border-card-border/60 p-3 flex flex-col gap-1">
 <div className="flex items-center justify-between text-[11px] font-mono">
 <span className="text-on-surface-variant uppercase text-[10px]">Sentiment Trajectory</span>
@@ -476,10 +476,10 @@ export default function Reporting() {
 <div className="w-full h-16 pt-1">
 <svg className="w-full h-full" fill="none" preserveaspectratio="none" viewBox="0 0 320 50">
 <defs>
-<lineargradient id="recGrad" x1="0" x2="0" y1="0" y2="1" />
+<linearGradient id="recGrad" x1="0" x2="0" y1="0" y2="1">
 <stop offset="0%" stop-color="#4cd7f6" stop-opacity="0.35"></stop>
 <stop offset="100%" stop-color="#4cd7f6" stop-opacity="0.0"></stop>
-</lineargradient>
+</linearGradient>
 </defs>
 <path d="M0,38 Q40,36 80,30 T160,22 T240,12 T300,16 T320,5 L320,50 L0,50 Z" fill="url(#recGrad)" />
 <path d="M0,38 Q40,36 80,30 T160,22 T240,12 T300,16 T320,5" stroke="#4cd7f6" strokeLinecap="round" strokeWidth="2" />
@@ -494,7 +494,7 @@ export default function Reporting() {
 </div>
 </div>
 </div>
-<!-- Card Actions -->
+{/* Card Actions */}
 <div className="pt-4 mt-4 border-t border-card-border/50 flex flex-col gap-2">
 <button className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-primary-container hover:bg-indigo-500 text-white font-medium text-xs shadow-md shadow-primary-container/25 transition-all">
 <span className="material-symbols-outlined text-[17px]">send</span>
@@ -507,9 +507,9 @@ export default function Reporting() {
 </div>
 </div>
 </div>
-<!-- 4. Spotlight Interactive Deep Dive / Preview (matching SCREEN_7's PRD preview SPEC-2024-884) -->
+{/* 4. Spotlight Interactive Deep Dive / Preview (matching SCREEN_7's PRD preview SPEC-2024-884) */}
 <div className="bg-surface-container-low border border-card-border p-5 rounded-2xl shadow-sm flex flex-col gap-4">
-<!-- Drawer Header -->
+{/* Drawer Header */}
 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-card-border/60">
 <div className="flex items-center gap-3">
 <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary-container to-secondary flex items-center justify-center text-white shadow-md">
@@ -532,9 +532,9 @@ export default function Reporting() {
             </span>
 </div>
 </div>
-<!-- Problem Definition & Friction Breakdown -->
+{/* Problem Definition & Friction Breakdown */}
 <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-<!-- Problem Definition (5 cols) -->
+{/* Problem Definition (5 cols) */}
 <div className="lg:col-span-5 flex flex-col gap-3">
 <div>
 <span className="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant font-semibold">Synthesized Problem &amp; Findings Statement</span>
@@ -557,13 +557,13 @@ export default function Reporting() {
 </div>
 </div>
 </div>
-<!-- Friction Vectors & Impact Stories (7 cols) -->
+{/* Friction Vectors & Impact Stories (7 cols) */}
 <div className="lg:col-span-7 flex flex-col gap-2.5">
 <div className="flex items-center justify-between">
 <span className="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant font-semibold">Executive Telemetry &amp; ARR Friction Vectors</span>
 <span className="text-xs text-primary hover:underline cursor-pointer">Regenerate with Claude 3.5 →</span>
 </div>
-<!-- Vector 1 -->
+{/* Vector 1 */}
 <div className="p-3 rounded-xl bg-surface-container-lowest border border-card-border/60 flex items-start gap-3">
 <span className="font-mono text-xs font-bold text-crimson-accent bg-crimson-accent/20 px-2 py-0.5 rounded border border-crimson-accent/20 whitespace-nowrap">HIGH RISK</span>
 <div className="flex-1">
@@ -580,7 +580,7 @@ export default function Reporting() {
 </div>
 </div>
 </div>
-<!-- Vector 2 -->
+{/* Vector 2 */}
 <div className="p-3 rounded-xl bg-surface-container-lowest border border-card-border/60 flex items-start gap-3">
 <span className="font-mono text-xs font-bold text-amber-accent bg-amber-accent/20 px-2 py-0.5 rounded border border-amber-accent/20 whitespace-nowrap">AUTH LOOP</span>
 <div className="flex-1">
@@ -597,7 +597,7 @@ export default function Reporting() {
 </div>
 </div>
 </div>
-<!-- Vector 3 -->
+{/* Vector 3 */}
 <div className="p-3 rounded-xl bg-surface-container-lowest border border-card-border/60 flex items-start gap-3">
 <span className="font-mono text-xs font-bold text-primary bg-primary-container/20 px-2 py-0.5 rounded border border-primary/20 whitespace-nowrap">BILLING UX</span>
 <div className="flex-1">
@@ -613,7 +613,7 @@ export default function Reporting() {
 </div>
 </div>
 </div>
-<!-- PRD Bottom Actions -->
+{/* PRD Bottom Actions */}
 <div className="flex items-center justify-end gap-2.5 mt-2 pt-2 border-t border-card-border/50">
 <button className="px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high border border-card-border text-on-surface text-xs font-medium transition-all flex items-center gap-1.5">
 <span className="material-symbols-outlined text-[15px]">visibility</span>
@@ -631,9 +631,9 @@ export default function Reporting() {
 </div>
 </div>
 </div>
-<!-- 5. Scheduled Automated Deliveries & Distribution Pipeline (matching SCREEN_7's crisp enterprise data table) -->
+{/* 5. Scheduled Automated Deliveries & Distribution Pipeline (matching SCREEN_7's crisp enterprise data table) */}
 <div className="bg-surface-container-low border border-card-border rounded-2xl shadow-sm overflow-hidden flex flex-col">
-<!-- Table Filter / Search Header -->
+{/* Table Filter / Search Header */}
 <div className="p-4 border-b border-card-border/60 flex flex-col md:flex-row md:items-center justify-between gap-3">
 <div>
 <h2 className="text-sm font-semibold text-on-surface">Scheduled Automated Deliveries &amp; Distribution Pipelines</h2>
@@ -653,7 +653,7 @@ export default function Reporting() {
 </button>
 </div>
 </div>
-<!-- Table Viewport -->
+{/* Table Viewport */}
 <div className="overflow-x-auto">
 <table className="w-full text-left border-collapse text-xs">
 <thead>
@@ -669,7 +669,7 @@ export default function Reporting() {
 </tr>
 </thead>
 <tbody className="divide-y divide-card-border/40">
-<!-- Row 1: Slack Webhook -->
+{/* Row 1: Slack Webhook */}
 <tr className="hover:bg-surface-container/50 transition-colors group">
 <td className="py-3 px-4">
 <div className="flex items-center gap-2.5">
@@ -719,7 +719,7 @@ export default function Reporting() {
 </div>
 </td>
 </tr>
-<!-- Row 2: Board Audit Distribution List -->
+{/* Row 2: Board Audit Distribution List */}
 <tr className="hover:bg-surface-container/50 transition-colors group">
 <td className="py-3 px-4">
 <div className="flex items-center gap-2.5">
@@ -763,7 +763,7 @@ export default function Reporting() {
 </div>
 </td>
 </tr>
-<!-- Row 3: Linear Triage Sync -->
+{/* Row 3: Linear Triage Sync */}
 <tr className="hover:bg-surface-container/50 transition-colors group">
 <td className="py-3 px-4">
 <div className="flex items-center gap-2.5">
@@ -813,7 +813,7 @@ export default function Reporting() {
 </div>
 </td>
 </tr>
-<!-- Row 4: S3 Raw Data Lake -->
+{/* Row 4: S3 Raw Data Lake */}
 <tr className="hover:bg-surface-container/50 transition-colors group">
 <td className="py-3 px-4">
 <div className="flex items-center gap-2.5">
@@ -859,7 +859,7 @@ export default function Reporting() {
 </tbody>
 </table>
 </div>
-<!-- Table Pagination & Count Strip -->
+{/* Table Pagination & Count Strip */}
 <div className="p-3 bg-surface-container-lowest border-t border-card-border/60 flex items-center justify-between text-xs text-on-surface-variant font-mono">
 <span>Showing 4 active automated pipelines across 142 stakeholders</span>
 <div className="flex items-center gap-1.5">
@@ -870,7 +870,7 @@ export default function Reporting() {
 </div>
 </div>
 </div>
-<!-- 6. Grounded Evidence Verbatims Wall (matching SCREEN_7's bottom 3 customer verbatims) -->
+{/* 6. Grounded Evidence Verbatims Wall (matching SCREEN_7's bottom 3 customer verbatims) */}
 <div className="flex flex-col gap-3">
 <div className="flex items-center justify-between">
 <div>
@@ -883,7 +883,7 @@ export default function Reporting() {
 </span>
 </div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-<!-- Verbatim Card 1: Camera Crash / Optical Scan -->
+{/* Verbatim Card 1: Camera Crash / Optical Scan */}
 <div className="bg-surface-container-low border border-card-border p-4 rounded-xl shadow-sm flex flex-col justify-between hover:border-card-border/90 transition-colors">
 <div className="flex flex-col gap-2">
 <div className="flex items-center justify-between text-xs">
@@ -905,7 +905,7 @@ export default function Reporting() {
 <span>2 days ago</span>
 </div>
 </div>
-<!-- Verbatim Card 2: In-app Invoicing & Billing -->
+{/* Verbatim Card 2: In-app Invoicing & Billing */}
 <div className="bg-surface-container-low border border-card-border p-4 rounded-xl shadow-sm flex flex-col justify-between hover:border-card-border/90 transition-colors">
 <div className="flex flex-col gap-2">
 <div className="flex items-center justify-between text-xs">
@@ -927,7 +927,7 @@ export default function Reporting() {
 <span>3 days ago</span>
 </div>
 </div>
-<!-- Verbatim Card 3: Stage Manager / Multitask Reset -->
+{/* Verbatim Card 3: Stage Manager / Multitask Reset */}
 <div className="bg-surface-container-low border border-card-border p-4 rounded-xl shadow-sm flex flex-col justify-between hover:border-card-border/90 transition-colors">
 <div className="flex flex-col gap-2">
 <div className="flex items-center justify-between text-xs">
@@ -957,3 +957,4 @@ export default function Reporting() {
     </>
   );
 }
+

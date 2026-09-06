@@ -4,10 +4,10 @@ export default function Ideation() {
   return (
     <>
       
-<!-- Left Fixed Sidebar (Consistent with screen_5, 7, 8, 9) -->
+{/* Left Fixed Sidebar (Consistent with screen_5, 7, 8, 9) */}
 <aside className="fixed left-0 top-0 h-full w-64 bg-surface-container-lowest border-r border-card-border/60 z-50 flex flex-col justify-between py-4 select-none">
 <div className="flex flex-col gap-4">
-<!-- App Header / Workspace Selector -->
+{/* App Header / Workspace Selector */}
 <div className="px-4 flex items-center justify-between">
 <div className="flex items-center gap-2.5">
 <div className="w-8 h-8 rounded-xl bg-primary-container flex items-center justify-center text-white shadow-[0_0_12px_rgba(99,102,241,0.35)]">
@@ -28,7 +28,7 @@ export default function Ideation() {
 <span className="material-symbols-outlined text-[16px] text-on-surface-variant">unfold_more</span>
 </button>
 </div>
-<!-- Navigation Links -->
+{/* Navigation Links */}
 <nav className="flex flex-col gap-1 px-3">
 <a className="flex items-center gap-3 px-3 py-2 rounded-xl text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface text-xs font-medium transition-colors" data-path="dashboard" href="#">
 <span className="material-symbols-outlined text-[19px]">grid_view</span>
@@ -53,7 +53,7 @@ export default function Ideation() {
 <span className="material-symbols-outlined text-[19px]">cloud</span>
 <span>Word Cloud</span>
 </a>
-<!-- Active Tab: Ideation -->
+{/* Active Tab: Ideation */}
 <a aria-current="page" className="flex items-center justify-between px-3 py-2 rounded-xl bg-primary-container text-white text-xs font-semibold shadow-md shadow-primary-container/20 transition-all" data-path="ideation" href="#">
 <div className="flex items-center gap-3">
 <span className="material-symbols-outlined text-[19px]">lightbulb</span>
@@ -71,7 +71,7 @@ export default function Ideation() {
 </a>
 </nav>
 </div>
-<!-- User Profile Badge -->
+{/* User Profile Badge */}
 <div className="px-3 pt-2">
 <div className="p-2 rounded-xl bg-surface-container-low border border-card-border/60 flex items-center justify-between">
 <div className="flex items-center gap-2.5 overflow-hidden">
@@ -92,11 +92,11 @@ export default function Ideation() {
 </div>
 </div>
 </aside>
-<!-- Main Content Wrapper with Pl-64 for Left Sidebar Offset -->
+{/* Main Content Wrapper with Pl-64 for Left Sidebar Offset */}
 <div className="pl-64 flex flex-col min-h-screen">
-<!-- Top Global Sticky Navigation Bar -->
+{/* Top Global Sticky Navigation Bar */}
 <header className="fixed top-0 left-64 right-0 h-16 bg-surface-container-lowest/90 backdrop-blur-xl border-b border-card-border/60 z-40 flex items-center justify-between px-6">
-<!-- Breadcrumbs & Live Sync Status -->
+{/* Breadcrumbs & Live Sync Status */}
 <div className="flex items-center gap-4">
 <div className="flex items-center gap-2 text-xs text-on-surface-variant font-medium">
 <span className="hover:text-on-surface transition-colors cursor-pointer flex items-center gap-1">
@@ -113,21 +113,21 @@ export default function Ideation() {
 <span className="text-outline">• 4m ago</span>
 </div>
 </div>
-<!-- Controls & Header Actions -->
+{/* Controls & Header Actions */}
 <div className="flex items-center gap-3">
-<!-- Platform Selector -->
+{/* Platform Selector */}
 <div className="hidden md:flex items-center bg-surface-container-low border border-card-border/60 p-0.5 rounded-xl text-xs">
 <button className="px-2.5 py-1 rounded-lg bg-surface-container-high text-on-surface font-medium">All Platforms</button>
 <button className="px-2.5 py-1 rounded-lg text-on-surface-variant hover:text-on-surface transition-colors">iOS</button>
 <button className="px-2.5 py-1 rounded-lg text-on-surface-variant hover:text-on-surface transition-colors">Android</button>
 </div>
-<!-- Date Range Picker -->
+{/* Date Range Picker */}
 <div className="flex items-center bg-surface-container-low border border-card-border/60 px-3 py-1.5 rounded-xl gap-2 text-xs text-on-surface-variant hover:text-on-surface cursor-pointer transition-colors">
 <span className="material-symbols-outlined text-[15px] text-tertiary">calendar_today</span>
 <span>Last 90 Days</span>
 <span className="material-symbols-outlined text-[15px]">expand_more</span>
 </div>
-<!-- Header Action Buttons -->
+{/* Header Action Buttons */}
 <button className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-container-low hover:bg-surface-container border border-card-border/80 text-on-surface text-xs font-medium transition-colors">
 <span className="material-symbols-outlined text-[16px] text-tertiary">sync_alt</span>
 <span>Sync Linear / Jira</span>
@@ -147,9 +147,9 @@ export default function Ideation() {
 </button>
 </div>
 </header>
-<!-- Main Body Container -->
+{/* Main Body Container */}
 <main className="w-full pt-20 pb-12 px-6 flex flex-col gap-6 max-w-[1720px] mx-auto">
-<!-- 1. Hero Title & Context Strip -->
+{/* 1. Hero Title & Context Strip */}
 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-surface-container-low border border-card-border p-5 rounded-2xl shadow-sm">
 <div className="flex flex-col gap-1.5 max-w-3xl">
 <div className="flex items-center gap-2 text-xs font-mono text-on-surface-variant">
@@ -166,7 +166,7 @@ export default function Ideation() {
             Customer review signal synthesis, opportunity scoring, automated user demand clustering, and linear roadmap exports.
           </p>
 </div>
-<!-- Matrix / Kanban / Backlog View Mode Selector -->
+{/* Matrix / Kanban / Backlog View Mode Selector */}
 <div className="flex items-center gap-1 bg-surface-container-lowest p-1 rounded-xl border border-card-border/60 self-start lg:self-center overflow-x-auto">
 <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-bright text-white text-xs font-semibold shadow-sm transition-all">
 <span className="material-symbols-outlined text-[16px] text-tertiary">scatter_plot</span>
@@ -186,9 +186,9 @@ export default function Ideation() {
 </button>
 </div>
 </div>
-<!-- 2. Top Metric KPI Strip (4 Stat Cards matching Screen 5 & 7) -->
+{/* 2. Top Metric KPI Strip (4 Stat Cards matching Screen 5 & 7) */}
 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-<!-- KPI 1: Synthesized Opportunities -->
+{/* KPI 1: Synthesized Opportunities */}
 <div className="bg-surface-container-low border border-card-border p-4 rounded-xl flex flex-col justify-between relative overflow-hidden group hover:border-card-border/90 transition-all">
 <div className="flex items-center justify-between">
 <span className="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant font-semibold">Synthesized Opportunities</span>
@@ -205,7 +205,7 @@ export default function Ideation() {
 <span className="text-tertiary font-mono font-medium">94% classified</span>
 </div>
 </div>
-<!-- KPI 2: Top Customer Friction -->
+{/* KPI 2: Top Customer Friction */}
 <div className="bg-surface-container-low border border-card-border p-4 rounded-xl flex flex-col justify-between relative overflow-hidden group hover:border-card-border/90 transition-all">
 <div className="flex items-center justify-between">
 <span className="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant font-semibold">Top Customer Friction</span>
@@ -225,7 +225,7 @@ export default function Ideation() {
 <span className="text-crimson-accent font-mono font-semibold">68% Churn Threat</span>
 </div>
 </div>
-<!-- KPI 3: Projected NPS Lift -->
+{/* KPI 3: Projected NPS Lift */}
 <div className="bg-surface-container-low border border-card-border p-4 rounded-xl flex flex-col justify-between relative overflow-hidden group hover:border-card-border/90 transition-all">
 <div className="flex items-center justify-between">
 <span className="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant font-semibold">Projected NPS Lift</span>
@@ -242,7 +242,7 @@ export default function Ideation() {
 <span className="text-on-surface font-mono font-medium">Target: NPS 58</span>
 </div>
 </div>
-<!-- KPI 4: Dev Readiness Index -->
+{/* KPI 4: Dev Readiness Index */}
 <div className="bg-surface-container-low border border-card-border p-4 rounded-xl flex flex-col justify-between relative overflow-hidden group hover:border-card-border/90 transition-all">
 <div className="flex items-center justify-between">
 <span className="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant font-semibold">Dev Readiness Index</span>
@@ -262,9 +262,9 @@ export default function Ideation() {
 </div>
 </div>
 </div>
-<!-- 3. Opportunity Prioritization Matrix: 2x2 Canvas (65%) + Top AI Recommendation (35%) -->
+{/* 3. Opportunity Prioritization Matrix: 2x2 Canvas (65%) + Top AI Recommendation (35%) */}
 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-<!-- Left Side: Interactive-looking 2x2 Opportunity Prioritization Matrix (8 cols / ~66%) -->
+{/* Left Side: Interactive-looking 2x2 Opportunity Prioritization Matrix (8 cols / ~66%) */}
 <div className="lg:col-span-8 bg-surface-container-low border border-card-border p-5 rounded-2xl shadow-sm flex flex-col gap-4">
 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-card-border/50">
 <div className="flex items-center gap-2.5">
@@ -276,7 +276,7 @@ export default function Ideation() {
 <p className="text-[11px] text-on-surface-variant">RICE Opportunity dynamic positioning based on live App Store review spikes</p>
 </div>
 </div>
-<!-- Legend Pills -->
+{/* Legend Pills */}
 <div className="flex items-center gap-3 text-[11px] font-mono">
 <span className="flex items-center gap-1 text-crimson-accent">
 <span className="w-2 h-2 rounded-full bg-crimson-accent"></span> Critical Pain
@@ -289,12 +289,12 @@ export default function Ideation() {
               </span>
 </div>
 </div>
-<!-- 2x2 Matrix Canvas -->
+{/* 2x2 Matrix Canvas */}
 <div className="relative w-full h-[410px] bg-surface-container-lowest rounded-xl border border-card-border/70 p-4 overflow-hidden select-none">
-<!-- Axis Dividers -->
+{/* Axis Dividers */}
 <div className="absolute inset-x-0 top-1/2 h-px bg-card-border/70 pointer-events-none"></div>
 <div className="absolute inset-y-0 left-1/2 w-px bg-card-border/70 pointer-events-none"></div>
-<!-- Quadrant Labels / Watermarks -->
+{/* Quadrant Labels / Watermarks */}
 <div className="absolute top-3 left-4 text-[11px] font-mono text-tertiary/90 font-semibold tracking-wide flex items-center gap-1 uppercase">
 <span className="material-symbols-outlined text-[15px]">bolt</span> Quick Wins (High Impact • Low Effort)
             </div>
@@ -307,22 +307,22 @@ export default function Ideation() {
 <div className="absolute bottom-3 right-4 text-[11px] font-mono text-on-surface-variant/50 font-semibold tracking-wide uppercase">
               Time Sinks (High Effort • Low Return)
             </div>
-<!-- Axis Direction Arrows -->
+{/* Axis Direction Arrows */}
 <div className="absolute left-2.5 top-1/2 -translate-y-1/2 -rotate-90 origin-center text-[10px] font-mono text-outline uppercase tracking-widest pointer-events-none">
               ← Impact / Customer Reach ↑
             </div>
 <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 text-[10px] font-mono text-outline uppercase tracking-widest pointer-events-none">
               Dev Effort / Complexity →
             </div>
-<!-- PLOTTED FEATURE NODES -->
-<!-- 1. HEIC Buffer Auto-Purge (Quick Win: High Impact, Low Effort) -->
+{/* PLOTTED FEATURE NODES */}
+{/* 1. HEIC Buffer Auto-Purge (Quick Win: High Impact, Low Effort) */}
 <div className="absolute top-[22%] left-[24%] -translate-x-1/2 -translate-y-1/2 group cursor-pointer z-10">
 <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-high/90 hover:bg-surface-bright border border-tertiary/40 shadow-lg backdrop-blur-md transition-all group-hover:scale-105">
 <span className="w-2 h-2 rounded-full bg-crimson-accent animate-pulse"></span>
 <span className="text-xs font-semibold text-on-surface">HEIC Buffer Auto-Purge</span>
 <span className="px-1.5 py-0.2 rounded bg-tertiary/20 text-tertiary font-mono text-[10px] font-bold">RICE 96</span>
 </div>
-<!-- Tooltip on hover -->
+{/* Tooltip on hover */}
 <div className="hidden group-hover:flex flex-col absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 p-2.5 rounded-lg bg-surface-container-highest border border-card-border text-on-surface shadow-2xl z-30 pointer-events-none">
 <span className="text-xs font-bold text-crimson-accent flex items-center gap-1">
 <span className="material-symbols-outlined text-[14px]">warning</span> Critical Crash Fix
@@ -330,7 +330,7 @@ export default function Ideation() {
 <span className="text-[11px] text-on-surface-variant mt-1 leading-snug">3,120 mentions. Eliminates memory exhaustion during raw batch imports.</span>
 </div>
 </div>
-<!-- 2. Sub Pause & Receipt Log (Quick Win) -->
+{/* 2. Sub Pause & Receipt Log (Quick Win) */}
 <div className="absolute top-[32%] left-[36%] -translate-x-1/2 -translate-y-1/2 group cursor-pointer z-10">
 <div className="flex items-center gap-1.5 px-2.5 py-1.2 rounded-lg bg-surface-container-high/80 hover:bg-surface-bright border border-card-border shadow-md backdrop-blur-md transition-all group-hover:scale-105">
 <span className="w-2 h-2 rounded-full bg-tertiary"></span>
@@ -338,7 +338,7 @@ export default function Ideation() {
 <span className="px-1.5 py-0.2 rounded bg-surface-container text-tertiary font-mono text-[10px]">RICE 92</span>
 </div>
 </div>
-<!-- 3. iPad Stage Manager Canvas (Strategic Bet: High Impact, High Effort) -->
+{/* 3. iPad Stage Manager Canvas (Strategic Bet: High Impact, High Effort) */}
 <div className="absolute top-[16%] left-[78%] -translate-x-1/2 -translate-y-1/2 group cursor-pointer z-10">
 <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-high/90 hover:bg-surface-bright border border-secondary/50 shadow-[0_0_15px_rgba(221,183,255,0.25)] backdrop-blur-md transition-all group-hover:scale-105">
 <span className="w-2 h-2 rounded-full bg-secondary animate-ping"></span>
@@ -352,7 +352,7 @@ export default function Ideation() {
 <span className="text-[11px] text-on-surface-variant mt-1 leading-snug">4,120 review mentions. Prevents canvas resets on iPadOS window resizing.</span>
 </div>
 </div>
-<!-- 4. E2EE Background Cloud Sync (Strategic Bet) -->
+{/* 4. E2EE Background Cloud Sync (Strategic Bet) */}
 <div className="absolute top-[35%] left-[66%] -translate-x-1/2 -translate-y-1/2 group cursor-pointer z-10">
 <div className="flex items-center gap-1.5 px-2.5 py-1.2 rounded-lg bg-surface-container-high/80 hover:bg-surface-bright border border-card-border shadow-md backdrop-blur-md transition-all group-hover:scale-105">
 <span className="w-2 h-2 rounded-full bg-secondary"></span>
@@ -360,7 +360,7 @@ export default function Ideation() {
 <span className="px-1.5 py-0.2 rounded bg-surface-container text-secondary font-mono text-[10px]">RICE 91</span>
 </div>
 </div>
-<!-- 5. Pure Black OLED #000000 (Incremental Refinement: Low Effort) -->
+{/* 5. Pure Black OLED #000000 (Incremental Refinement: Low Effort) */}
 <div className="absolute top-[68%] left-[26%] -translate-x-1/2 -translate-y-1/2 group cursor-pointer z-10">
 <div className="flex items-center gap-1.5 px-2.5 py-1.2 rounded-lg bg-surface-container-high/70 hover:bg-surface-bright border border-card-border shadow-sm backdrop-blur-md transition-all group-hover:scale-105">
 <span className="w-2 h-2 rounded-full bg-primary"></span>
@@ -368,7 +368,7 @@ export default function Ideation() {
 <span className="px-1.5 py-0.2 rounded bg-surface-container text-on-surface-variant font-mono text-[10px]">RICE 79</span>
 </div>
 </div>
-<!-- 6. Custom Palette Hex Support (Time Sink / Lower Return) -->
+{/* 6. Custom Palette Hex Support (Time Sink / Lower Return) */}
 <div className="absolute top-[76%] left-[72%] -translate-x-1/2 -translate-y-1/2 group cursor-pointer z-10 opacity-75 hover:opacity-100 transition-opacity">
 <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-surface-container/60 hover:bg-surface-container-high border border-card-border/60 shadow-sm backdrop-blur-md transition-all">
 <span className="w-1.5 h-1.5 rounded-full bg-outline"></span>
@@ -377,7 +377,7 @@ export default function Ideation() {
 </div>
 </div>
 </div>
-<!-- Footer Formula Bar -->
+{/* Footer Formula Bar */}
 <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs text-on-surface-variant font-mono gap-2 pt-1">
 <div className="flex items-center gap-1.5">
 <span className="material-symbols-outlined text-[16px] text-tertiary">functions</span>
@@ -386,7 +386,7 @@ export default function Ideation() {
 <span className="text-primary hover:underline cursor-pointer">Configure Weights →</span>
 </div>
 </div>
-<!-- Right Side: Polished "Top AI Recommendation" card (4 cols / ~34%) -->
+{/* Right Side: Polished "Top AI Recommendation" card (4 cols / ~34%) */}
 <div className="lg:col-span-4 bg-surface-container-low border border-card-border p-5 rounded-2xl shadow-sm flex flex-col justify-between relative overflow-hidden h-full">
 <div className="flex flex-col gap-3">
 <div className="flex items-center justify-between">
@@ -404,7 +404,7 @@ export default function Ideation() {
                 Synthesized from 2,410 negative reviews regarding abrupt account cutoffs during payment card expiration cycles.
               </p>
 </div>
-<!-- Key metrics box -->
+{/* Key metrics box */}
 <div className="flex flex-col gap-2 bg-surface-container-lowest border border-card-border/60 p-3 rounded-xl">
 <div className="flex items-center justify-between text-xs">
 <span className="text-on-surface-variant">Annualized Churn Risk Mitigated:</span>
@@ -419,7 +419,7 @@ export default function Ideation() {
 <span className="font-mono text-secondary font-bold">98.2%</span>
 </div>
 </div>
-<!-- Sentiment Shift Bar -->
+{/* Sentiment Shift Bar */}
 <div className="flex flex-col gap-1.5 mt-1">
 <div className="flex justify-between text-[11px] font-mono text-on-surface-variant">
 <span>Sentiment Shift: <span className="text-crimson-accent font-semibold">-0.92</span></span>
@@ -431,7 +431,7 @@ export default function Ideation() {
 </div>
 </div>
 </div>
-<!-- Card Actions -->
+{/* Card Actions */}
 <div className="pt-4 mt-4 border-t border-card-border/50 flex flex-col gap-2">
 <button className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-primary-container hover:bg-indigo-500 text-white font-medium text-xs shadow-md transition-all">
 <span className="material-symbols-outlined text-[17px]">auto_stories</span>
@@ -444,9 +444,9 @@ export default function Ideation() {
 </div>
 </div>
 </div>
-<!-- 4. AI Spec Generation Spotlight (Ready-to-Ship PRD card) -->
+{/* 4. AI Spec Generation Spotlight (Ready-to-Ship PRD card) */}
 <div className="bg-surface-container-low border border-card-border p-5 rounded-2xl shadow-sm flex flex-col gap-4">
-<!-- Drawer Header -->
+{/* Drawer Header */}
 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-card-border/60">
 <div className="flex items-center gap-3">
 <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary-container to-secondary flex items-center justify-center text-white shadow-md">
@@ -469,9 +469,9 @@ export default function Ideation() {
             </span>
 </div>
 </div>
-<!-- Problem & Story Details -->
+{/* Problem & Story Details */}
 <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-<!-- Problem Definition (5 cols) -->
+{/* Problem Definition (5 cols) */}
 <div className="lg:col-span-5 flex flex-col gap-3">
 <div>
 <span className="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant font-semibold">Synthesized Problem Statement</span>
@@ -494,13 +494,13 @@ export default function Ideation() {
 </div>
 </div>
 </div>
-<!-- User Stories & Acceptance Criteria (7 cols) -->
+{/* User Stories & Acceptance Criteria (7 cols) */}
 <div className="lg:col-span-7 flex flex-col gap-2.5">
 <div className="flex items-center justify-between">
 <span className="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant font-semibold">Generated User Stories &amp; Acceptance Criteria</span>
 <span className="text-xs text-primary hover:underline cursor-pointer">Regenerate with Claude 3.5 →</span>
 </div>
-<!-- Story 1 -->
+{/* Story 1 */}
 <div className="p-3 rounded-xl bg-surface-container-lowest border border-card-border/60 flex items-start gap-3">
 <span className="font-mono text-xs font-bold text-primary bg-primary-container/20 px-2 py-0.5 rounded border border-primary/20">US-1</span>
 <div className="flex-1">
@@ -513,7 +513,7 @@ export default function Ideation() {
 </div>
 </div>
 </div>
-<!-- Story 2 -->
+{/* Story 2 */}
 <div className="p-3 rounded-xl bg-surface-container-lowest border border-card-border/60 flex items-start gap-3">
 <span className="font-mono text-xs font-bold text-primary bg-primary-container/20 px-2 py-0.5 rounded border border-primary/20">US-2</span>
 <div className="flex-1">
@@ -526,7 +526,7 @@ export default function Ideation() {
 </div>
 </div>
 </div>
-<!-- PRD Bottom Actions -->
+{/* PRD Bottom Actions */}
 <div className="flex items-center justify-end gap-2.5 mt-2 pt-2 border-t border-card-border/50">
 <button className="px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high border border-card-border text-on-surface text-xs font-medium transition-all flex items-center gap-1.5">
 <span className="material-symbols-outlined text-[15px]">visibility</span>
@@ -544,9 +544,9 @@ export default function Ideation() {
 </div>
 </div>
 </div>
-<!-- 5. High-Density Synthesized Feature Backlog Table -->
+{/* 5. High-Density Synthesized Feature Backlog Table */}
 <div className="bg-surface-container-low border border-card-border rounded-2xl shadow-sm overflow-hidden flex flex-col">
-<!-- Table Filter / Search Header -->
+{/* Table Filter / Search Header */}
 <div className="p-4 border-b border-card-border/60 flex flex-col md:flex-row md:items-center justify-between gap-3">
 <div>
 <h2 className="text-sm font-semibold text-on-surface">Synthesized Feature Backlog</h2>
@@ -562,7 +562,7 @@ export default function Ideation() {
 </button>
 </div>
 </div>
-<!-- Table Viewport -->
+{/* Table Viewport */}
 <div className="overflow-x-auto">
 <table className="w-full text-left border-collapse text-xs">
 <thead>
@@ -578,7 +578,7 @@ export default function Ideation() {
 </tr>
 </thead>
 <tbody className="divide-y divide-card-border/40">
-<!-- Row 1: Stage Manager (RICE 98) -->
+{/* Row 1: Stage Manager (RICE 98) */}
 <tr className="hover:bg-surface-container/50 transition-colors group">
 <td className="py-3 px-4">
 <div className="flex items-center gap-2.5">
@@ -632,7 +632,7 @@ export default function Ideation() {
 </div>
 </td>
 </tr>
-<!-- Row 2: HEIC Buffer (RICE 96) -->
+{/* Row 2: HEIC Buffer (RICE 96) */}
 <tr className="hover:bg-surface-container/50 transition-colors group">
 <td className="py-3 px-4">
 <div className="flex items-center gap-2.5">
@@ -686,7 +686,7 @@ export default function Ideation() {
 </div>
 </td>
 </tr>
-<!-- Row 3: Sub Pause (RICE 92) -->
+{/* Row 3: Sub Pause (RICE 92) */}
 <tr className="hover:bg-surface-container/50 transition-colors group">
 <td className="py-3 px-4">
 <div className="flex items-center gap-2.5">
@@ -740,7 +740,7 @@ export default function Ideation() {
 </div>
 </td>
 </tr>
-<!-- Row 4: Background Export Queue (RICE 89) -->
+{/* Row 4: Background Export Queue (RICE 89) */}
 <tr className="hover:bg-surface-container/50 transition-colors group">
 <td className="py-3 px-4">
 <div className="flex items-center gap-2.5">
@@ -794,7 +794,7 @@ export default function Ideation() {
 </div>
 </td>
 </tr>
-<!-- Row 5: OLED Theme (RICE 79) -->
+{/* Row 5: OLED Theme (RICE 79) */}
 <tr className="hover:bg-surface-container/50 transition-colors group">
 <td className="py-3 px-4">
 <div className="flex items-center gap-2.5">
@@ -848,7 +848,7 @@ export default function Ideation() {
 </div>
 </td>
 </tr>
-<!-- Row 6: Apple Pencil Pro Barrel Roll (RICE 76) -->
+{/* Row 6: Apple Pencil Pro Barrel Roll (RICE 76) */}
 <tr className="hover:bg-surface-container/50 transition-colors group">
 <td className="py-3 px-4">
 <div className="flex items-center gap-2.5">
@@ -902,7 +902,7 @@ export default function Ideation() {
 </div>
 </td>
 </tr>
-<!-- Row 7: Custom Palette Hex Support (RICE 68) -->
+{/* Row 7: Custom Palette Hex Support (RICE 68) */}
 <tr className="hover:bg-surface-container/50 transition-colors group">
 <td className="py-3 px-4">
 <div className="flex items-center gap-2.5">
@@ -959,7 +959,7 @@ export default function Ideation() {
 </tbody>
 </table>
 </div>
-<!-- Table Pagination & Count Strip -->
+{/* Table Pagination & Count Strip */}
 <div className="p-3 bg-surface-container-lowest border-t border-card-border/60 flex items-center justify-between text-xs text-on-surface-variant font-mono">
 <span>Showing 7 of 34 opportunity clusters (filtered from 9,420 quotes)</span>
 <div className="flex items-center gap-1.5">
@@ -971,7 +971,7 @@ export default function Ideation() {
 </div>
 </div>
 </div>
-<!-- 6. Synthesized Customer Verbatims Wall (3-Column Direct Evidence Cards) -->
+{/* 6. Synthesized Customer Verbatims Wall (3-Column Direct Evidence Cards) */}
 <div className="flex flex-col gap-3">
 <div className="flex items-center justify-between">
 <div>
@@ -984,7 +984,7 @@ export default function Ideation() {
 </span>
 </div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-<!-- Verbatim Card 1: iPad Stage Manager Block -->
+{/* Verbatim Card 1: iPad Stage Manager Block */}
 <div className="bg-surface-container-low border border-card-border p-4 rounded-xl shadow-sm flex flex-col justify-between hover:border-card-border/90 transition-colors">
 <div className="flex flex-col gap-2">
 <div className="flex items-center justify-between text-xs">
@@ -1006,7 +1006,7 @@ export default function Ideation() {
 <span>2 days ago</span>
 </div>
 </div>
-<!-- Verbatim Card 2: HEIC Crash / Garbage Collection -->
+{/* Verbatim Card 2: HEIC Crash / Garbage Collection */}
 <div className="bg-surface-container-low border border-card-border p-4 rounded-xl shadow-sm flex flex-col justify-between hover:border-card-border/90 transition-colors">
 <div className="flex flex-col gap-2">
 <div className="flex items-center justify-between text-xs">
@@ -1028,7 +1028,7 @@ export default function Ideation() {
 <span>3 days ago</span>
 </div>
 </div>
-<!-- Verbatim Card 3: Subscription & Billing Transparency -->
+{/* Verbatim Card 3: Subscription & Billing Transparency */}
 <div className="bg-surface-container-low border border-card-border p-4 rounded-xl shadow-sm flex flex-col justify-between hover:border-card-border/90 transition-colors">
 <div className="flex flex-col gap-2">
 <div className="flex items-center justify-between text-xs">
@@ -1058,3 +1058,4 @@ export default function Ideation() {
     </>
   );
 }
+

@@ -4,10 +4,10 @@ export default function Settings() {
   return (
     <>
       
-<!-- Persistent Sidebar -->
+{/* Persistent Sidebar */}
 <aside className="fixed left-0 top-0 h-full w-sidebar-w bg-surface-container-lowest/95 border-r border-surface-container-high/40 backdrop-blur-xl z-50 flex flex-col justify-between py-space-md shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
 <div className="flex flex-col gap-space-md">
-<!-- Workspace Brand -->
+{/* Workspace Brand */}
 <div className="px-space-md flex items-center justify-between">
 <div className="flex items-center gap-space-xs">
 <div className="w-8 h-8 rounded-xl bg-primary-container flex items-center justify-center text-on-primary-container font-title-lg text-title-lg shadow-sm">
@@ -19,7 +19,7 @@ export default function Settings() {
 </div>
 </div>
 </div>
-<!-- Workspace Selector -->
+{/* Workspace Selector */}
 <div className="px-space-md">
 <button className="w-full flex items-center justify-between px-space-sm py-space-xs rounded-xl bg-surface-container-low hover:bg-surface-container border border-surface-container-highest/40 text-on-surface-variant hover:text-on-surface transition-colors">
 <div className="flex items-center gap-space-xs overflow-hidden">
@@ -29,7 +29,7 @@ export default function Settings() {
 <span className="material-symbols-outlined text-[16px] text-on-surface-variant">unfold_more</span>
 </button>
 </div>
-<!-- Navigation Items -->
+{/* Navigation Items */}
 <nav className="flex flex-col gap-space-2xs px-space-sm">
 <a className="flex items-center gap-space-sm px-space-sm py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" href="#">
 <span className="material-symbols-outlined text-[20px]">grid_view</span>
@@ -62,14 +62,14 @@ export default function Settings() {
 <span className="material-symbols-outlined text-[20px]">description</span>
 <span className="font-body-md text-body-md">Reporting</span>
 </a>
-<!-- Settings ACTIVE with Indigo Accent -->
+{/* Settings ACTIVE with Indigo Accent */}
 <a aria-current="page" className="flex items-center gap-space-sm px-space-sm py-space-xs bg-primary-container text-on-primary-container font-semibold rounded-xl shadow-sm transition-colors" href="#">
 <span className="material-symbols-outlined text-[20px]">settings</span>
 <span className="font-body-md text-body-md">Settings</span>
 </a>
 </nav>
 </div>
-<!-- Bottom Profile -->
+{/* Bottom Profile */}
 <div className="px-space-md pt-space-sm border-t border-surface-container-high/40">
 <div className="p-space-xs rounded-xl bg-surface-container-low border border-surface-container-highest/30 flex items-center justify-between">
 <div className="flex items-center gap-space-xs overflow-hidden">
@@ -90,12 +90,12 @@ export default function Settings() {
 </div>
 </div>
 </aside>
-<!-- Main View Area -->
+{/* Main View Area */}
 <div className="pl-sidebar-w">
-<!-- Top Header Bar -->
+{/* Top Header Bar */}
 <header className="fixed top-0 left-sidebar-w right-0 h-16 bg-surface-container-lowest/80 border-b border-surface-container-high/40 backdrop-blur-xl z-40">
 <div className="h-16 w-full px-space-xl flex items-center justify-between gap-space-md">
-<!-- Breadcrumb & Save Indicator -->
+{/* Breadcrumb & Save Indicator */}
 <div className="flex items-center gap-space-md">
 <div className="flex items-center gap-space-xs font-body-sm text-body-sm text-on-surface-variant">
 <span className="material-symbols-outlined text-[16px]">corporate_fare</span>
@@ -109,7 +109,7 @@ export default function Settings() {
 <span className="font-mono-metric text-mono-metric text-[12px] text-on-surface-variant">All changes autosaved</span>
 </div>
 </div>
-<!-- Top Right Actions -->
+{/* Top Right Actions */}
 <div className="flex items-center gap-space-sm">
 <a className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-container-low hover:bg-surface-container-high border border-surface-container-highest/40 text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm font-medium transition-colors" href="#">
 <span className="material-symbols-outlined text-[16px]">menu_book</span>
@@ -125,10 +125,10 @@ export default function Settings() {
 </div>
 </div>
 </header>
-<!-- Main Content Body -->
+{/* Main Content Body */}
 <main className="w-full pt-16 bg-surface min-h-screen">
 <div className="p-space-xl max-w-5xl mx-auto flex flex-col gap-space-xl pb-24">
-<!-- Page Header -->
+{/* Page Header */}
 <div className="flex flex-col md:flex-row md:items-center justify-between gap-space-md pt-space-xs pb-space-xs border-b border-surface-container-high/40">
 <div className="flex flex-col gap-1">
 <h1 className="font-title-lg text-2xl font-semibold text-on-surface tracking-tight">Settings</h1>
@@ -146,7 +146,7 @@ export default function Settings() {
 </button>
 </div>
 </div>
-<!-- Secondary Navigation Sub-tabs -->
+{/* Secondary Navigation Sub-tabs */}
 <div className="flex items-center gap-1 border-b border-surface-container-high/50 pb-px overflow-x-auto">
 <button className="px-space-md py-2 text-on-surface font-medium border-b-2 border-primary-container text-body-sm whitespace-nowrap">
             General
@@ -170,14 +170,14 @@ export default function Settings() {
             Audit Logs
           </button>
 </div>
-<!-- Section A: Workspace & General Profile -->
+{/* Section A: Workspace & General Profile */}
 <section className="rounded-xl border border-surface-container-high bg-surface-container-lowest/70 overflow-hidden shadow-sm">
 <div className="p-space-lg border-b border-surface-container-high/60 flex flex-col gap-1">
 <h2 className="font-title-md text-title-md font-semibold text-on-surface">Workspace Profile</h2>
 <p className="font-body-sm text-body-sm text-on-surface-variant">Update the public brand identity and default regional attributes for this workspace.</p>
 </div>
 <div className="p-space-lg flex flex-col gap-space-lg">
-<!-- Logo area -->
+{/* Logo area */}
 <div className="flex items-center gap-space-lg">
 <div className="w-16 h-16 rounded-2xl bg-surface-container-high border border-surface-container-highest flex items-center justify-center text-primary-container shrink-0">
 <span className="material-symbols-outlined text-[32px]">layers</span>
@@ -194,7 +194,7 @@ export default function Settings() {
 <span className="font-body-sm text-[12px] text-on-surface-variant">Recommended 256x256 PNG or SVG. Max 2MB.</span>
 </div>
 </div>
-<!-- Form fields grid -->
+{/* Form fields grid */}
 <div className="grid grid-cols-1 md:grid-cols-2 gap-space-md">
 <div className="flex flex-col gap-1.5">
 <label className="font-body-sm text-body-sm font-medium text-on-surface">Workspace Name</label>
@@ -233,7 +233,7 @@ export default function Settings() {
             </button>
 </div>
 </section>
-<!-- Section B: Copilot AI Synthesis & Model Configuration -->
+{/* Section B: Copilot AI Synthesis & Model Configuration */}
 <section className="rounded-xl border border-surface-container-high bg-surface-container-lowest/70 overflow-hidden shadow-sm">
 <div className="p-space-lg border-b border-surface-container-high/60 flex flex-col gap-1">
 <div className="flex items-center gap-2">
@@ -243,7 +243,7 @@ export default function Settings() {
 <p className="font-body-sm text-body-sm text-on-surface-variant">Configure generative inference routing, citation grounding, and automated triage heuristics.</p>
 </div>
 <div className="p-space-lg flex flex-col gap-space-lg">
-<!-- Model selector -->
+{/* Model selector */}
 <div className="grid grid-cols-1 md:grid-cols-3 gap-space-md items-start">
 <div className="flex flex-col">
 <label className="font-body-sm text-body-sm font-medium text-on-surface">Model Provider &amp; Version</label>
@@ -261,7 +261,7 @@ export default function Settings() {
 </div>
 </div>
 <div className="h-px w-full bg-surface-container-high/50"></div>
-<!-- Hallucination & Citation Strictness Switch -->
+{/* Hallucination & Citation Strictness Switch */}
 <div className="flex items-start justify-between gap-space-md">
 <div className="flex flex-col gap-0.5">
 <div className="flex items-center gap-2">
@@ -272,14 +272,14 @@ export default function Settings() {
                   Require strict 100% citation grounding against raw review verbatims before surfacing insights. Suppresses ungrounded speculative recommendations.
                 </p>
 </div>
-<!-- Active toggle switch -->
+{/* Active toggle switch */}
 <label className="relative inline-flex items-center cursor-pointer shrink-0 mt-1">
 <input checked="" className="sr-only peer" type="checkbox"/>
 <div className="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-primary-container after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-container"></div>
 </label>
 </div>
 <div className="h-px w-full bg-surface-container-high/50"></div>
-<!-- Confidence & Auto-Triage Threshold Slider -->
+{/* Confidence & Auto-Triage Threshold Slider */}
 <div className="grid grid-cols-1 md:grid-cols-3 gap-space-md items-center">
 <div className="flex flex-col">
 <label className="font-body-sm text-body-sm font-medium text-on-surface">Confidence &amp; Auto-Triage Cutoff</label>
@@ -293,7 +293,7 @@ export default function Settings() {
 </div>
 </div>
 <div className="h-px w-full bg-surface-container-high/50"></div>
-<!-- Autonomous Summarization Cadence -->
+{/* Autonomous Summarization Cadence */}
 <div className="grid grid-cols-1 md:grid-cols-3 gap-space-md items-start">
 <div className="flex flex-col">
 <label className="font-body-sm text-body-sm font-medium text-on-surface">Summarization Cadence</label>
@@ -330,7 +330,7 @@ export default function Settings() {
             </button>
 </div>
 </section>
-<!-- Section C: Connected Data Integrations (Proper SaaS Connected Apps List) -->
+{/* Section C: Connected Data Integrations (Proper SaaS Connected Apps List) */}
 <section className="rounded-xl border border-surface-container-high bg-surface-container-lowest/70 overflow-hidden shadow-sm">
 <div className="p-space-lg border-b border-surface-container-high/60 flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs">
 <div className="flex flex-col gap-1">
@@ -346,7 +346,7 @@ export default function Settings() {
 </button>
 </div>
 <div className="divide-y divide-surface-container-high/50">
-<!-- Integration 1: Apple App Store -->
+{/* Integration 1: Apple App Store */}
 <div className="p-space-md sm:px-space-lg flex items-center justify-between gap-space-md hover:bg-surface-container-low/40 transition-colors">
 <div className="flex items-center gap-space-md">
 <div className="w-10 h-10 rounded-xl bg-surface-container-high border border-surface-container-highest/60 flex items-center justify-center text-tertiary shrink-0">
@@ -372,7 +372,7 @@ export default function Settings() {
 </button>
 </div>
 </div>
-<!-- Integration 2: Google Play Console -->
+{/* Integration 2: Google Play Console */}
 <div className="p-space-md sm:px-space-lg flex items-center justify-between gap-space-md hover:bg-surface-container-low/40 transition-colors">
 <div className="flex items-center gap-space-md">
 <div className="w-10 h-10 rounded-xl bg-surface-container-high border border-surface-container-highest/60 flex items-center justify-center text-primary shrink-0">
@@ -398,7 +398,7 @@ export default function Settings() {
 </button>
 </div>
 </div>
-<!-- Integration 3: Zendesk Support -->
+{/* Integration 3: Zendesk Support */}
 <div className="p-space-md sm:px-space-lg flex items-center justify-between gap-space-md hover:bg-surface-container-low/40 transition-colors">
 <div className="flex items-center gap-space-md">
 <div className="w-10 h-10 rounded-xl bg-surface-container-high border border-surface-container-highest/60 flex items-center justify-center text-secondary shrink-0">
@@ -424,7 +424,7 @@ export default function Settings() {
 </button>
 </div>
 </div>
-<!-- Integration 4: Linear Issue Tracker -->
+{/* Integration 4: Linear Issue Tracker */}
 <div className="p-space-md sm:px-space-lg flex items-center justify-between gap-space-md hover:bg-surface-container-low/40 transition-colors">
 <div className="flex items-center gap-space-md">
 <div className="w-10 h-10 rounded-xl bg-surface-container-high border border-surface-container-highest/60 flex items-center justify-center text-primary shrink-0">
@@ -450,7 +450,7 @@ export default function Settings() {
 </button>
 </div>
 </div>
-<!-- Integration 5: Slack Alerts & Digests -->
+{/* Integration 5: Slack Alerts & Digests */}
 <div className="p-space-md sm:px-space-lg flex items-center justify-between gap-space-md hover:bg-surface-container-low/40 transition-colors">
 <div className="flex items-center gap-space-md">
 <div className="w-10 h-10 rounded-xl bg-surface-container-high border border-surface-container-highest/60 flex items-center justify-center text-tertiary shrink-0">
@@ -476,7 +476,7 @@ export default function Settings() {
 </button>
 </div>
 </div>
-<!-- Integration 6: Snowflake Data Lake -->
+{/* Integration 6: Snowflake Data Lake */}
 <div className="p-space-md sm:px-space-lg flex items-center justify-between gap-space-md hover:bg-surface-container-low/40 transition-colors">
 <div className="flex items-center gap-space-md">
 <div className="w-10 h-10 rounded-xl bg-surface-container-high border border-surface-container-highest/60 flex items-center justify-center text-primary shrink-0">
@@ -504,7 +504,7 @@ export default function Settings() {
 </div>
 </div>
 </section>
-<!-- Section D: Security, Privacy & Compliance Controls -->
+{/* Section D: Security, Privacy & Compliance Controls */}
 <section className="rounded-xl border border-surface-container-high bg-surface-container-lowest/70 overflow-hidden shadow-sm">
 <div className="p-space-lg border-b border-surface-container-high/60 flex flex-col gap-1">
 <div className="flex items-center gap-2">
@@ -514,7 +514,7 @@ export default function Settings() {
 <p className="font-body-sm text-body-sm text-on-surface-variant">Ensure adherence to enterprise GDPR, HIPAA, and SOC-2 Type II data residency mandates.</p>
 </div>
 <div className="p-space-lg flex flex-col gap-space-lg">
-<!-- Automated PII Scrubbing Switch -->
+{/* Automated PII Scrubbing Switch */}
 <div className="flex items-start justify-between gap-space-md">
 <div className="flex flex-col gap-0.5">
 <div className="flex items-center gap-2">
@@ -531,7 +531,7 @@ export default function Settings() {
 </label>
 </div>
 <div className="h-px w-full bg-surface-container-high/50"></div>
-<!-- Retention & Residency Grid -->
+{/* Retention & Residency Grid */}
 <div className="grid grid-cols-1 md:grid-cols-2 gap-space-md">
 <div className="flex flex-col gap-1.5">
 <label className="font-body-sm text-body-sm font-medium text-on-surface">Data Retention Period</label>
@@ -566,7 +566,7 @@ export default function Settings() {
             </button>
 </div>
 </section>
-<!-- Section E: Danger Zone -->
+{/* Section E: Danger Zone */}
 <section className="rounded-xl border border-red-500/30 bg-red-950/10 overflow-hidden shadow-sm">
 <div className="p-space-lg border-b border-red-500/20 flex flex-col gap-1">
 <div className="flex items-center gap-2 text-red-400">
@@ -576,7 +576,7 @@ export default function Settings() {
 <p className="font-body-sm text-body-sm text-on-surface-variant">Irreversible operational actions that affect ongoing model inferences and telemetry persistence.</p>
 </div>
 <div className="p-space-lg flex flex-col gap-space-lg divide-y divide-red-500/20">
-<!-- Action 1: Re-index Embeddings -->
+{/* Action 1: Re-index Embeddings */}
 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md pt-space-xs first:pt-0">
 <div className="flex flex-col gap-0.5">
 <span className="font-body-sm text-body-sm font-semibold text-on-surface">Re-index All Vector Embeddings</span>
@@ -588,7 +588,7 @@ export default function Settings() {
                 Re-index Vectors
               </button>
 </div>
-<!-- Action 2: Delete Workspace -->
+{/* Action 2: Delete Workspace */}
 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md pt-space-md">
 <div className="flex flex-col gap-0.5">
 <span className="font-body-sm text-body-sm font-semibold text-red-400">Delete Workspace &amp; Data</span>
@@ -609,3 +609,4 @@ export default function Settings() {
     </>
   );
 }
+
