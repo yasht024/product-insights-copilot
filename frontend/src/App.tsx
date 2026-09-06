@@ -16,10 +16,10 @@ function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/inbox" element={<ReviewsInbox />} />
+          <Route path="/reviews-inbox" element={<ReviewsInbox />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/analytics" element={<Analytics />} />
-          <Route path="/wordcloud" element={<WordCloud />} />
+          <Route path="/word-cloud" element={<WordCloud />} />
           <Route path="/ideation" element={<Ideation />} />
           <Route path="/reporting" element={<Reporting />} />
           <Route path="/settings" element={<Settings />} />
