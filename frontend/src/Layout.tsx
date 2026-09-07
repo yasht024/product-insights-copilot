@@ -6,6 +6,7 @@ export default function Layout() {
   const currentPath = location.pathname.substring(1) || 'dashboard';
 
   // Interactive states
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activePlatform, setActivePlatform] = useState('All Platforms');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [showTimeframe, setShowTimeframe] = useState(false);
@@ -19,9 +20,9 @@ export default function Layout() {
   };
 
   return (
-    <div className="flex min-h-screen bg-surface">
+    <div className="flex min-h-screen bg-surface overflow-x-hidden">
       {/* Sidebar */}
-      <aside className="fixed left-0 top-0 h-full w-sidebar-w bg-surface-container-lowest/90 backdrop-blur-xl z-50 flex flex-col justify-between py-space-md shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+      <aside className={`fixed left-0 top-0 h-full w-sidebar-w bg-surface-container-lowest/90 backdrop-blur-xl z-50 flex flex-col justify-between py-space-md shadow-[0_1px_8px_rgba(0,0,0,0.04)] transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex flex-col gap-space-md">
           <div className="px-space-md flex items-center justify-between">
             <div className="flex items-center gap-space-xs">
@@ -107,11 +108,18 @@ export default function Layout() {
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 pl-sidebar-w flex flex-col min-h-screen">
+      <div className={`flex-1 flex flex-col min-h-screen transition-all duration-300 ${isSidebarOpen ? 'pl-sidebar-w' : 'pl-0'}`}>
         {/* Header */}
-        <header className="fixed top-0 left-sidebar-w right-0 h-16 bg-surface-container-lowest/80 backdrop-blur-xl z-40 shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+        <header className={`fixed top-0 right-0 h-16 bg-surface-container-lowest/80 backdrop-blur-xl z-40 shadow-[0_1px_8px_rgba(0,0,0,0.04)] transition-all duration-300 ${isSidebarOpen ? 'left-sidebar-w' : 'left-0'}`}>
           <div className="h-16 w-full px-space-lg flex items-center justify-between gap-space-md">
             <div className="flex items-center gap-space-md">
+              <button 
+                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                title={isSidebarOpen ? "Hide sidebar" : "Show sidebar"}
+                className="p-2 text-on-surface hover:text-primary bg-surface-container hover:bg-surface-container-high rounded-lg transition-colors flex items-center justify-center border border-outline-variant shadow-sm"
+              >
+                <span className="material-symbols-outlined text-[20px]">{isSidebarOpen ? 'menu_open' : 'menu'}</span>
+              </button>
               <div className="flex items-center gap-space-xs font-body-sm text-body-sm text-on-surface-variant">
                 <span className="material-symbols-outlined text-[16px]">home</span>
                 <span>/</span>
