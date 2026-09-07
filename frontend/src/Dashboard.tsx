@@ -1,164 +1,232 @@
-import React, { useState } from 'react';
-import CategorizeReviewsModal from './components/CategorizeReviewsModal';
-import {
-  LayoutDashboard,
-  Inbox,
-  LineChart,
-  Tags,
-  Cloud,
-  Lightbulb,
-  FileText,
-  Settings as SettingsIcon,
-  Bell,
-  RefreshCw,
-  ChevronDown,
-  Play,
-  Star,
-  Activity,
-  X
-} from 'lucide-react';
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useSearchParams } from 'react-router-dom';
+import { Info, SlidersHorizontal, Star } from 'lucide-react';
+import { apiClient } from './api/client';
+import DashboardPreferencesModal, {
+  type DashboardPreferences,
+} from './components/DashboardPreferencesModal';
 
-export default function Dashboard() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+const PREFERENCES_KEY = 'product-insights-dashboard-preferences';
+const VIEW_DAYS_KEY = 'product-insights-dashboard-view-days';
+const DEFAULT_PREFERENCES: DashboardPreferences = {
+  showVolume: true,
+  showRating: true,
+  showAdvocacy: true,
+  advocateMin: 5,
+  criticMax: 3,
+  minimumWords: 0,
+};
 
+function loadPreferences(): DashboardPreferences {
+  try {
+    const stored = localStorage.getItem(PREFERENCES_KEY);
+    return stored ? { ...DEFAULT_PREFERENCES, ...JSON.parse(stored) } : DEFAULT_PREFERENCES;
+  } catch {
+    return DEFAULT_PREFERENCES;
+  }
+}
+
+function formatReviewDate(value: string | null | undefined): string {
+  if (!value) return 'No imported reviews';
+  return new Intl.DateTimeFormat(undefined, {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  }).format(new Date(value));
+}
+
+function MetricInfo({ label, children, align = 'right' }: { label: string; children: string; align?: 'left' | 'right' }) {
   return (
-    <>
-      <main className="p-8 max-w-7xl w-full mx-auto flex flex-col gap-6">
-          {/* Page Title & Scope Header */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <span className="px-2 py-0.5 rounded text-[11px] font-mono font-semibold tracking-wider uppercase bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Live Telemetry</span>
-                <span className="text-zinc-600 text-xs">•</span>
-                <span className="text-zinc-400 text-xs font-mono">App Store & Google Play Production</span>
-              </div>
-              <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-zinc-100">Executive Dashboard</h1>
-              <p className="text-sm text-zinc-400 mt-0.5">Continuous cross-platform review sentiment, triage velocity & classification telemetry.</p>
-            </div>
-          </div>
-
-          {/* Top Row: 3 Balanced KPI Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* KPI 1: Total Reviews */}
-            <div className="bg-zinc-900/70 border border-zinc-800/80 shadow-xl rounded-2xl backdrop-blur-md p-6 flex flex-col justify-between relative overflow-hidden group hover:border-zinc-700/80 transition-all">
-              <div className="absolute -right-6 -top-6 w-28 h-28 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none"></div>
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-semibold uppercase tracking-wider text-zinc-400">Aggregate Volume</span>
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-mono font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                    <Activity className="w-3 h-3" />
-                    +12.4%
-                  </span>
-                </div>
-                <div className="text-3xl lg:text-4xl font-bold tracking-tight text-zinc-100 mt-3 font-mono">24,648</div>
-              </div>
-              <div className="mt-6 pt-4 border-t border-zinc-800/60 flex flex-col gap-2">
-                <div className="flex justify-between items-center text-xs text-zinc-400 font-mono">
-                  <span>Platform Ratio</span>
-                  <span className="text-zinc-200">18,420 iOS · 6,228 Android</span>
-                </div>
-                <div className="w-full h-2 rounded-full bg-zinc-800 overflow-hidden flex gap-0.5">
-                  <div className="h-full bg-indigo-500 rounded-l-full" style={{ width: '74.7%' }} title="iOS (74.7%)"></div>
-                  <div className="h-full bg-purple-500 rounded-r-full" style={{ width: '25.3%' }} title="Android (25.3%)"></div>
-                </div>
-              </div>
-            </div>
-
-            {/* KPI 2: Average Rating */}
-            <div className="bg-zinc-900/70 border border-zinc-800/80 shadow-xl rounded-2xl backdrop-blur-md p-6 flex flex-col justify-between relative overflow-hidden group hover:border-zinc-700/80 transition-all">
-              <div className="absolute -right-6 -top-6 w-28 h-28 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-semibold uppercase tracking-wider text-zinc-400">Customer Sentiment</span>
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-mono font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                    <Activity className="w-3 h-3" />
-                    +0.3 pts
-                  </span>
-                </div>
-                <div className="flex items-baseline gap-2 mt-3">
-                  <span className="text-3xl lg:text-4xl font-bold tracking-tight text-zinc-100 font-mono">4.4</span>
-                  <span className="text-sm font-medium text-zinc-500">/ 5.0</span>
-                </div>
-              </div>
-              <div className="mt-6 pt-4 border-t border-zinc-800/60 flex items-center justify-between">
-                <div className="flex items-center gap-1 text-amber-400">
-                  <Star className="w-4 h-4 fill-amber-400" />
-                  <Star className="w-4 h-4 fill-amber-400" />
-                  <Star className="w-4 h-4 fill-amber-400" />
-                  <Star className="w-4 h-4 fill-amber-400" />
-                  <Star className="w-4 h-4 text-amber-400/40" />
-                </div>
-                <span className="text-xs font-mono text-zinc-400">Weighted median 4.5</span>
-              </div>
-            </div>
-
-            {/* KPI 3: NPS Score */}
-            <div className="bg-zinc-900/70 border border-zinc-800/80 shadow-xl rounded-2xl backdrop-blur-md p-6 flex flex-col justify-between relative overflow-hidden group hover:border-zinc-700/80 transition-all">
-              <div className="absolute -right-6 -top-6 w-28 h-28 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-semibold uppercase tracking-wider text-zinc-400">Net Promoter Score</span>
-                  <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-mono font-semibold uppercase tracking-wide">
-                    Tier: Excellent
-                  </span>
-                </div>
-                <div className="text-3xl lg:text-4xl font-bold tracking-tight text-zinc-100 mt-3 font-mono">+74</div>
-              </div>
-              <div className="mt-6 pt-4 border-t border-zinc-800/60 flex flex-col gap-2">
-                <div className="w-full h-2 rounded-full bg-zinc-800 overflow-hidden flex gap-0.5">
-                  <div className="h-full bg-emerald-500 rounded-l-full" style={{ width: '82%' }}></div>
-                  <div className="h-full bg-amber-500" style={{ width: '10%' }}></div>
-                  <div className="h-full bg-rose-500 rounded-r-full" style={{ width: '8%' }}></div>
-                </div>
-                <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400 pt-0.5">
-                  <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>82% Promoters</span>
-                  <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>10% Passives</span>
-                  <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-rose-500"></span>8% Detractors</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* AI Categorization Pipeline Control Center Banner */}
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-950/40 via-zinc-900/60 to-purple-950/40 border border-indigo-500/30 shadow-xl backdrop-blur-md p-6">
-            <div className="absolute -right-16 -bottom-16 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
-            <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-              <div className="flex flex-col gap-2 max-w-2xl">
-                <div className="flex flex-wrap items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-600/30">
-                    <Play className="w-4 h-4" />
-                  </div>
-                  <h2 className="text-base font-semibold text-zinc-100">AI Review Categorization Pipeline</h2>
-                  <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-indigo-500/10 text-indigo-300 border border-indigo-500/25">Active Model: GPT-4o Insights v3</span>
-                </div>
-                <p className="text-xs lg:text-sm text-zinc-400">Synthesizes incoming user reviews across taxonomy clusters, bug reports, and UX friction points at microsecond velocity.</p>
-                <div className="mt-2 flex flex-col gap-1.5">
-                  <div className="flex justify-between items-center text-xs font-mono">
-                    <span className="text-zinc-200 font-medium">21,890 Categorized <span className="text-indigo-400">(88.8%)</span></span>
-                    <span className="text-zinc-400">2,758 Pending Evaluation</span>
-                  </div>
-                  <div className="w-full h-2.5 rounded-full bg-zinc-950/80 p-0.5 border border-zinc-800/80 overflow-hidden">
-                    <div className="h-full rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-[0_0_12px_rgba(99,102,241,0.5)] transition-all duration-1000" style={{ width: '88.8%' }}></div>
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center flex-shrink-0">
-                <button 
-                  onClick={() => setIsModalOpen(true)}
-                  className="w-full sm:w-auto px-5 py-3 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-medium text-sm flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/30 hover:shadow-indigo-600/50 hover:scale-[1.02] active:scale-[0.98] transition-all">
-                  <Play className="w-4 h-4 animate-pulse" />
-                  <span>Categorize Reviews</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </main>
-        
-        <CategorizeReviewsModal 
-          isOpen={isModalOpen} 
-          onClose={() => setIsModalOpen(false)} 
-        />
-    </>
+    <details className="relative z-10">
+      <summary className="flex cursor-pointer list-none rounded-md p-1 text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500" aria-label={`About ${label}`}>
+        <Info className="h-4 w-4" />
+      </summary>
+      <div className={`absolute top-7 z-20 w-[min(16rem,calc(100vw-2rem))] rounded-lg border border-zinc-700 bg-zinc-950 p-3 text-left text-xs font-normal normal-case leading-relaxed tracking-normal text-zinc-300 shadow-xl ${align === 'left' ? 'left-0' : 'right-0'}`}>
+        {children}
+      </div>
+    </details>
   );
 }
 
+function signed(value: number): string {
+  return `${value > 0 ? '+' : ''}${value.toFixed(1)}`;
+}
+
+export default function Dashboard() {
+  const [searchParams] = useSearchParams();
+  const platform = searchParams.get('platform') || 'All Platforms';
+  const [isPreferencesOpen, setIsPreferencesOpen] = useState(false);
+  const [preferences, setPreferences] = useState(loadPreferences);
+  const [viewDays, setViewDays] = useState(() => {
+    const stored = Number(localStorage.getItem(VIEW_DAYS_KEY));
+    return Number.isInteger(stored) && stored >= 1 && stored <= 365 ? stored : 30;
+  });
+  const [viewDaysInput, setViewDaysInput] = useState(String(viewDays));
+  const workspaceId = 'ws_1';
+
+  const { data: metrics, isLoading, isError } = useQuery({
+    queryKey: ['dashboardMetrics', workspaceId, platform, preferences.advocateMin, preferences.criticMax, preferences.minimumWords, viewDays],
+    queryFn: () => apiClient.getDashboardMetrics(workspaceId, {
+      platform,
+      advocateMin: preferences.advocateMin,
+      criticMax: preferences.criticMax,
+      days: viewDays,
+      minWords: preferences.minimumWords,
+    }),
+  });
+
+  const iosPercent = metrics?.total_reviews
+    ? ((metrics.ios_reviews / metrics.total_reviews) * 100).toFixed(1)
+    : '0.0';
+  const androidPercent = metrics?.total_reviews
+    ? ((metrics.android_reviews / metrics.total_reviews) * 100).toFixed(1)
+    : '0.0';
+  const hasReviews = Boolean(metrics?.total_reviews);
+
+  const savePreferences = (next: DashboardPreferences) => {
+    localStorage.setItem(PREFERENCES_KEY, JSON.stringify(next));
+    setPreferences(next);
+    setIsPreferencesOpen(false);
+  };
+
+  const applyViewDays = (value: number) => {
+    const next = Math.min(365, Math.max(1, Math.round(value || 1)));
+    setViewDays(next);
+    setViewDaysInput(String(next));
+    localStorage.setItem(VIEW_DAYS_KEY, String(next));
+  };
+
+  return (
+    <>
+      <main className="mx-auto flex w-full max-w-7xl flex-col gap-6 p-4 sm:p-6 lg:p-8">
+        <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+          <div>
+            <div className="mb-1 flex items-center gap-2">
+              <span className="rounded border border-indigo-500/20 bg-indigo-500/10 px-2 py-0.5 font-mono text-[11px] font-semibold uppercase tracking-wider text-indigo-400">Database metrics</span>
+              <span className="text-xs text-zinc-600">•</span>
+              <span className="font-mono text-xs text-zinc-400">{platform}</span>
+            </div>
+            <h1 className="text-2xl font-bold tracking-tight text-zinc-100 lg:text-3xl">Executive Dashboard</h1>
+            <p className="mt-0.5 text-sm text-zinc-400">Every value below is calculated from the reviews currently stored in this workspace.</p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-1 rounded-xl border border-zinc-700 bg-zinc-900 p-1" aria-label="Dashboard date range">
+              {[1, 2, 7, 30].map((days) => (
+                <button key={days} type="button" onClick={() => applyViewDays(days)} className={`rounded-lg px-2.5 py-1.5 font-mono text-xs transition-colors ${viewDays === days ? 'bg-indigo-600 text-white' : 'text-zinc-400 hover:bg-zinc-800 hover:text-white'}`}>
+                  {days === 7 ? '1W' : days === 30 ? '1M' : `${days}D`}
+                </button>
+              ))}
+              <div className="relative ml-1">
+                <input type="number" min={1} max={365} value={viewDaysInput} onChange={(event) => setViewDaysInput(event.target.value)} onBlur={() => applyViewDays(Number(viewDaysInput))} onKeyDown={(event) => { if (event.key === 'Enter') applyViewDays(Number(viewDaysInput)); }} aria-label="Custom dashboard days" className="w-20 rounded-lg border border-zinc-700 bg-zinc-950 py-1.5 pl-2 pr-8 font-mono text-xs text-zinc-100 outline-none focus:border-indigo-500" />
+                <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-zinc-500">days</span>
+              </div>
+            </div>
+            <button type="button" onClick={() => setIsPreferencesOpen(true)} className="flex w-fit items-center gap-2 rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:border-indigo-500/50 hover:text-white">
+              <SlidersHorizontal className="h-4 w-4" /> Customize metrics
+            </button>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 rounded-xl border border-zinc-800 bg-zinc-900/50 px-4 py-3 text-xs text-zinc-400">
+          <span className="flex items-center gap-1">
+            <MetricInfo label="data coverage" align="left">These dates and counts describe verified Groww store reviews currently stored locally that match the selected date, platform, and optional word-count filters. Changing the view does not scrape again.</MetricInfo>
+            Data coverage
+          </span>
+          <span>Selected window: <strong className="text-zinc-200">last {viewDays} {viewDays === 1 ? 'day' : 'days'}</strong></span>
+          <span>Text length: <strong className="text-zinc-200">{preferences.minimumWords ? `more than ${preferences.minimumWords} words` : 'all reviews'}</strong></span>
+          <span><strong className="text-zinc-200">{metrics?.total_reviews.toLocaleString() || 0}</strong> matching unique reviews</span>
+          <span>{formatReviewDate(metrics?.oldest_review_at)} → {formatReviewDate(metrics?.newest_review_at)}</span>
+          <span>Source: verified store-review rows</span>
+        </div>
+
+        {isError && <div role="alert" className="rounded-xl border border-rose-500/30 bg-rose-500/10 p-4 text-sm text-rose-300">Dashboard metrics could not be calculated. Confirm that the API is running and try again.</div>}
+
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {preferences.showVolume && (
+            <section className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-900/70 p-6 shadow-xl backdrop-blur-md transition-all hover:border-zinc-700/80">
+              <div className="pointer-events-none absolute -right-6 -top-6 h-28 w-28 rounded-full bg-indigo-500/10 blur-2xl" />
+              <div>
+                <div className="flex items-center justify-between gap-3">
+                  <span className="font-mono text-xs font-semibold uppercase tracking-wider text-zinc-400">Review volume</span>
+                  <MetricInfo label="review volume">The number of unique review IDs stored for the selected platform and date window. Duplicate IDs are skipped during scraping.</MetricInfo>
+                </div>
+                <div className="mt-3 font-mono text-3xl font-bold tracking-tight text-zinc-100 lg:text-4xl">{isLoading ? '…' : metrics?.total_reviews.toLocaleString() || 0}</div>
+                <p className="mt-2 text-xs text-zinc-500">Unique reviews in the last {viewDays} {viewDays === 1 ? 'day' : 'days'} · {platform}</p>
+              </div>
+              <div className="mt-6 flex flex-col gap-2 border-t border-zinc-800/60 pt-4">
+                <div className="flex items-center justify-between font-mono text-xs text-zinc-400">
+                  <span>Store split</span>
+                  <span className="text-zinc-200">{metrics?.ios_reviews.toLocaleString() || 0} iOS · {metrics?.android_reviews.toLocaleString() || 0} Android</span>
+                </div>
+                <div className="flex h-2 w-full gap-0.5 overflow-hidden rounded-full bg-zinc-800">
+                  <div className="h-full rounded-l-full bg-indigo-500" style={{ width: `${iosPercent}%` }} title={`iOS: ${iosPercent}%`} />
+                  <div className="h-full rounded-r-full bg-purple-500" style={{ width: `${androidPercent}%` }} title={`Android: ${androidPercent}%`} />
+                </div>
+              </div>
+            </section>
+          )}
+
+          {preferences.showRating && (
+            <section className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-900/70 p-6 shadow-xl backdrop-blur-md transition-all hover:border-zinc-700/80">
+              <div className="pointer-events-none absolute -right-6 -top-6 h-28 w-28 rounded-full bg-amber-500/10 blur-2xl" />
+              <div>
+                <div className="flex items-center justify-between gap-3">
+                  <span className="font-mono text-xs font-semibold uppercase tracking-wider text-zinc-400">Average store rating</span>
+                  <MetricInfo label="average store rating">The arithmetic mean of the 1–5 star ratings in the selected platform and date window. Store averages below always compare iOS and Android over the same date window.</MetricInfo>
+                </div>
+                <div className="mt-3 flex items-baseline gap-2">
+                  <span className="font-mono text-3xl font-bold tracking-tight text-zinc-100 lg:text-4xl">{isLoading ? '…' : hasReviews ? metrics?.average_rating.toFixed(1) : '—'}</span>
+                  {hasReviews && <span className="text-sm font-medium text-zinc-500">/ 5.0</span>}
+                </div>
+                <p className="mt-2 text-xs text-zinc-500">Mean across {metrics?.total_reviews.toLocaleString() || 0} reviews</p>
+              </div>
+              <div className="mt-6 flex flex-col gap-3 border-t border-zinc-800/60 pt-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1 text-amber-400" aria-label={hasReviews ? `${metrics?.average_rating} out of 5 stars` : 'No ratings in this window'}>
+                    {[1, 2, 3, 4, 5].map((rating) => <Star key={rating} className={`h-4 w-4 ${hasReviews && rating <= Math.round(metrics?.average_rating || 0) ? 'fill-amber-400' : 'text-amber-400/30'}`} />)}
+                  </div>
+                  <span className="font-mono text-xs text-zinc-400">Median {hasReviews ? metrics?.median_rating.toFixed(1) : '—'}</span>
+                </div>
+                <div className="grid grid-cols-3 gap-2 rounded-lg bg-zinc-950/60 p-2.5 text-center font-mono text-[11px]">
+                  <div><div className="text-zinc-500">iOS</div><div className="mt-0.5 text-zinc-200">{metrics?.ios_average_rating?.toFixed(1) ?? '—'}</div></div>
+                  <div><div className="text-zinc-500">Android</div><div className="mt-0.5 text-zinc-200">{metrics?.android_average_rating?.toFixed(1) ?? '—'}</div></div>
+                  <div title="iOS average minus Android average"><div className="text-zinc-500">iOS − Android</div><div className={`mt-0.5 ${metrics?.store_rating_difference == null ? 'text-zinc-200' : metrics.store_rating_difference > 0 ? 'text-emerald-400' : metrics.store_rating_difference < 0 ? 'text-rose-400' : 'text-zinc-200'}`}>{metrics?.store_rating_difference == null ? '—' : `${signed(metrics.store_rating_difference)} pts`}</div></div>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {preferences.showAdvocacy && (
+            <section className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-900/70 p-6 shadow-xl backdrop-blur-md transition-all hover:border-zinc-700/80">
+              <div className="pointer-events-none absolute -right-6 -top-6 h-28 w-28 rounded-full bg-emerald-500/10 blur-2xl" />
+              <div>
+                <div className="flex items-center justify-between gap-3">
+                  <span className="font-mono text-xs font-semibold uppercase tracking-wider text-zinc-400">Rating advocacy</span>
+                  <MetricInfo label="rating advocacy">Rating advocacy = 100 × (advocates − critics) ÷ all matching reviews. It ranges from −100 to +100. This is a star-rating proxy, not NPS, which requires a 0–10 recommendation survey.</MetricInfo>
+                </div>
+                <div className="mt-3 font-mono text-3xl font-bold tracking-tight text-zinc-100 lg:text-4xl">{isLoading ? '…' : hasReviews ? signed(metrics?.rating_advocacy_score || 0) : '—'}</div>
+                <p className="mt-2 text-xs text-zinc-500">Advocates ≥ {preferences.advocateMin}★ minus critics ≤ {preferences.criticMax}★</p>
+              </div>
+              <div className="mt-6 flex flex-col gap-2 border-t border-zinc-800/60 pt-4">
+                <div className="flex h-2 w-full gap-0.5 overflow-hidden rounded-full bg-zinc-800">
+                  <div className="h-full rounded-l-full bg-emerald-500" style={{ width: `${metrics?.advocates_percent || 0}%` }} />
+                  <div className="h-full bg-amber-500" style={{ width: `${metrics?.neutral_percent || 0}%` }} />
+                  <div className="h-full rounded-r-full bg-rose-500" style={{ width: `${metrics?.critics_percent || 0}%` }} />
+                </div>
+                <div className="flex items-center justify-between gap-2 font-mono text-[10px] text-zinc-400 sm:text-[11px]">
+                  <span>{metrics?.advocates_percent || 0}% advocates ({metrics?.advocates_count || 0})</span>
+                  <span>{metrics?.neutral_percent || 0}% neutral ({metrics?.neutral_count || 0})</span>
+                  <span>{metrics?.critics_percent || 0}% critics ({metrics?.critics_count || 0})</span>
+                </div>
+              </div>
+            </section>
+          )}
+        </div>
+
+      </main>
+
+      <DashboardPreferencesModal isOpen={isPreferencesOpen} preferences={preferences} onClose={() => setIsPreferencesOpen(false)} onSave={savePreferences} />
+    </>
+  );
+}

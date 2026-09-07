@@ -1,26 +1,68 @@
 import React, { useState } from 'react';
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { NavLink, Outlet, useLocation, useSearchParams } from 'react-router-dom';
+import { apiClient } from './api/client';
+import ScrapeReviewsModal from './components/ScrapeReviewsModal';
+
+function relativeScrapeTime(value: string | null | undefined): string {
+  if (!value) return 'Scrape time not recorded';
+  const normalized = /(?:Z|[+-]\d\d:\d\d)$/.test(value) ? value : `${value}Z`;
+  const elapsedSeconds = Math.max(0, Math.floor((Date.now() - new Date(normalized).getTime()) / 1000));
+  if (elapsedSeconds < 60) return 'Scraped just now';
+  const minutes = Math.floor(elapsedSeconds / 60);
+  if (minutes < 60) return `Scraped ${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `Scraped ${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `Scraped ${days}d ago`;
+}
 
 export default function Layout() {
   const location = useLocation();
   const currentPath = location.pathname.substring(1) || 'dashboard';
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // URL-driven platform filter
+  const activePlatform = searchParams.get('platform') || 'All Platforms';
+
+  const setActivePlatform = (platform: string) => {
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev);
+      next.set('platform', platform);
+      return next;
+    });
+  };
 
   // Interactive states
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [activePlatform, setActivePlatform] = useState('All Platforms');
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [showTimeframe, setShowTimeframe] = useState(false);
-  const [timeframe, setTimeframe] = useState('Last 30 Days');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() =>
+    typeof window === 'undefined' ? true : window.matchMedia('(min-width: 1024px)').matches
+  );
+  const [isScrapeModalOpen, setIsScrapeModalOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showAppSelector, setShowAppSelector] = useState(false);
-
-  const handleRefresh = () => {
-    setIsRefreshing(true);
-    setTimeout(() => setIsRefreshing(false), 1500);
-  };
+  const { data: syncStatus } = useQuery({
+    queryKey: ['syncStatus', 'ws_1'],
+    queryFn: () => apiClient.getSyncStatus('ws_1'),
+    refetchInterval: 60_000,
+  });
+  const { data: inboxSummary } = useQuery({
+    queryKey: ['reviewSummary', 'ws_1', 'sidebar-all'],
+    queryFn: () => apiClient.getReviewSummary('ws_1', new URLSearchParams({ min_words: '0' })),
+  });
+  const syncTimestamp = syncStatus?.last_synced_at
+    ? new Date(/(?:Z|[+-]\d\d:\d\d)$/.test(syncStatus.last_synced_at) ? syncStatus.last_synced_at : `${syncStatus.last_synced_at}Z`)
+    : null;
 
   return (
     <div className="flex min-h-screen bg-surface overflow-x-hidden">
+      {isSidebarOpen && (
+        <button
+          type="button"
+          aria-label="Close navigation"
+          onClick={() => setIsSidebarOpen(false)}
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-[2px] lg:hidden"
+        />
+      )}
       {/* Sidebar */}
       <aside className={`fixed left-0 top-0 h-full w-sidebar-w bg-surface-container-lowest/90 backdrop-blur-xl z-50 flex flex-col justify-between py-space-md shadow-[0_1px_8px_rgba(0,0,0,0.04)] transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex flex-col gap-space-md">
@@ -42,15 +84,13 @@ export default function Layout() {
               className="w-full flex items-center justify-between px-space-sm py-space-xs rounded-xl bg-surface-container-low hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors">
               <div className="flex items-center gap-space-xs overflow-hidden">
                 <span className="material-symbols-outlined text-[18px] text-tertiary">layers</span>
-                <span className="font-body-sm text-body-sm font-medium text-on-surface truncate">Acme Mobile App</span>
+                <span className="font-body-sm text-body-sm font-medium text-on-surface truncate">Groww Mobile App</span>
               </div>
               <span className="material-symbols-outlined text-[16px] text-on-surface-variant">{showAppSelector ? 'expand_less' : 'unfold_more'}</span>
             </button>
             {showAppSelector && (
               <div className="absolute top-full left-space-md right-space-md mt-1 bg-surface-container-highest border border-outline-variant rounded-xl shadow-lg z-50 overflow-hidden flex flex-col">
-                <button className="px-3 py-2 text-left text-sm text-on-surface hover:bg-surface-container transition-colors">Acme Mobile App</button>
-                <button className="px-3 py-2 text-left text-sm text-on-surface-variant hover:bg-surface-container transition-colors">Acme Web Portal</button>
-                <button className="px-3 py-2 text-left text-sm text-on-surface-variant hover:bg-surface-container transition-colors">Acme API Dashboard</button>
+                <button className="px-3 py-2 text-left text-sm text-on-surface hover:bg-surface-container transition-colors">Groww Mobile App</button>
               </div>
             )}
           </div>
@@ -58,19 +98,20 @@ export default function Layout() {
           <nav className="flex flex-col gap-space-2xs px-space-sm">
             {[
               { path: 'dashboard', icon: 'grid_view', label: 'Dashboard' },
-              { path: 'reviews-inbox', icon: 'inbox', label: 'Reviews Inbox', badge: '24' },
+              { path: 'reviews-inbox', icon: 'inbox', label: 'Reviews Inbox', badge: inboxSummary?.unread.toLocaleString() ?? '…' },
               { path: 'analytics', icon: 'monitoring', label: 'Analytics' },
-              { path: 'categories', icon: 'category', label: 'Categories' },
               { path: 'word-cloud', icon: 'cloud', label: 'Word Cloud' },
               { path: 'ideation', icon: 'lightbulb', label: 'Ideation' },
               { path: 'reporting', icon: 'description', label: 'Reporting' },
               { path: 'settings', icon: 'settings', label: 'Settings' },
             ].map(item => {
-              const isActive = currentPath === item.path || (currentPath === '' && item.path === 'dashboard');
               return (
                 <NavLink 
                   key={item.path}
                   to={"/" + item.path} 
+                  onClick={() => {
+                    if (window.matchMedia('(max-width: 1023px)').matches) setIsSidebarOpen(false);
+                  }}
                   className={({isActive}) => `flex items-center justify-between px-space-sm py-space-xs transition-colors rounded-xl ${isActive ? 'bg-primary-container text-on-primary-container font-semibold' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface'}`}
                 >
                   <div className="flex items-center gap-space-sm">
@@ -108,11 +149,11 @@ export default function Layout() {
       </aside>
 
       {/* Main Content Area */}
-      <div className={`flex-1 flex flex-col min-h-screen transition-all duration-300 min-w-0 ${isSidebarOpen ? 'pl-sidebar-w' : 'pl-0'}`}>
+      <div className={`flex-1 flex flex-col min-h-screen transition-all duration-300 min-w-0 ${isSidebarOpen ? 'lg:pl-sidebar-w' : 'pl-0'}`}>
         {/* Header */}
-        <header className={`fixed top-0 right-0 h-16 bg-surface-container-lowest/80 backdrop-blur-xl z-40 shadow-[0_1px_8px_rgba(0,0,0,0.04)] transition-all duration-300 ${isSidebarOpen ? 'left-sidebar-w' : 'left-0'}`}>
-          <div className="h-16 w-full px-space-lg flex items-center justify-between gap-space-md">
-            <div className="flex items-center gap-space-md">
+        <header className={`fixed top-0 right-0 h-16 bg-surface-container-lowest/80 backdrop-blur-xl z-30 shadow-[0_1px_8px_rgba(0,0,0,0.04)] transition-all duration-300 ${isSidebarOpen ? 'lg:left-sidebar-w' : 'left-0'}`}>
+          <div className="h-16 w-full px-space-sm sm:px-space-lg flex items-center justify-between gap-space-xs sm:gap-space-md">
+            <div className="flex items-center gap-space-xs sm:gap-space-md min-w-0">
               <button 
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                 title={isSidebarOpen ? "Hide sidebar" : "Show sidebar"}
@@ -120,19 +161,24 @@ export default function Layout() {
               >
                 <span className="material-symbols-outlined text-[20px]">{isSidebarOpen ? 'menu_open' : 'menu'}</span>
               </button>
-              <div className="flex items-center gap-space-xs font-body-sm text-body-sm text-on-surface-variant">
+              <div className="hidden sm:flex items-center gap-space-xs font-body-sm text-body-sm text-on-surface-variant min-w-0">
                 <span className="material-symbols-outlined text-[16px]">home</span>
                 <span>/</span>
                 <span className="text-on-surface font-medium capitalize">{currentPath}</span>
               </div>
-              <div className="h-4 w-px bg-surface-container-highest"></div>
-              <div className="flex items-center gap-space-2xs">
-                <span className="w-2 h-2 rounded-full bg-tertiary-container animate-pulse"></span>
-                <span className="font-mono-metric text-mono-metric text-on-surface-variant">Synced 4m ago</span>
+              <div className="hidden md:block h-4 w-px bg-surface-container-highest"></div>
+              <div className="hidden md:flex items-center gap-space-2xs">
+                <span className={`h-2 w-2 rounded-full ${syncStatus?.status === 'success' ? 'bg-emerald-500' : syncStatus?.status === 'partial' ? 'bg-amber-500' : 'bg-zinc-500'}`}></span>
+                <span
+                  className="font-mono-metric text-mono-metric text-on-surface-variant"
+                  title={syncTimestamp ? `${syncStatus?.status === 'partial' ? 'Partial scrape' : 'Successful scrape'} at ${syncTimestamp.toLocaleString()}` : 'Run a scrape to start tracking its status.'}
+                >
+                  {relativeScrapeTime(syncStatus?.last_synced_at)}
+                </span>
               </div>
             </div>
             <div className="flex items-center gap-space-sm relative">
-              <div className="flex items-center bg-surface-container-low p-1 rounded-xl">
+              <div className="hidden xl:flex items-center bg-surface-container-low p-1 rounded-xl">
                 {['All Platforms', 'iOS', 'Android'].map((platform) => (
                   <button 
                     key={platform}
@@ -143,36 +189,13 @@ export default function Layout() {
                   </button>
                 ))}
               </div>
-              <div className="relative">
-                <div 
-                  onClick={() => setShowTimeframe(!showTimeframe)}
-                  className="flex items-center bg-surface-container-low px-space-sm py-1.5 rounded-xl gap-space-xs text-on-surface-variant hover:text-on-surface cursor-pointer">
-                  <span className="material-symbols-outlined text-[16px]">calendar_today</span>
-                  <span className="font-body-sm text-body-sm">{timeframe}</span>
-                  <span className="material-symbols-outlined text-[16px]">{showTimeframe ? 'expand_less' : 'expand_more'}</span>
-                </div>
-                {showTimeframe && (
-                  <div className="absolute top-full right-0 mt-1 w-48 bg-surface-container-highest border border-outline-variant rounded-xl shadow-lg z-50 overflow-hidden flex flex-col">
-                    {['Last 7 Days', 'Last 30 Days', 'Last 90 Days', 'Year to Date'].map(t => (
-                      <button 
-                        key={t}
-                        onClick={() => { setTimeframe(t); setShowTimeframe(false); }}
-                        className={`px-3 py-2 text-left text-sm transition-colors ${timeframe === t ? 'bg-primary/10 text-primary font-medium' : 'text-on-surface hover:bg-surface-container'}`}
-                      >
-                        {t}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
               <button 
-                onClick={handleRefresh}
-                disabled={isRefreshing}
-                className="flex items-center gap-space-2xs px-space-sm py-1.5 rounded-xl bg-primary-container hover:bg-primary text-on-primary-container font-body-sm text-body-sm font-semibold transition-all shadow-[0_1px_8px_rgba(0,0,0,0.04)] disabled:opacity-70">
-                <span className={`material-symbols-outlined text-[16px] ${isRefreshing ? 'animate-spin' : ''}`}>sync</span>
-                <span>{isRefreshing ? 'Refreshing...' : 'Refresh Feeds'}</span>
+                onClick={() => setIsScrapeModalOpen(true)}
+                className="flex items-center gap-space-2xs px-space-sm py-1.5 rounded-xl bg-primary-container hover:bg-primary text-on-primary-container font-body-sm text-body-sm font-semibold transition-all shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+                <span className="material-symbols-outlined text-[16px]">database</span>
+                <span className="hidden sm:inline">Scrape Reviews</span>
               </button>
-              <div className="h-4 w-px bg-surface-container-highest"></div>
+              <div className="hidden sm:block h-4 w-px bg-surface-container-highest"></div>
               <div className="relative">
                 <button 
                   onClick={() => setShowNotifications(!showNotifications)}
@@ -187,7 +210,7 @@ export default function Layout() {
                   </div>
                 )}
               </div>
-              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+              <div className="hidden sm:flex w-8 h-8 rounded-full bg-primary items-center justify-center">
                 <span className="material-symbols-outlined text-on-primary text-[18px]">person</span>
               </div>
             </div>
@@ -200,6 +223,7 @@ export default function Layout() {
           </div>
         </main>
       </div>
+      <ScrapeReviewsModal isOpen={isScrapeModalOpen} onClose={() => setIsScrapeModalOpen(false)} />
     </div>
   );
 }

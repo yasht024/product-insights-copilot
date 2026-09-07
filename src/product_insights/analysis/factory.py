@@ -13,7 +13,7 @@ def create_chat_model(config: AnalysisConfig) -> BaseChatModel:
         from langchain_core.messages import AIMessage
         return FakeMessagesListChatModel(responses=[AIMessage(content="{}")])
         
-    if config.provider == "google":
+    if config.provider in {"google", "google_genai"}:
         try:
             from langchain_google_genai import ChatGoogleGenerativeAI
         except ImportError:

@@ -1,6 +1,17 @@
 import React from 'react';
+import { useToast } from './components/Toast';
 
 export default function Settings() {
+  const { addToast } = useToast();
+
+  const handleComingSoon = () => {
+    addToast({
+      type: 'info',
+      title: 'Coming Soon',
+      message: 'This feature is not yet backed by the backend.'
+    });
+  };
+
   return (
 <div className="w-full pt-16 bg-surface min-h-screen">
 <div className="p-space-xl max-w-5xl mx-auto flex flex-col gap-space-xl pb-24">
@@ -13,10 +24,18 @@ export default function Settings() {
             </p>
 </div>
 <div className="flex items-center gap-space-xs shrink-0">
-<button className="px-space-md py-2 rounded-xl bg-transparent hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm font-medium transition-colors border border-surface-container-highest/50" type="button">
+<button 
+  className="px-space-md py-2 rounded-xl bg-transparent hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm font-medium transition-colors border border-surface-container-highest/50" 
+  type="button"
+  onClick={handleComingSoon}
+>
               Reset to Defaults
             </button>
-<button className="flex items-center gap-1.5 px-space-md py-2 rounded-xl bg-primary text-on-primary font-body-sm text-body-sm font-semibold shadow-sm hover:bg-primary-fixed transition-all" type="button">
+<button 
+  className="flex items-center gap-1.5 px-space-md py-2 rounded-xl bg-primary text-on-primary font-body-sm text-body-sm font-semibold shadow-sm hover:bg-primary-fixed transition-all" 
+  type="button"
+  onClick={handleComingSoon}
+>
 <span className="material-symbols-outlined text-[18px]">check</span>
 <span>Save Changes</span>
 </button>

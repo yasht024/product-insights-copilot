@@ -1,1655 +1,323 @@
-import React from "react";
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useSearchParams } from 'react-router-dom';
+import { apiClient, type Review } from './api/client';
+import { useToast } from './components/Toast';
+
+const workspaceId = 'ws_1';
+
+function formatDate(value: string | null): string {
+  if (!value) return 'Unknown date';
+  const normalized = /(?:Z|[+-]\d\d:\d\d)$/.test(value) ? value : `${value}Z`;
+  return new Intl.DateTimeFormat(undefined, { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(normalized));
+}
+
+function statusClass(status: string): string {
+  switch (status.toLowerCase()) {
+    case 'reviewed':
+    case 'replied':
+      return 'bg-emerald-500/15 text-emerald-300';
+    case 'flagged':
+      return 'bg-amber-500/15 text-amber-300';
+    case 'archived':
+      return 'bg-zinc-700/60 text-zinc-400';
+    default:
+      return 'bg-indigo-500/15 text-indigo-300';
+  }
+}
 
 export default function ReviewsInbox() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [selectedReview, setSelectedReview] = useState<Review | null>(null);
+  const [selectedRowIds, setSelectedRowIds] = useState<Set<string>>(new Set());
+  const [draftText, setDraftText] = useState('');
+  const [draftTone, setDraftTone] = useState<'concise' | 'formal'>('concise');
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const queryClient = useQueryClient();
+  const { addToast } = useToast();
+
+  const page = Math.max(1, Number(searchParams.get('page')) || 1);
+  const limit = [25, 50, 100].includes(Number(searchParams.get('limit')))
+    ? Number(searchParams.get('limit'))
+    : 25;
+  const queryString = searchParams.toString();
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['reviews', workspaceId, queryString],
+    queryFn: () => apiClient.getReviews(workspaceId, searchParams),
+  });
+  const { data: summary, isLoading: isSummaryLoading } = useQuery({
+    queryKey: ['reviewSummary', workspaceId, queryString],
+    queryFn: () => apiClient.getReviewSummary(workspaceId, searchParams),
+  });
+
+  const bulkActionMutation = useMutation({
+    mutationFn: ({ ids, status }: { ids: string[]; status: string }) =>
+      apiClient.bulkAction(workspaceId, ids, 'mark_status', status),
+    onSuccess: async (result, variables) => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['reviews', workspaceId] }),
+        queryClient.invalidateQueries({ queryKey: ['reviewSummary', workspaceId] }),
+      ]);
+      setSelectedRowIds(new Set());
+      addToast({
+        type: 'success',
+        title: `${variables.status} reviews`,
+        message: `${result.updated_count} ${result.updated_count === 1 ? 'review was' : 'reviews were'} updated.`,
+      });
+    },
+    onError: () => addToast({ type: 'error', title: 'Update failed', message: 'The selected reviews could not be updated.' }),
+  });
+
+  const draftMutation = useMutation({
+    mutationFn: ({ reviewId, tone }: { reviewId: string; tone: 'concise' | 'formal' }) =>
+      apiClient.generateDraft(workspaceId, reviewId, tone),
+    onSuccess: (result) => setDraftText(result.draft),
+    onError: () => {
+      setDraftText('');
+      addToast({ type: 'error', title: 'Draft unavailable', message: 'A reply suggestion could not be generated.' });
+    },
+  });
+
+  useEffect(() => {
+    const focusSearch = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        searchInputRef.current?.focus();
+      }
+    };
+    window.addEventListener('keydown', focusSearch);
+    return () => window.removeEventListener('keydown', focusSearch);
+  }, []);
+
+  const totalPages = Math.max(1, Math.ceil((data?.total || 0) / limit));
+  const firstResult = data?.total ? (page - 1) * limit + 1 : 0;
+  const lastResult = data?.total ? Math.min(page * limit, data.total) : 0;
+  const allPageRowsSelected = Boolean(data?.items.length) && data!.items.every((review) => selectedRowIds.has(review.id));
+  const selectedIds = useMemo(
+    () => (data?.items || []).filter((review) => selectedRowIds.has(review.id)).map((review) => review.id),
+    [data?.items, selectedRowIds],
+  );
+
+  const updateParams = (updates: Record<string, string | null>) => {
+    setSelectedRowIds(new Set());
+    setSearchParams((previous) => {
+      const next = new URLSearchParams(previous);
+      Object.entries(updates).forEach(([key, value]) => {
+        if (!value || value.startsWith('All ')) next.delete(key);
+        else next.set(key, value);
+      });
+      return next;
+    });
+  };
+
+  const handleFilterChange = (key: string, value: string) => updateParams({ [key]: value, page: '1' });
+  const changePage = (nextPage: number) => updateParams({ page: String(Math.min(totalPages, Math.max(1, nextPage))) });
+
+  const toggleRow = (id: string) => {
+    setSelectedRowIds((current) => {
+      const next = new Set(current);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const toggleAll = () => {
+    if (!data?.items.length) return;
+    setSelectedRowIds(allPageRowsSelected ? new Set() : new Set(data.items.map((review) => review.id)));
+  };
+
+  const openReply = (review: Review, tone: 'concise' | 'formal' = 'concise') => {
+    setSelectedReview(review);
+    setDraftText('');
+    setDraftTone(tone);
+    draftMutation.mutate({ reviewId: review.id, tone });
+  };
+
+  const regenerateDraft = (tone: 'concise' | 'formal') => {
+    if (!selectedReview) return;
+    setDraftTone(tone);
+    draftMutation.mutate({ reviewId: selectedReview.id, tone });
+  };
+
+  const copyDraft = async () => {
+    if (!draftText) return;
+    await navigator.clipboard.writeText(draftText);
+    addToast({ type: 'success', title: 'Draft copied', message: 'The reply suggestion is ready to paste into the store console.' });
+  };
+
   return (
-    <>
-      
-      
-        
-        
-          
-            {/* Top Ambient Glow Field */}
-            <div className="relative w-full overflow-hidden">
-              <div className="absolute -top-24 left-1/4 w-[36rem] h-48 bg-primary-container/10 rounded-full blur-3xl pointer-events-none"></div>
-              <div className="absolute -top-28 right-1/4 w-[28rem] h-44 bg-tertiary-container/10 rounded-full blur-3xl pointer-events-none"></div>
-              {/* Page Header & Metrics Strip */}
-              <div className="px-space-lg py-space-md flex flex-col gap-space-md">
-                {/* Title Row */}
-                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-space-sm">
-                  <div className="flex flex-col gap-space-2xs">
-                    <div className="flex items-center gap-space-xs">
-                      <span className="font-display-sm text-display-sm text-on-surface tracking-tight font-semibold">
-                        Reviews Inbox
-                      </span>
-                      <span className="px-space-xs py-0.5 rounded-full bg-surface-container-high text-tertiary font-mono-metric text-mono-metric uppercase tracking-widest flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></span>
-                        Live Feed
-                      </span>
-                    </div>
-                    <p className="font-body-md text-body-md text-on-surface-variant max-w-3xl">
-                      Live multi-platform customer feedback stream with
-                      automated neural triage, cluster taxonomy, and instant
-                      response synthesizing.
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-space-xs shrink-0 flex-wrap">
-                    <button
-                      className="flex items-center gap-space-xs px-space-sm py-2 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-body-sm text-body-sm transition-all shadow-sm"
-                      id="btn-bulk-classify"
-                    >
-                      <span className="material-symbols-outlined text-[16px] text-tertiary">
-                        auto_fix_high
-                      </span>
-                      <span>Bulk AI Classify</span>
-                    </button>
-                    <button className="flex items-center gap-space-xs px-space-sm py-2 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-body-sm text-body-sm transition-all shadow-sm">
-                      <span className="material-symbols-outlined text-[16px] text-on-surface-variant">
-                        download
-                      </span>
-                      <span>Export CSV</span>
-                    </button>
-                    <button className="flex items-center gap-space-xs px-space-sm py-2 rounded-xl bg-primary-container text-on-primary-container font-body-sm text-body-sm font-semibold hover:bg-primary transition-all shadow-md">
-                      <span className="material-symbols-outlined text-[16px]">
-                        tune
-                      </span>
-                      <span>Filter Presets</span>
-                    </button>
-                  </div>
-                </div>
-                {/* KPI Stats Banner */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-space-sm">
-                  {/* KPI 1 */}
-                  <div className="p-space-md rounded-xl bg-surface-container-low flex items-center justify-between shadow-sm">
-                    <div className="flex flex-col gap-0.5">
-                      <span className="font-label-caps text-label-caps text-on-surface-variant uppercase">
-                        Total Synced
-                      </span>
-                      <span className="font-mono-metric text-title-lg text-on-surface font-bold">
-                        24,648
-                      </span>
-                      <span className="font-body-sm text-body-sm text-tertiary flex items-center gap-1">
-                        <span className="material-symbols-outlined text-[14px]">
-                          arrow_upward
-                        </span>
-                        +1,240 this week
-                      </span>
-                    </div>
-                    <div className="w-10 h-10 rounded-xl bg-surface-container-high flex items-center justify-center text-primary">
-                      <span className="material-symbols-outlined text-[20px]">
-                        sync_alt
-                      </span>
-                    </div>
-                  </div>
-                  {/* KPI 2 */}
-                  <div className="p-space-md rounded-xl bg-surface-container-low flex items-center justify-between shadow-sm">
-                    <div className="flex flex-col gap-0.5">
-                      <span className="font-label-caps text-label-caps text-on-surface-variant uppercase">
-                        Unread / Pending
-                      </span>
-                      <span className="font-mono-metric text-title-lg text-secondary-fixed-dim font-bold">
-                        142
-                      </span>
-                      <span className="font-body-sm text-body-sm text-on-surface-variant">
-                        32 waiting on drafts
-                      </span>
-                    </div>
-                    <div className="w-10 h-10 rounded-xl bg-secondary-container/40 flex items-center justify-center text-secondary">
-                      <span className="material-symbols-outlined text-[20px]">
-                        mark_email_unread
-                      </span>
-                    </div>
-                  </div>
-                  {/* KPI 3 */}
-                  <div className="p-space-md rounded-xl bg-surface-container-low flex items-center justify-between shadow-sm">
-                    <div className="flex flex-col gap-0.5">
-                      <span className="font-label-caps text-label-caps text-on-surface-variant uppercase">
-                        Critical Alerts (1★)
-                      </span>
-                      <span className="font-mono-metric text-title-lg text-error font-bold">
-                        18
-                      </span>
-                      <span className="font-body-sm text-body-sm text-error flex items-center gap-1">
-                        <span className="material-symbols-outlined text-[14px]">
-                          priority_high
-                        </span>
-                        Requires triage &lt; 2h
-                      </span>
-                    </div>
-                    <div className="w-10 h-10 rounded-xl bg-error-container/40 flex items-center justify-center text-error">
-                      <span className="material-symbols-outlined text-[20px]">
-                        warning
-                      </span>
-                    </div>
-                  </div>
-                  {/* KPI 4 */}
-                  <div className="p-space-md rounded-xl bg-surface-container-low flex items-center justify-between shadow-sm">
-                    <div className="flex flex-col gap-0.5">
-                      <span className="font-label-caps text-label-caps text-on-surface-variant uppercase">
-                        Avg Response Time
-                      </span>
-                      <span className="font-mono-metric text-title-lg text-on-surface font-bold">
-                        4.2 hrs
-                      </span>
-                      <span className="font-body-sm text-body-sm text-tertiary flex items-center gap-1">
-                        <span className="material-symbols-outlined text-[14px]">
-                          trending_down
-                        </span>
-                        -1.8 hrs vs SLA
-                      </span>
-                    </div>
-                    <div className="w-10 h-10 rounded-xl bg-surface-container-high flex items-center justify-center text-tertiary">
-                      <span className="material-symbols-outlined text-[20px]">
-                        speed
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+    <main className="mx-auto flex w-full max-w-[1600px] flex-col gap-5 p-4 sm:p-6 lg:p-8">
+      <header className="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
+        <div>
+          <div className="mb-2 flex items-center gap-2">
+            <span className="rounded border border-indigo-500/20 bg-indigo-500/10 px-2 py-0.5 font-mono text-[11px] font-semibold uppercase tracking-wider text-indigo-400">Stored reviews</span>
+            <span className="font-mono text-xs text-zinc-500">Groww · iOS and Android</span>
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight text-zinc-100 lg:text-3xl">Reviews Inbox</h1>
+          <p className="mt-1 max-w-3xl text-sm text-zinc-400">Search, review, export, and update the customer reviews currently stored in this workspace.</p>
+        </div>
+        <button type="button" onClick={() => { window.location.href = apiClient.getExportUrl(workspaceId, searchParams); }} className="flex w-fit items-center gap-2 rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:border-indigo-500/50 hover:text-white">
+          <span className="material-symbols-outlined text-[17px]">download</span>
+          Export filtered CSV
+        </button>
+      </header>
+
+      <section className="grid grid-cols-2 gap-3 lg:grid-cols-4" aria-label="Filtered review summary">
+        {[
+          { label: 'Matching reviews', value: summary?.total.toLocaleString() ?? '—', detail: `${summary?.ios || 0} iOS · ${summary?.android || 0} Android`, icon: 'inbox', color: 'text-indigo-400' },
+          { label: 'Unread', value: summary?.unread.toLocaleString() ?? '—', detail: 'Within current filters', icon: 'mark_email_unread', color: 'text-sky-400' },
+          { label: '1-star reviews', value: summary?.one_star.toLocaleString() ?? '—', detail: 'Within current filters', icon: 'warning', color: 'text-rose-400' },
+          { label: 'Average rating', value: summary?.average_rating == null ? '—' : `${summary.average_rating.toFixed(1)} / 5`, detail: 'Within current filters', icon: 'star', color: 'text-amber-400' },
+        ].map((item) => (
+          <div key={item.label} className="flex items-center justify-between rounded-xl border border-zinc-800 bg-zinc-900/60 p-4">
+            <div>
+              <div className="text-xs font-medium uppercase tracking-wide text-zinc-500">{item.label}</div>
+              <div className="mt-1 font-mono text-xl font-bold text-zinc-100">{isSummaryLoading ? '…' : item.value}</div>
+              <div className="mt-1 text-xs text-zinc-500">{item.detail}</div>
             </div>
-            {/* Search & Filter Ribbon */}
-            <div className="px-space-lg pb-space-xs flex flex-col gap-space-xs">
-              <div className="p-space-xs rounded-xl bg-surface-container-low flex flex-col xl:flex-row gap-space-xs items-stretch xl:items-center shadow-sm">
-                {/* Search Box */}
-                <div className="relative flex-1">
-                  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-on-surface-variant">
-                    search
-                  </span>
-                  <input
-                    className="w-full pl-9 pr-14 py-2 bg-surface-container rounded-lg text-on-surface placeholder:text-on-surface-variant font-body-sm text-body-sm outline-none transition-all"
-                    id="reviews-search-input"
-                    placeholder="Search by keyword, user ID, or review text..."
-                    type="text"
-                  />
-                  <kbd className="absolute right-2.5 top-1/2 -translate-y-1/2 px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-mono-metric text-[10px]">
-                    ⌘K
-                  </kbd>
-                </div>
-                {/* Filters Row */}
-                <div className="flex items-center gap-space-2xs flex-wrap">
-                  {/* Platform */}
-                  <div className="relative">
-                    <select className="appearance-none bg-surface-container hover:bg-surface-container-high text-on-surface font-body-sm text-body-sm pl-2.5 pr-7 py-2 rounded-lg outline-none cursor-pointer">
-                      <option>All Platforms</option>
-                      <option>Apple App Store</option>
-                      <option>Google Play Store</option>
-                    </select>
-                    <span className="material-symbols-outlined pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[16px] text-on-surface-variant">
-                      expand_more
-                    </span>
-                  </div>
-                  {/* Version */}
-                  <div className="relative">
-                    <select className="appearance-none bg-surface-container hover:bg-surface-container-high text-on-surface font-body-sm text-body-sm pl-2.5 pr-7 py-2 rounded-lg outline-none cursor-pointer">
-                      <option>v2.4.0 (Latest)</option>
-                      <option>v2.3.9</option>
-                      <option>v2.3.8</option>
-                      <option>All Versions</option>
-                    </select>
-                    <span className="material-symbols-outlined pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[16px] text-on-surface-variant">
-                      expand_more
-                    </span>
-                  </div>
-                  {/* Sentiment */}
-                  <div className="relative">
-                    <select className="appearance-none bg-surface-container hover:bg-surface-container-high text-on-surface font-body-sm text-body-sm pl-2.5 pr-7 py-2 rounded-lg outline-none cursor-pointer">
-                      <option>All Sentiments</option>
-                      <option>Positive</option>
-                      <option>Neutral</option>
-                      <option>Negative</option>
-                      <option>Mixed</option>
-                    </select>
-                    <span className="material-symbols-outlined pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[16px] text-on-surface-variant">
-                      expand_more
-                    </span>
-                  </div>
-                  {/* Star Rating */}
-                  <div className="relative">
-                    <select className="appearance-none bg-surface-container hover:bg-surface-container-high text-on-surface font-body-sm text-body-sm pl-2.5 pr-7 py-2 rounded-lg outline-none cursor-pointer">
-                      <option>All Stars</option>
-                      <option>5 Stars</option>
-                      <option>4 Stars</option>
-                      <option>3 Stars</option>
-                      <option>2 Stars</option>
-                      <option>1 Star</option>
-                    </select>
-                    <span className="material-symbols-outlined pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[16px] text-on-surface-variant">
-                      expand_more
-                    </span>
-                  </div>
-                  {/* Tags */}
-                  <div className="relative">
-                    <select className="appearance-none bg-surface-container hover:bg-surface-container-high text-on-surface font-body-sm text-body-sm pl-2.5 pr-7 py-2 rounded-lg outline-none cursor-pointer">
-                      <option>All Tags</option>
-                      <option>Crash / Bug</option>
-                      <option>Feature Request</option>
-                      <option>Billing &amp; Subscriptions</option>
-                      <option>UX &amp; Usability</option>
-                      <option>Performance</option>
-                    </select>
-                    <span className="material-symbols-outlined pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[16px] text-on-surface-variant">
-                      expand_more
-                    </span>
-                  </div>
-                  {/* Status */}
-                  <div className="relative">
-                    <select className="appearance-none bg-surface-container hover:bg-surface-container-high text-on-surface font-body-sm text-body-sm pl-2.5 pr-7 py-2 rounded-lg outline-none cursor-pointer">
-                      <option>Status: Unread</option>
-                      <option>Status: Replied</option>
-                      <option>Status: Flagged</option>
-                      <option>Status: Archived</option>
-                    </select>
-                    <span className="material-symbols-outlined pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[16px] text-on-surface-variant">
-                      expand_more
-                    </span>
-                  </div>
-                  <button
-                    className="p-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors"
-                    title="Reset Filters"
-                  >
-                    <span className="material-symbols-outlined text-[18px]">
-                      restart_alt
-                    </span>
-                  </button>
-                </div>
-              </div>
-              {/* Active Selection & Bulk Action Bar */}
-              <div
-                className="px-space-md py-space-xs rounded-xl bg-surface-container-high flex flex-wrap items-center justify-between gap-space-sm shadow-md transition-all"
-                id="bulk-action-bar"
-              >
-                <div className="flex items-center gap-space-sm">
-                  <label className="inline-flex items-center gap-space-xs cursor-pointer">
-                    <input
-                      className="w-4 h-4 rounded bg-surface-container-lowest text-primary accent-primary"
-                      id="check-select-all"
-                      type="checkbox"
-                    />
-                    <span className="font-label-caps text-label-caps text-on-surface font-bold">
-                      142 reviews selected
-                    </span>
-                  </label>
-                  <span className="text-on-surface-variant font-mono-metric text-[12px] hidden sm:inline">
-                    | Applied scope: Filtered View
-                  </span>
-                </div>
-                <div className="flex items-center gap-space-2xs flex-wrap">
-                  <button className="flex items-center gap-1.5 px-space-xs py-1 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface font-body-sm text-body-sm transition-colors">
-                    <span className="material-symbols-outlined text-[16px] text-tertiary">
-                      done_all
-                    </span>
-                    <span>Mark as Reviewed</span>
-                  </button>
-                  <button className="flex items-center gap-1.5 px-space-xs py-1 rounded-lg bg-primary-container hover:bg-primary text-on-primary-container font-body-sm text-body-sm font-semibold transition-colors">
-                    <span className="material-symbols-outlined text-[16px]">
-                      smart_toy
-                    </span>
-                    <span>Assign AI Response Draft</span>
-                  </button>
-                  <button className="flex items-center gap-1.5 px-space-xs py-1 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface font-body-sm text-body-sm transition-colors">
-                    <span className="material-symbols-outlined text-[16px] text-secondary">
-                      label
-                    </span>
-                    <span>Add Tag</span>
-                  </button>
-                  <button className="flex items-center gap-1.5 px-space-xs py-1 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface font-body-sm text-body-sm transition-colors">
-                    <span className="material-symbols-outlined text-[16px] text-primary">
-                      bug_report
-                    </span>
-                    <span>Escalate to Jira</span>
-                  </button>
-                  <button
-                    className="p-1 rounded-lg bg-surface-container hover:bg-error/20 text-on-surface-variant hover:text-error transition-colors"
-                    title="Delete or Flag as Spam"
-                  >
-                    <span className="material-symbols-outlined text-[18px]">
-                      delete
-                    </span>
-                  </button>
-                </div>
-              </div>
+            <span className={`material-symbols-outlined ${item.color}`}>{item.icon}</span>
+          </div>
+        ))}
+      </section>
+
+      {Boolean(summary?.excluded_non_store) && (
+        <div className="flex items-start gap-2 rounded-xl border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-xs leading-relaxed text-amber-200">
+          <span className="material-symbols-outlined text-[17px]">verified</span>
+          <span><strong>{summary?.excluded_non_store.toLocaleString()}</strong> known demo or legacy non-Groww rows are excluded from the inbox and dashboard calculations.</span>
+        </div>
+      )}
+
+      <section className="flex flex-col gap-3 rounded-xl border border-zinc-800 bg-zinc-900/60 p-3">
+        <div className="flex flex-col gap-2 xl:flex-row">
+          <div className="relative min-w-0 flex-1">
+            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-zinc-500">search</span>
+            <input ref={searchInputRef} value={searchParams.get('q') || ''} onChange={(event) => handleFilterChange('q', event.target.value)} className="w-full rounded-lg border border-transparent bg-zinc-950 py-2.5 pl-10 pr-16 text-sm text-zinc-100 outline-none transition-colors placeholder:text-zinc-600 focus:border-indigo-500" placeholder="Search review text…" />
+            <kbd className="absolute right-3 top-1/2 -translate-y-1/2 rounded bg-zinc-800 px-1.5 py-0.5 font-mono text-[10px] text-zinc-500">Ctrl K</kbd>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <select aria-label="Platform" value={searchParams.get('platform') || 'All Platforms'} onChange={(event) => handleFilterChange('platform', event.target.value)} className="rounded-lg bg-zinc-950 px-3 py-2.5 text-sm text-zinc-200 outline-none focus:ring-1 focus:ring-indigo-500">
+              <option>All Platforms</option><option value="iOS">iOS</option><option value="Android">Android</option>
+            </select>
+            <select aria-label="Version" value={searchParams.get('version') || 'All Versions'} onChange={(event) => handleFilterChange('version', event.target.value)} className="max-w-48 rounded-lg bg-zinc-950 px-3 py-2.5 text-sm text-zinc-200 outline-none focus:ring-1 focus:ring-indigo-500">
+              <option>All Versions</option>
+              {data?.available_versions.map((version) => <option key={version}>{version}</option>)}
+            </select>
+            <select aria-label="Rating" value={searchParams.get('rating') || 'All Ratings'} onChange={(event) => handleFilterChange('rating', event.target.value)} className="rounded-lg bg-zinc-950 px-3 py-2.5 text-sm text-zinc-200 outline-none focus:ring-1 focus:ring-indigo-500">
+              <option>All Ratings</option>
+              {[5, 4, 3, 2, 1].map((rating) => <option key={rating} value={rating}>{rating} stars</option>)}
+            </select>
+            <select aria-label="Status" value={searchParams.get('status') || 'All Statuses'} onChange={(event) => handleFilterChange('status', event.target.value)} className="rounded-lg bg-zinc-950 px-3 py-2.5 text-sm text-zinc-200 outline-none focus:ring-1 focus:ring-indigo-500">
+              <option>All Statuses</option>
+              {data?.available_statuses.map((status) => <option key={status}>{status}</option>)}
+            </select>
+            <select aria-label="Review date range" value={searchParams.get('days') || 'All time'} onChange={(event) => handleFilterChange('days', event.target.value)} className="rounded-lg bg-zinc-950 px-3 py-2.5 text-sm text-zinc-200 outline-none focus:ring-1 focus:ring-indigo-500">
+              <option>All time</option><option value="1">Last 1 day</option><option value="2">Last 2 days</option><option value="7">Last 7 days</option><option value="30">Last 30 days</option><option value="90">Last 90 days</option><option value="365">Last year</option>
+            </select>
+            <label className="flex items-center gap-2 rounded-lg bg-zinc-950 px-3 py-2 text-xs text-zinc-500">
+              More than
+              <input aria-label="Minimum review word count" type="number" min={0} max={100} value={searchParams.get('min_words') ?? '8'} onChange={(event) => handleFilterChange('min_words', String(Math.min(100, Math.max(0, Number(event.target.value) || 0))))} className="w-12 rounded border border-zinc-700 bg-zinc-900 px-1.5 py-1 text-center font-mono text-zinc-200 outline-none focus:border-indigo-500" />
+              words
+            </label>
+            <button type="button" onClick={() => { setSelectedRowIds(new Set()); setSearchParams(new URLSearchParams()); }} className="flex items-center gap-1 rounded-lg px-3 py-2 text-sm text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-white" title="Reset all filters">
+              <span className="material-symbols-outlined text-[18px]">restart_alt</span> Reset
+            </button>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-zinc-800 pt-3">
+          <label className="flex cursor-pointer items-center gap-2 text-sm font-medium text-zinc-300">
+            <input type="checkbox" checked={allPageRowsSelected} onChange={toggleAll} className="h-4 w-4 accent-indigo-500" />
+            {selectedIds.length} selected on this page
+          </label>
+          <div className="flex flex-wrap gap-2">
+            {[
+              { status: 'Reviewed', icon: 'done_all' },
+              { status: 'Flagged', icon: 'flag' },
+              { status: 'Archived', icon: 'archive' },
+            ].map((action) => (
+              <button key={action.status} type="button" disabled={!selectedIds.length || bulkActionMutation.isPending} onClick={() => bulkActionMutation.mutate({ ids: selectedIds, status: action.status })} className="flex items-center gap-1.5 rounded-lg bg-zinc-800 px-3 py-1.5 text-xs font-medium text-zinc-200 transition-colors hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-40">
+                <span className="material-symbols-outlined text-[16px]">{action.icon}</span>{action.status}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="overflow-hidden rounded-xl border border-zinc-800 bg-zinc-950/50 shadow-xl">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[1050px] border-collapse text-left text-sm">
+            <thead className="bg-zinc-900 text-[11px] uppercase tracking-wider text-zinc-500">
+              <tr>
+                <th className="w-12 px-4 py-3 text-center"><span className="sr-only">Select</span></th>
+                <th className="min-w-52 px-4 py-3">Reviewer and store</th>
+                <th className="w-36 px-4 py-3">Rating</th>
+                <th className="min-w-96 px-4 py-3">Review</th>
+                <th className="w-40 px-4 py-3">Version and date</th>
+                <th className="w-28 px-4 py-3">Status</th>
+                <th className="w-24 px-4 py-3 text-right">Reply</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-zinc-800">
+              {isLoading ? (
+                <tr><td colSpan={7} className="px-4 py-14 text-center text-zinc-500">Loading reviews…</td></tr>
+              ) : isError ? (
+                <tr><td colSpan={7} className="px-4 py-14 text-center text-rose-300">Reviews could not be loaded. Confirm that the local API is running.</td></tr>
+              ) : !data?.items.length ? (
+                <tr><td colSpan={7} className="px-4 py-14 text-center text-zinc-500">No stored reviews match these filters.</td></tr>
+              ) : data.items.map((review) => (
+                <tr key={review.id} className="bg-zinc-950/20 text-zinc-300 transition-colors hover:bg-zinc-900/70">
+                  <td className="px-4 py-3 text-center"><input aria-label={`Select review ${review.id}`} type="checkbox" checked={selectedRowIds.has(review.id)} onChange={() => toggleRow(review.id)} className="h-4 w-4 accent-indigo-500" /></td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-3">
+                      <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold ${review.rating <= 2 ? 'bg-rose-500/15 text-rose-300' : review.rating >= 4 ? 'bg-emerald-500/15 text-emerald-300' : 'bg-zinc-800 text-zinc-300'}`}>{(review.author || 'AN').slice(0, 2).toUpperCase()}</div>
+                      <div className="min-w-0"><div className="truncate font-medium text-zinc-200">{review.author || 'Anonymous'}</div><div className="truncate text-xs text-zinc-500">{review.platform}</div></div>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3"><div className="flex items-center gap-1" aria-label={`${review.rating} out of 5 stars`}><span className="font-mono font-semibold text-amber-300">{review.rating}.0</span><span className="text-amber-400">★</span></div></td>
+                  <td className="px-4 py-3"><p className="line-clamp-3 max-w-2xl leading-relaxed text-zinc-400" title={review.text}>{review.text}</p></td>
+                  <td className="px-4 py-3"><div className="font-mono text-xs text-zinc-300">{review.version || 'Unknown'}</div><div className="mt-1 text-xs text-zinc-500">{formatDate(review.created_at)}</div></td>
+                  <td className="px-4 py-3"><span className={`inline-flex rounded-full px-2 py-1 font-mono text-[10px] font-bold uppercase ${statusClass(review.status)}`}>{review.status}</span></td>
+                  <td className="px-4 py-3 text-right"><button type="button" onClick={() => openReply(review)} className="rounded-lg p-2 text-zinc-400 transition-colors hover:bg-indigo-500/15 hover:text-indigo-300" title="Create reply suggestion"><span className="material-symbols-outlined text-[18px]">reply</span></button></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <footer className="flex flex-col items-center justify-between gap-3 border-t border-zinc-800 bg-zinc-900/70 px-4 py-3 sm:flex-row">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-zinc-500">
+            <span>Showing <strong className="font-mono text-zinc-300">{firstResult}–{lastResult}</strong> of <strong className="font-mono text-zinc-300">{data?.total.toLocaleString() || 0}</strong></span>
+            <label className="flex items-center gap-2">Rows <select value={limit} onChange={(event) => updateParams({ limit: event.target.value, page: '1' })} className="rounded-md bg-zinc-800 px-2 py-1 text-zinc-200 outline-none"><option value={25}>25</option><option value={50}>50</option><option value={100}>100</option></select></label>
+          </div>
+          <div className="flex items-center gap-2">
+            <button type="button" disabled={page <= 1} onClick={() => changePage(page - 1)} className="rounded-lg p-1.5 text-zinc-400 hover:bg-zinc-800 hover:text-white disabled:opacity-30"><span className="material-symbols-outlined text-[18px]">chevron_left</span></button>
+            <span className="min-w-28 text-center font-mono text-xs text-zinc-400">Page {Math.min(page, totalPages)} of {totalPages}</span>
+            <button type="button" disabled={page >= totalPages} onClick={() => changePage(page + 1)} className="rounded-lg p-1.5 text-zinc-400 hover:bg-zinc-800 hover:text-white disabled:opacity-30"><span className="material-symbols-outlined text-[18px]">chevron_right</span></button>
+          </div>
+        </footer>
+      </section>
+
+      {selectedReview && (
+        <aside className="fixed bottom-4 left-4 right-4 z-50 md:left-auto md:w-[36rem]" aria-label="Reply suggestion">
+          <div className="flex max-h-[calc(100vh-6rem)] flex-col gap-4 overflow-y-auto rounded-2xl border border-zinc-700 bg-zinc-900/95 p-5 shadow-2xl backdrop-blur-xl">
+            <div className="flex items-start justify-between gap-3">
+              <div><div className="font-semibold text-zinc-100">Reply suggestion</div><div className="mt-0.5 text-xs text-zinc-500">For {selectedReview.platform} · {selectedReview.rating}★</div></div>
+              <button type="button" onClick={() => setSelectedReview(null)} className="rounded-lg p-1 text-zinc-500 hover:bg-zinc-800 hover:text-white" aria-label="Close reply"><span className="material-symbols-outlined text-[18px]">close</span></button>
             </div>
-            {/* Main Data Table Container */}
-            <div className="px-space-lg py-space-xs">
-              <div className="w-full rounded-xl bg-surface-container-lowest overflow-hidden shadow-lg flex flex-col">
-                {/* Table Header */}
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left border-collapse">
-                    <thead>
-                      <tr className="bg-surface-container-low text-on-surface-variant font-label-caps text-label-caps uppercase tracking-wider">
-                        <th className="py-3 px-space-sm w-10 text-center">
-                          <input
-                            className="w-3.5 h-3.5 rounded bg-surface-container-lowest accent-primary"
-                            type="checkbox"
-                          />
-                        </th>
-                        <th className="py-3 px-space-sm min-w-[180px]">
-                          Reviewer &amp; Platform
-                        </th>
-                        <th className="py-3 px-space-sm min-w-[140px]">
-                          Rating / Sentiment
-                        </th>
-                        <th className="py-3 px-space-sm min-w-[360px]">
-                          Feedback &amp; Content Insights
-                        </th>
-                        <th className="py-3 px-space-sm min-w-[120px]">
-                          Version / Date
-                        </th>
-                        <th className="py-3 px-space-sm min-w-[170px]">
-                          AI Taxonomy &amp; Cluster
-                        </th>
-                        <th className="py-3 px-space-sm min-w-[130px]">
-                          Triage Status
-                        </th>
-                        <th className="py-3 px-space-sm text-right min-w-[130px]">
-                          Quick Actions
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-surface-container font-body-sm text-body-sm text-on-surface">
-                      {/* ROW 1: Alex K. (Critical Crash) - ACTIVE / SELECTED ITEM */}
-                      <tr
-                        className="bg-surface-container-high/40 hover:bg-surface-container-high transition-colors group cursor-pointer"
-                        onClick={() => console.log('openCopilotDrawer', 'Alex K.', 'Crash on RAW upload', 'Frequent crashes on iOS 17.4 when uploading large raw files. Please patch ASAP.', 'iOS 17.4', 'v2.4.0')}
-                      >
-                        <td
-                          className="py-3.5 px-space-sm text-center"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <input
-                            checked=""
-                            className="w-3.5 h-3.5 rounded bg-surface-container-lowest accent-primary"
-                            type="checkbox"
-                          />
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex items-center gap-space-xs">
-                            <div className="w-7 h-7 rounded-full bg-error-container text-error flex items-center justify-center font-bold text-body-sm">
-                              AK
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="font-medium text-on-surface">
-                                Alex K.
-                              </span>
-                              <span className="font-label-caps text-[10px] text-on-surface-variant flex items-center gap-1">
-                                <span className="material-symbols-outlined text-[13px] text-on-surface">
-                                  phone_iphone
-                                </span>
-                                App Store · US
-                              </span>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex flex-col gap-1">
-                            <div
-                              className="flex text-error"
-                              title="1 out of 5 stars"
-                            >
-                              <span
-                                className="material-symbols-outlined text-[15px]"
-                                style={{ fontVariationSettings: "'FILL' 1" }}
-                              >
-                                star
-                              </span>
-                              <span className="material-symbols-outlined text-[15px] opacity-20">
-                                star
-                              </span>
-                              <span className="material-symbols-outlined text-[15px] opacity-20">
-                                star
-                              </span>
-                              <span className="material-symbols-outlined text-[15px] opacity-20">
-                                star
-                              </span>
-                              <span className="material-symbols-outlined text-[15px] opacity-20">
-                                star
-                              </span>
-                            </div>
-                            <span className="inline-flex items-center gap-1 font-label-caps text-[10px] text-error font-semibold">
-                              <span className="w-1.5 h-1.5 rounded-full bg-error animate-ping"></span>
-                              Severe Negative
-                            </span>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex flex-col gap-0.5 max-w-xl">
-                            <span className="font-title-md text-[13px] font-semibold text-on-surface">
-                              App crash loop with RAW camera assets
-                            </span>
-                            <p className="text-on-surface-variant line-clamp-2">
-                              "Frequent crashes on{" "}
-                              <mark className="bg-error/20 text-error px-1 rounded">
-                                iOS 17.4
-                              </mark>{" "}
-                              when uploading{" "}
-                              <mark className="bg-error/20 text-error px-1 rounded">
-                                large raw files
-                              </mark>
-                              . Please patch ASAP. Completely broken for client
-                              shoots."
-                            </p>
-                            <div className="flex items-center gap-space-xs mt-1">
-                              <span className="px-1.5 py-0.5 rounded bg-error/15 text-error font-mono-metric text-[10px] uppercase font-bold tracking-wider">
-                                #Crash
-                              </span>
-                              <span className="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-mono-metric text-[10px]">
-                                #MemoryLeak
-                              </span>
-                              <span className="px-1.5 py-0.5 rounded bg-primary-container/20 text-primary font-mono-metric text-[10px] flex items-center gap-0.5">
-                                <span className="material-symbols-outlined text-[11px]">
-                                  bolt
-                                </span>
-                                AI Draft Ready
-                              </span>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm font-mono-metric text-mono-metric text-on-surface-variant">
-                          <div className="flex flex-col">
-                            <span className="text-on-surface font-semibold">
-                              v2.4.0 (b490)
-                            </span>
-                            <span className="text-[11px]">14 mins ago</span>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex flex-col gap-1">
-                            <span className="px-2 py-0.5 rounded bg-surface-container text-tertiary font-body-sm text-[11px] font-medium w-fit">
-                              Stability · Upload Pipeline
-                            </span>
-                            <span className="font-label-caps text-[10px] text-on-surface-variant">
-                              Cluster: #ERR-RAW-408
-                            </span>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <span className="px-2 py-1 rounded-full bg-error-container/30 text-error font-mono-metric text-[10px] font-bold uppercase inline-flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-error"></span>
-                            Needs Reply
-                          </span>
-                        </td>
-                        <td
-                          className="py-3.5 px-space-sm text-right"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <div className="flex items-center justify-end gap-1">
-                            <button
-                              className="p-1.5 rounded-lg bg-primary-container text-on-primary-container hover:bg-primary transition-colors"
-                              title="Quick Copilot Reply"
-                            >
-                              <span className="material-symbols-outlined text-[16px]">
-                                reply
-                              </span>
-                            </button>
-                            <button
-                              className="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors"
-                              title="Escalate Jira"
-                            >
-                              <span className="material-symbols-outlined text-[16px]">
-                                rocket_launch
-                              </span>
-                            </button>
-                            <button className="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors">
-                              <span className="material-symbols-outlined text-[16px]">
-                                more_vert
-                              </span>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                      {/* ROW 2: Sarah M. (Delight / 5 Stars) */}
-                      <tr
-                        className="hover:bg-surface-container transition-colors group cursor-pointer"
-                        onClick={() => console.log('openCopilotDrawer', 'Sarah M.', 'Export speed delight', 'The new export feature saved our team hours of manual reporting. Flawless update!', 'iOS 17.3', 'v2.4.0')}
-                      >
-                        <td
-                          className="py-3.5 px-space-sm text-center"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <input
-                            className="w-3.5 h-3.5 rounded bg-surface-container-lowest accent-primary"
-                            type="checkbox"
-                          />
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex items-center gap-space-xs">
-                            <div className="w-7 h-7 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center font-bold text-body-sm">
-                              SM
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="font-medium text-on-surface">
-                                Sarah M.
-                              </span>
-                              <span className="font-label-caps text-[10px] text-on-surface-variant flex items-center gap-1">
-                                <span className="material-symbols-outlined text-[13px] text-on-surface">
-                                  phone_iphone
-                                </span>
-                                App Store · UK
-                              </span>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex flex-col gap-1">
-                            <div
-                              className="flex text-tertiary"
-                              title="5 out of 5 stars"
-                            >
-                              <span
-                                className="material-symbols-outlined text-[15px]"
-                                style={{ fontVariationSettings: "'FILL' 1" }}
-                              >
-                                star
-                              </span>
-                              <span
-                                className="material-symbols-outlined text-[15px]"
-                                style={{ fontVariationSettings: "'FILL' 1" }}
-                              >
-                                star
-                              </span>
-                              <span
-                                className="material-symbols-outlined text-[15px]"
-                                style={{ fontVariationSettings: "'FILL' 1" }}
-                              >
-                                star
-                              </span>
-                              <span
-                                className="material-symbols-outlined text-[15px]"
-                                style={{ fontVariationSettings: "'FILL' 1" }}
-                              >
-                                star
-                              </span>
-                              <span
-                                className="material-symbols-outlined text-[15px]"
-                                style={{ fontVariationSettings: "'FILL' 1" }}
-                              >
-                                star
-                              </span>
-                            </div>
-                            <span className="inline-flex items-center gap-1 font-label-caps text-[10px] text-tertiary font-semibold">
-                              High Delight (+0.94)
-                            </span>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex flex-col gap-0.5 max-w-xl">
-                            <span className="font-title-md text-[13px] font-semibold text-on-surface">
-                              Flawless update - reporting workflow transformed
-                            </span>
-                            <p className="text-on-surface-variant line-clamp-2">
-                              "The new{" "}
-                              <mark className="bg-tertiary/20 text-tertiary px-1 rounded">
-                                export feature
-                              </mark>{" "}
-                              saved our team hours of manual reporting. Flawless
-                              update! Loving the real-time CSV generators."
-                            </p>
-                            <div className="flex items-center gap-space-xs mt-1">
-                              <span className="px-1.5 py-0.5 rounded bg-tertiary/15 text-tertiary font-mono-metric text-[10px] uppercase font-bold">
-                                #FeaturePraise
-                              </span>
-                              <span className="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-mono-metric text-[10px]">
-                                #UXVelocity
-                              </span>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm font-mono-metric text-mono-metric text-on-surface-variant">
-                          <div className="flex flex-col">
-                            <span className="text-on-surface font-semibold">
-                              v2.4.0
-                            </span>
-                            <span className="text-[11px]">1 hr ago</span>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex flex-col gap-1">
-                            <span className="px-2 py-0.5 rounded bg-surface-container text-on-surface font-body-sm text-[11px] font-medium w-fit">
-                              Reporting &amp; Data Out
-                            </span>
-                            <span className="font-label-caps text-[10px] text-on-surface-variant">
-                              Cluster: #EXPO-PRAISE
-                            </span>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <span className="px-2 py-1 rounded-full bg-surface-container text-tertiary font-mono-metric text-[10px] font-bold uppercase inline-flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
-                            Reviewed
-                          </span>
-                        </td>
-                        <td
-                          className="py-3.5 px-space-sm text-right"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <div className="flex items-center justify-end gap-1">
-                            <button
-                              className="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors"
-                              title="Thank Reviewer"
-                            >
-                              <span className="material-symbols-outlined text-[16px]">
-                                favorite
-                              </span>
-                            </button>
-                            <button className="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors">
-                              <span className="material-symbols-outlined text-[16px]">
-                                more_vert
-                              </span>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                      {/* ROW 3: Daniel R. (Constructive Feature Request) */}
-                      <tr
-                        className="hover:bg-surface-container transition-colors group cursor-pointer"
-                        onClick={() => console.log('openCopilotDrawer', 'Daniel R.', 'Keyboard shortcuts inquiry', 'Love the interface fluidity, but really hoping for keyboard shortcuts in the next minor release.', 'Android 14', 'v2.3.9')}
-                      >
-                        <td
-                          className="py-3.5 px-space-sm text-center"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <input
-                            className="w-3.5 h-3.5 rounded bg-surface-container-lowest accent-primary"
-                            type="checkbox"
-                          />
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex items-center gap-space-xs">
-                            <div className="w-7 h-7 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center font-bold text-body-sm">
-                              DR
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="font-medium text-on-surface">
-                                Daniel R.
-                              </span>
-                              <span className="font-label-caps text-[10px] text-on-surface-variant flex items-center gap-1">
-                                <span className="material-symbols-outlined text-[13px] text-secondary">
-                                  android
-                                </span>
-                                Google Play · DE
-                              </span>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex flex-col gap-1">
-                            <div
-                              className="flex text-primary"
-                              title="4 out of 5 stars"
-                            >
-                              <span
-                                className="material-symbols-outlined text-[15px]"
-                                style={{ fontVariationSettings: "'FILL' 1" }}
-                              >
-                                star
-                              </span>
-                              <span
-                                className="material-symbols-outlined text-[15px]"
-                                style={{ fontVariationSettings: "'FILL' 1" }}
-                              >
-                                star
-                              </span>
-                              <span
-                                className="material-symbols-outlined text-[15px]"
-                                style={{ fontVariationSettings: "'FILL' 1" }}
-                              >
-                                star
-                              </span>
-                              <span
-                                className="material-symbols-outlined text-[15px]"
-                                style={{ fontVariationSettings: "'FILL' 1" }}
-                              >
-                                star
-                              </span>
-                              <span className="material-symbols-outlined text-[15px] opacity-20">
-                                star
-                              </span>
-                            </div>
-                            <span className="inline-flex items-center gap-1 font-label-caps text-[10px] text-primary font-semibold">
-                              Positive Constructive
-                            </span>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex flex-col gap-0.5 max-w-xl">
-                            <span className="font-title-md text-[13px] font-semibold text-on-surface">
-                              Fluid UI, awaiting hardware keyboard bindings
-                            </span>
-                            <p className="text-on-surface-variant line-clamp-2">
-                              "Love the interface fluidity, but really hoping
-                              for{" "}
-                              <mark className="bg-primary/20 text-primary px-1 rounded">
-                                keyboard shortcuts
-                              </mark>{" "}
-                              in the next minor release when used on tablets."
-                            </p>
-                            <div className="flex items-center gap-space-xs mt-1">
-                              <span className="px-1.5 py-0.5 rounded bg-primary-container/20 text-primary font-mono-metric text-[10px] uppercase font-bold">
-                                #FeatureRequest
-                              </span>
-                              <span className="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-mono-metric text-[10px]">
-                                #TabletUX
-                              </span>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm font-mono-metric text-mono-metric text-on-surface-variant">
-                          <div className="flex flex-col">
-                            <span className="text-on-surface font-semibold">
-                              v2.3.9
-                            </span>
-                            <span className="text-[11px]">3 hrs ago</span>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex flex-col gap-1">
-                            <span className="px-2 py-0.5 rounded bg-surface-container text-on-surface font-body-sm text-[11px] font-medium w-fit">
-                              Platform · Input Methods
-                            </span>
-                            <span className="font-label-caps text-[10px] text-on-surface-variant">
-                              Cluster: #REQ-HOTKEYS
-                            </span>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <span className="px-2 py-1 rounded-full bg-surface-container text-on-surface-variant font-mono-metric text-[10px] font-bold uppercase inline-flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-on-surface-variant"></span>
-                            Pending
-                          </span>
-                        </td>
-                        <td
-                          className="py-3.5 px-space-sm text-right"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <div className="flex items-center justify-end gap-1">
-                            <button
-                              className="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors"
-                              title="Quick Reply"
-                            >
-                              <span className="material-symbols-outlined text-[16px]">
-                                reply
-                              </span>
-                            </button>
-                            <button
-                              className="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors"
-                              title="Push to Backlog"
-                            >
-                              <span className="material-symbols-outlined text-[16px]">
-                                bookmark_add
-                              </span>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                      {/* ROW 4: Elena Rostova (Battery Performance issue) */}
-                      <tr
-                        className="hover:bg-surface-container transition-colors group cursor-pointer"
-                        onClick={() => console.log('openCopilotDrawer', 'Elena Rostova', 'Battery Drain 5G', 'High battery consumption during background sync over 5G. Drains 25% an hour.', 'Android 14', 'v2.4.0')}
-                      >
-                        <td
-                          className="py-3.5 px-space-sm text-center"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <input
-                            className="w-3.5 h-3.5 rounded bg-surface-container-lowest accent-primary"
-                            type="checkbox"
-                          />
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex items-center gap-space-xs">
-                            <div className="w-7 h-7 rounded-full bg-surface-container-high text-secondary flex items-center justify-center font-bold text-body-sm">
-                              ER
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="font-medium text-on-surface">
-                                Elena Rostova
-                              </span>
-                              <span className="font-label-caps text-[10px] text-on-surface-variant flex items-center gap-1">
-                                <span className="material-symbols-outlined text-[13px] text-secondary">
-                                  android
-                                </span>
-                                Google Play · CA
-                              </span>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex flex-col gap-1">
-                            <div
-                              className="flex text-secondary-container"
-                              title="2 out of 5 stars"
-                            >
-                              <span
-                                className="material-symbols-outlined text-[15px]"
-                                style={{ fontVariationSettings: "'FILL' 1" }}
-                              >
-                                star
-                              </span>
-                              <span
-                                className="material-symbols-outlined text-[15px]"
-                                style={{ fontVariationSettings: "'FILL' 1" }}
-                              >
-                                star
-                              </span>
-                              <span className="material-symbols-outlined text-[15px] opacity-20">
-                                star
-                              </span>
-                              <span className="material-symbols-outlined text-[15px] opacity-20">
-                                star
-                              </span>
-                              <span className="material-symbols-outlined text-[15px] opacity-20">
-                                star
-                              </span>
-                            </div>
-                            <span className="inline-flex items-center gap-1 font-label-caps text-[10px] text-secondary-container font-semibold">
-                              Negative / Bug
-                            </span>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex flex-col gap-0.5 max-w-xl">
-                            <span className="font-title-md text-[13px] font-semibold text-on-surface">
-                              Extreme battery depletion in standby
-                            </span>
-                            <p className="text-on-surface-variant line-clamp-2">
-                              "High{" "}
-                              <mark className="bg-secondary/20 text-secondary px-1 rounded">
-                                battery consumption
-                              </mark>{" "}
-                              during{" "}
-                              <mark className="bg-secondary/20 text-secondary px-1 rounded">
-                                background sync over 5G
-                              </mark>
-                              . Dropped 28% in 90 minutes without screen on."
-                            </p>
-                            <div className="flex items-center gap-space-xs mt-1">
-                              <span className="px-1.5 py-0.5 rounded bg-secondary/15 text-secondary font-mono-metric text-[10px] uppercase font-bold">
-                                #Performance
-                              </span>
-                              <span className="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-mono-metric text-[10px]">
-                                #BatteryDrain
-                              </span>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm font-mono-metric text-mono-metric text-on-surface-variant">
-                          <div className="flex flex-col">
-                            <span className="text-on-surface font-semibold">
-                              v2.4.0
-                            </span>
-                            <span className="text-[11px]">4 hrs ago</span>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex flex-col gap-1">
-                            <span className="px-2 py-0.5 rounded bg-surface-container text-secondary font-body-sm text-[11px] font-medium w-fit">
-                              Core · Power &amp; Networking
-                            </span>
-                            <span className="font-label-caps text-[10px] text-on-surface-variant">
-                              Cluster: #SYS-DRAIN-5G
-                            </span>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <span className="px-2 py-1 rounded-full bg-secondary-container/20 text-on-secondary-container font-mono-metric text-[10px] font-bold uppercase inline-flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-secondary"></span>
-                            Flagged for QA
-                          </span>
-                        </td>
-                        <td
-                          className="py-3.5 px-space-sm text-right"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <div className="flex items-center justify-end gap-1">
-                            <button
-                              className="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors"
-                              title="Create Jira Bug"
-                            >
-                              <span className="material-symbols-outlined text-[16px]">
-                                bug_report
-                              </span>
-                            </button>
-                            <button className="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors">
-                              <span className="material-symbols-outlined text-[16px]">
-                                more_vert
-                              </span>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                      {/* ROW 5: Marcus Vance (Praise / AI Model) */}
-                      <tr
-                        className="hover:bg-surface-container transition-colors group cursor-pointer"
-                        onClick={() => console.log('openCopilotDrawer', 'Marcus Vance', 'AI Categorization Delight', 'Best update this year. The AI categorization accuracy is uncanny.', 'iOS 17.4', 'v2.4.0')}
-                      >
-                        <td
-                          className="py-3.5 px-space-sm text-center"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <input
-                            className="w-3.5 h-3.5 rounded bg-surface-container-lowest accent-primary"
-                            type="checkbox"
-                          />
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex items-center gap-space-xs">
-                            <div className="w-7 h-7 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-body-sm">
-                              MV
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="font-medium text-on-surface">
-                                Marcus Vance
-                              </span>
-                              <span className="font-label-caps text-[10px] text-on-surface-variant flex items-center gap-1">
-                                <span className="material-symbols-outlined text-[13px] text-on-surface">
-                                  phone_iphone
-                                </span>
-                                App Store · US
-                              </span>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex flex-col gap-1">
-                            <div
-                              className="flex text-tertiary"
-                              title="5 out of 5 stars"
-                            >
-                              <span
-                                className="material-symbols-outlined text-[15px]"
-                                style={{ fontVariationSettings: "'FILL' 1" }}
-                              >
-                                star
-                              </span>
-                              <span
-                                className="material-symbols-outlined text-[15px]"
-                                style={{ fontVariationSettings: "'FILL' 1" }}
-                              >
-                                star
-                              </span>
-                              <span
-                                className="material-symbols-outlined text-[15px]"
-                                style={{ fontVariationSettings: "'FILL' 1" }}
-                              >
-                                star
-                              </span>
-                              <span
-                                className="material-symbols-outlined text-[15px]"
-                                style={{ fontVariationSettings: "'FILL' 1" }}
-                              >
-                                star
-                              </span>
-                              <span
-                                className="material-symbols-outlined text-[15px]"
-                                style={{ fontVariationSettings: "'FILL' 1" }}
-                              >
-                                star
-                              </span>
-                            </div>
-                            <span className="inline-flex items-center gap-1 font-label-caps text-[10px] text-tertiary font-semibold">
-                              Promoter (+0.98)
-                            </span>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex flex-col gap-0.5 max-w-xl">
-                            <span className="font-title-md text-[13px] font-semibold text-on-surface">
-                              Best release this fiscal quarter
-                            </span>
-                            <p className="text-on-surface-variant line-clamp-2">
-                              "Best update this year. The{" "}
-                              <mark className="bg-tertiary/20 text-tertiary px-1 rounded">
-                                AI categorization accuracy
-                              </mark>{" "}
-                              is uncanny. It tagged hundreds of ambiguous
-                              feedback notes in minutes."
-                            </p>
-                            <div className="flex items-center gap-space-xs mt-1">
-                              <span className="px-1.5 py-0.5 rounded bg-tertiary/15 text-tertiary font-mono-metric text-[10px] uppercase font-bold">
-                                #Praise
-                              </span>
-                              <span className="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-mono-metric text-[10px]">
-                                #NLPQuality
-                              </span>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm font-mono-metric text-mono-metric text-on-surface-variant">
-                          <div className="flex flex-col">
-                            <span className="text-on-surface font-semibold">
-                              v2.4.0
-                            </span>
-                            <span className="text-[11px]">5 hrs ago</span>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex flex-col gap-1">
-                            <span className="px-2 py-0.5 rounded bg-surface-container text-tertiary font-body-sm text-[11px] font-medium w-fit">
-                              Intelligence · Tagging
-                            </span>
-                            <span className="font-label-caps text-[10px] text-on-surface-variant">
-                              Cluster: #AI-ACCURACY
-                            </span>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <span className="px-2 py-1 rounded-full bg-surface-container text-tertiary font-mono-metric text-[10px] font-bold uppercase inline-flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
-                            Reviewed
-                          </span>
-                        </td>
-                        <td
-                          className="py-3.5 px-space-sm text-right"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <div className="flex items-center justify-end gap-1">
-                            <button className="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors">
-                              <span className="material-symbols-outlined text-[16px]">
-                                more_vert
-                              </span>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                      {/* ROW 6: Chloe Bennett (Billing / Urgent P0) */}
-                      <tr
-                        className="hover:bg-surface-container transition-colors group cursor-pointer"
-                        onClick={() => console.log('openCopilotDrawer', 'Chloe Bennett', 'Double Charge on Renewal', 'Charged twice during subscription renewal. Support ticket #9921 unanswered.', 'iOS 17.3', 'v2.4.0')}
-                      >
-                        <td
-                          className="py-3.5 px-space-sm text-center"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <input
-                            className="w-3.5 h-3.5 rounded bg-surface-container-lowest accent-primary"
-                            type="checkbox"
-                          />
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex items-center gap-space-xs">
-                            <div className="w-7 h-7 rounded-full bg-error-container text-error flex items-center justify-center font-bold text-body-sm">
-                              CB
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="font-medium text-on-surface">
-                                Chloe Bennett
-                              </span>
-                              <span className="font-label-caps text-[10px] text-on-surface-variant flex items-center gap-1">
-                                <span className="material-symbols-outlined text-[13px] text-on-surface">
-                                  phone_iphone
-                                </span>
-                                App Store · AU
-                              </span>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex flex-col gap-1">
-                            <div
-                              className="flex text-error"
-                              title="1 out of 5 stars"
-                            >
-                              <span
-                                className="material-symbols-outlined text-[15px]"
-                                style={{ fontVariationSettings: "'FILL' 1" }}
-                              >
-                                star
-                              </span>
-                              <span className="material-symbols-outlined text-[15px] opacity-20">
-                                star
-                              </span>
-                              <span className="material-symbols-outlined text-[15px] opacity-20">
-                                star
-                              </span>
-                              <span className="material-symbols-outlined text-[15px] opacity-20">
-                                star
-                              </span>
-                              <span className="material-symbols-outlined text-[15px] opacity-20">
-                                star
-                              </span>
-                            </div>
-                            <span className="inline-flex items-center gap-1 font-label-caps text-[10px] text-error font-semibold">
-                              Churn Risk · Churn-High
-                            </span>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex flex-col gap-0.5 max-w-xl">
-                            <span className="font-title-md text-[13px] font-semibold text-on-surface">
-                              Double billed on annual renewal with zero reply
-                            </span>
-                            <p className="text-on-surface-variant line-clamp-2">
-                              "
-                              <mark className="bg-error/20 text-error px-1 rounded">
-                                Charged twice
-                              </mark>{" "}
-                              during subscription renewal. Support ticket{" "}
-                              <span className="underline text-primary">
-                                #9921
-                              </span>{" "}
-                              unanswered for 48 hours. Fix immediately."
-                            </p>
-                            <div className="flex items-center gap-space-xs mt-1">
-                              <span className="px-1.5 py-0.5 rounded bg-error/15 text-error font-mono-metric text-[10px] uppercase font-bold">
-                                #Billing
-                              </span>
-                              <span className="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-mono-metric text-[10px]">
-                                #RevenueCritical
-                              </span>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm font-mono-metric text-mono-metric text-on-surface-variant">
-                          <div className="flex flex-col">
-                            <span className="text-on-surface font-semibold">
-                              v2.4.0
-                            </span>
-                            <span className="text-[11px]">7 hrs ago</span>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex flex-col gap-1">
-                            <span className="px-2 py-0.5 rounded bg-surface-container text-error font-body-sm text-[11px] font-medium w-fit">
-                              Commerce · In-App Subscriptions
-                            </span>
-                            <span className="font-label-caps text-[10px] text-on-surface-variant">
-                              Cluster: #BILLING-RENEWAL
-                            </span>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <span className="px-2 py-1 rounded-full bg-error-container/40 text-error font-mono-metric text-[10px] font-bold uppercase inline-flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-error"></span>
-                            Escalated
-                          </span>
-                        </td>
-                        <td
-                          className="py-3.5 px-space-sm text-right"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <div className="flex items-center justify-end gap-1">
-                            <button
-                              className="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors"
-                              title="Lookup Stripe Invoice"
-                            >
-                              <span className="material-symbols-outlined text-[16px]">
-                                receipt_long
-                              </span>
-                            </button>
-                            <button className="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors">
-                              <span className="material-symbols-outlined text-[16px]">
-                                more_vert
-                              </span>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                      {/* ROW 7: Liam O'Connor (UX Ergonomics) */}
-                      <tr
-                        className="hover:bg-surface-container transition-colors group cursor-pointer"
-                        onClick={() => console.log('openCopilotDrawer', 'Liam O\'Connor', 'Navigation ergonomics', 'New navigation tab is harder to reach with one hand on Pixel 8 Pro.', 'Android 14', 'v2.3.8')}
-                      >
-                        <td
-                          className="py-3.5 px-space-sm text-center"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <input
-                            className="w-3.5 h-3.5 rounded bg-surface-container-lowest accent-primary"
-                            type="checkbox"
-                          />
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex items-center gap-space-xs">
-                            <div className="w-7 h-7 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center font-bold text-body-sm">
-                              LO
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="font-medium text-on-surface">
-                                Liam O'Connor
-                              </span>
-                              <span className="font-label-caps text-[10px] text-on-surface-variant flex items-center gap-1">
-                                <span className="material-symbols-outlined text-[13px] text-secondary">
-                                  android
-                                </span>
-                                Google Play · IE
-                              </span>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex flex-col gap-1">
-                            <div
-                              className="flex text-on-surface-variant"
-                              title="3 out of 5 stars"
-                            >
-                              <span
-                                className="material-symbols-outlined text-[15px] text-primary"
-                                style={{ fontVariationSettings: "'FILL' 1" }}
-                              >
-                                star
-                              </span>
-                              <span
-                                className="material-symbols-outlined text-[15px] text-primary"
-                                style={{ fontVariationSettings: "'FILL' 1" }}
-                              >
-                                star
-                              </span>
-                              <span
-                                className="material-symbols-outlined text-[15px] text-primary"
-                                style={{ fontVariationSettings: "'FILL' 1" }}
-                              >
-                                star
-                              </span>
-                              <span className="material-symbols-outlined text-[15px] opacity-20">
-                                star
-                              </span>
-                              <span className="material-symbols-outlined text-[15px] opacity-20">
-                                star
-                              </span>
-                            </div>
-                            <span className="inline-flex items-center gap-1 font-label-caps text-[10px] text-on-surface-variant font-semibold">
-                              Mixed Neutral
-                            </span>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex flex-col gap-0.5 max-w-xl">
-                            <span className="font-title-md text-[13px] font-semibold text-on-surface">
-                              Reachability issue on large display flagships
-                            </span>
-                            <p className="text-on-surface-variant line-clamp-2">
-                              "New{" "}
-                              <mark className="bg-surface-variant text-on-surface px-1 rounded">
-                                navigation tab
-                              </mark>{" "}
-                              is harder to reach with one hand on Pixel 8 Pro.
-                              Preferred the old bottom bar arrangement."
-                            </p>
-                            <div className="flex items-center gap-space-xs mt-1">
-                              <span className="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface font-mono-metric text-[10px] uppercase font-bold">
-                                #UXDesign
-                              </span>
-                              <span className="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-mono-metric text-[10px]">
-                                #ThumbZone
-                              </span>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm font-mono-metric text-mono-metric text-on-surface-variant">
-                          <div className="flex flex-col">
-                            <span className="text-on-surface font-semibold">
-                              v2.3.8
-                            </span>
-                            <span className="text-[11px]">8 hrs ago</span>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex flex-col gap-1">
-                            <span className="px-2 py-0.5 rounded bg-surface-container text-on-surface font-body-sm text-[11px] font-medium w-fit">
-                              Interface · Navigation
-                            </span>
-                            <span className="font-label-caps text-[10px] text-on-surface-variant">
-                              Cluster: #UI-REACHABILITY
-                            </span>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <span className="px-2 py-1 rounded-full bg-primary-container/20 text-primary font-mono-metric text-[10px] font-bold uppercase inline-flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
-                            In Progress
-                          </span>
-                        </td>
-                        <td
-                          className="py-3.5 px-space-sm text-right"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <div className="flex items-center justify-end gap-1">
-                            <button
-                              className="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors"
-                              title="Quick Reply"
-                            >
-                              <span className="material-symbols-outlined text-[16px]">
-                                reply
-                              </span>
-                            </button>
-                            <button className="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors">
-                              <span className="material-symbols-outlined text-[16px]">
-                                more_vert
-                              </span>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                      {/* ROW 8: Priya Patel (Enterprise Standup Integration) */}
-                      <tr
-                        className="hover:bg-surface-container transition-colors group cursor-pointer"
-                        onClick={() => console.log('openCopilotDrawer', 'Priya Patel', 'Daily Standup Fit', 'Integrated into our daily standup review triage seamlessly. High productivity boost.', 'iOS 17.4', 'v2.4.0')}
-                      >
-                        <td
-                          className="py-3.5 px-space-sm text-center"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <input
-                            className="w-3.5 h-3.5 rounded bg-surface-container-lowest accent-primary"
-                            type="checkbox"
-                          />
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex items-center gap-space-xs">
-                            <div className="w-7 h-7 rounded-full bg-surface-container-high text-tertiary flex items-center justify-center font-bold text-body-sm">
-                              PP
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="font-medium text-on-surface">
-                                Priya Patel
-                              </span>
-                              <span className="font-label-caps text-[10px] text-on-surface-variant flex items-center gap-1">
-                                <span className="material-symbols-outlined text-[13px] text-on-surface">
-                                  phone_iphone
-                                </span>
-                                App Store · IN
-                              </span>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex flex-col gap-1">
-                            <div
-                              className="flex text-tertiary"
-                              title="5 out of 5 stars"
-                            >
-                              <span
-                                className="material-symbols-outlined text-[15px]"
-                                style={{ fontVariationSettings: "'FILL' 1" }}
-                              >
-                                star
-                              </span>
-                              <span
-                                className="material-symbols-outlined text-[15px]"
-                                style={{ fontVariationSettings: "'FILL' 1" }}
-                              >
-                                star
-                              </span>
-                              <span
-                                className="material-symbols-outlined text-[15px]"
-                                style={{ fontVariationSettings: "'FILL' 1" }}
-                              >
-                                star
-                              </span>
-                              <span
-                                className="material-symbols-outlined text-[15px]"
-                                style={{ fontVariationSettings: "'FILL' 1" }}
-                              >
-                                star
-                              </span>
-                              <span
-                                className="material-symbols-outlined text-[15px]"
-                                style={{ fontVariationSettings: "'FILL' 1" }}
-                              >
-                                star
-                              </span>
-                            </div>
-                            <span className="inline-flex items-center gap-1 font-label-caps text-[10px] text-tertiary font-semibold">
-                              Advocate (+0.96)
-                            </span>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex flex-col gap-0.5 max-w-xl">
-                            <span className="font-title-md text-[13px] font-semibold text-on-surface">
-                              Essential tool for cross-functional sprint reviews
-                            </span>
-                            <p className="text-on-surface-variant line-clamp-2">
-                              "Integrated into our{" "}
-                              <mark className="bg-tertiary/20 text-tertiary px-1 rounded">
-                                daily standup review triage
-                              </mark>{" "}
-                              seamlessly. Our product managers cut backlog
-                              grooming in half."
-                            </p>
-                            <div className="flex items-center gap-space-xs mt-1">
-                              <span className="px-1.5 py-0.5 rounded bg-tertiary/15 text-tertiary font-mono-metric text-[10px] uppercase font-bold">
-                                #Workflow
-                              </span>
-                              <span className="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-mono-metric text-[10px]">
-                                #Enterprise
-                              </span>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm font-mono-metric text-mono-metric text-on-surface-variant">
-                          <div className="flex flex-col">
-                            <span className="text-on-surface font-semibold">
-                              v2.4.0
-                            </span>
-                            <span className="text-[11px]">11 hrs ago</span>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <div className="flex flex-col gap-1">
-                            <span className="px-2 py-0.5 rounded bg-surface-container text-tertiary font-body-sm text-[11px] font-medium w-fit">
-                              Team · Collaboration
-                            </span>
-                            <span className="font-label-caps text-[10px] text-on-surface-variant">
-                              Cluster: #STANDUP-TRIAGE
-                            </span>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-space-sm">
-                          <span className="px-2 py-1 rounded-full bg-surface-container text-tertiary font-mono-metric text-[10px] font-bold uppercase inline-flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
-                            Reviewed
-                          </span>
-                        </td>
-                        <td
-                          className="py-3.5 px-space-sm text-right"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <div className="flex items-center justify-end gap-1">
-                            <button
-                              className="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors"
-                              title="Highlight Case Study"
-                            >
-                              <span className="material-symbols-outlined text-[16px]">
-                                grade
-                              </span>
-                            </button>
-                            <button className="p-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors">
-                              <span className="material-symbols-outlined text-[16px]">
-                                more_vert
-                              </span>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                {/* Pagination & Footer Strip */}
-                <div className="p-space-sm bg-surface-container-low flex flex-col md:flex-row items-center justify-between gap-space-sm">
-                  <div className="flex items-center gap-space-md">
-                    <span className="font-body-sm text-body-sm text-on-surface-variant">
-                      Showing{" "}
-                      <strong className="text-on-surface font-mono-metric">
-                        1 - 25
-                      </strong>{" "}
-                      of{" "}
-                      <strong className="text-on-surface font-mono-metric">
-                        24,648
-                      </strong>{" "}
-                      customer reviews
-                    </span>
-                    <div className="flex items-center gap-space-2xs">
-                      <span className="font-body-sm text-body-sm text-on-surface-variant">
-                        Rows per page:
-                      </span>
-                      <select className="bg-surface-container text-on-surface font-body-sm text-body-sm rounded-lg px-2 py-1 outline-none">
-                        <option>25</option>
-                        <option>50</option>
-                        <option>100</option>
-                      </select>
-                    </div>
-                  </div>
-                  {/* Page Selector Buttons */}
-                  <div className="flex items-center gap-1 font-mono-metric text-mono-metric">
-                    <button
-                      className="p-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface disabled:opacity-40 transition-colors"
-                      disabled=""
-                    >
-                      <span className="material-symbols-outlined text-[16px]">
-                        chevron_left
-                      </span>
-                    </button>
-                    <button className="w-7 h-7 rounded-lg bg-primary-container text-on-primary-container font-bold flex items-center justify-center">
-                      1
-                    </button>
-                    <button className="w-7 h-7 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors flex items-center justify-center">
-                      2
-                    </button>
-                    <button className="w-7 h-7 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors flex items-center justify-center">
-                      3
-                    </button>
-                    <span className="px-1 text-on-surface-variant">...</span>
-                    <button className="px-2 h-7 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors flex items-center justify-center">
-                      986
-                    </button>
-                    <button className="p-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors">
-                      <span className="material-symbols-outlined text-[16px]">
-                        chevron_right
-                      </span>
-                    </button>
-                  </div>
-                </div>
-              </div>
+            <blockquote className="line-clamp-3 rounded-lg border-l-2 border-indigo-500 bg-zinc-950/70 p-3 text-xs leading-relaxed text-zinc-400">{selectedReview.text}</blockquote>
+            <div className="flex gap-2">
+              {(['concise', 'formal'] as const).map((tone) => <button key={tone} type="button" disabled={draftMutation.isPending} onClick={() => regenerateDraft(tone)} className={`rounded-lg px-3 py-1.5 text-xs font-medium capitalize ${draftTone === tone ? 'bg-indigo-500/20 text-indigo-300' : 'bg-zinc-800 text-zinc-400 hover:text-white'}`}>{tone}</button>)}
             </div>
-            {/* Slide-Out / Interactive AI Copilot Quick-Reply Drawer */}
-            <div
-              className="fixed bottom-4 right-4 max-w-xl w-full z-50 transition-all transform translate-y-0"
-              id="copilot-drawer"
-            >
-              <div className="rounded-xl bg-surface-container-high shadow-2xl p-space-md flex flex-col gap-space-sm backdrop-blur-2xl">
-                {/* Drawer Header */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-space-xs">
-                    <div className="w-8 h-8 rounded-xl bg-primary-container text-on-primary-container flex items-center justify-center">
-                      <span className="material-symbols-outlined text-[18px]">
-                        psychology
-                      </span>
-                    </div>
-                    <div className="flex flex-col">
-                      <div className="flex items-center gap-space-2xs">
-                        <span
-                          className="font-title-md text-title-md text-on-surface font-semibold"
-                          id="drawer-reviewer-name"
-                        >
-                          AI Copilot Quick Reply
-                        </span>
-                        <span className="px-1.5 py-0.2 rounded bg-tertiary-container/30 text-tertiary font-mono-metric text-[10px] uppercase font-bold">
-                          Empathetic Tone
-                        </span>
-                      </div>
-                      <span
-                        className="font-label-caps text-label-caps text-on-surface-variant"
-                        id="drawer-context"
-                      >
-                        Triage Target: Alex K. (iOS 17.4 · v2.4.0)
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <button
-                      className="p-1 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors"
-                      onClick={() => { /* minimizeCopilotDrawer() */ }}
-                    >
-                      <span className="material-symbols-outlined text-[18px]">
-                        close
-                      </span>
-                    </button>
-                  </div>
-                </div>
-                {/* Synthesis Banner */}
-                <div className="p-space-xs rounded-lg bg-surface-container flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
-                  <span className="material-symbols-outlined text-primary text-[18px]">
-                    bolt
-                  </span>
-                  <span>
-                    Matching root-cause{" "}
-                    <strong className="text-on-surface font-mono-metric">
-                      #ERR-RAW-408
-                    </strong>{" "}
-                    (HEIC/RAW buffer overflow in iOS photo picker).
-                  </span>
-                </div>
-                {/* AI Draft Textarea */}
-                <div className="flex flex-col gap-1">
-                  <label className="font-label-caps text-label-caps text-on-surface-variant uppercase flex items-center justify-between">
-                    <span>
-                      Drafted Response (Friendly &amp; Empathetic Engineer)
-                    </span>
-                    <span className="text-tertiary font-mono-metric text-[11px]">
-                      99.2% confidence
-                    </span>
-                  </label>
-                  <div className="relative">
-                    <textarea
-                      className="w-full bg-surface-container-lowest text-on-surface p-space-sm rounded-lg font-body-sm text-body-sm outline-none resize-none"
-                      id="copilot-draft-text"
-                      rows="4"
-                    >
-                      Hi Alex, thanks for flagging this. Our iOS engineering
-                      team just isolated the memory spike on large RAW image
-                      uploads in v2.4.0. We have hotfix v2.4.1 in TestFlight
-                      today with the patched memory allocator. We would love to
-                      get you direct early access to verify it resolves your
-                      client workflow!
-                    </textarea>
-                    <div className="absolute bottom-2.5 right-2.5 flex items-center gap-1">
-                      <button
-                        className="px-2 py-0.5 rounded bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface font-mono-metric text-[10px]"
-                        title="Re-phrase shorter"
-                      >
-                        Concise
-                      </button>
-                      <button
-                        className="px-2 py-0.5 rounded bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface font-mono-metric text-[10px]"
-                        title="Re-phrase formal"
-                      >
-                        Formal
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                {/* Action Footer */}
-                <div className="flex items-center justify-between gap-space-xs pt-space-2xs flex-wrap">
-                  <div className="flex items-center gap-space-2xs">
-                    <button
-                      className="flex items-center gap-1 px-space-xs py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-highest text-on-surface font-body-sm text-body-sm transition-colors"
-                      onClick={() => { /* regenerateDraft() */ }}
-                    >
-                      <span className="material-symbols-outlined text-[16px] text-tertiary">
-                        autorenew
-                      </span>
-                      <span>Regenerate Draft</span>
-                    </button>
-                    <button className="flex items-center gap-1 px-space-xs py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-highest text-on-surface font-body-sm text-body-sm transition-colors">
-                      <span className="material-symbols-outlined text-[16px]">
-                        edit_note
-                      </span>
-                      <span>Edit Manually</span>
-                    </button>
-                  </div>
-                  <button
-                    className="flex items-center gap-space-xs px-space-md py-1.5 rounded-lg bg-primary-container hover:bg-primary text-on-primary-container font-body-sm text-body-sm font-semibold shadow-md transition-all"
-                    onClick={() => { /* sendApprovedReply() */ }}
-                  >
-                    <span className="material-symbols-outlined text-[16px]">
-                      send
-                    </span>
-                    <span>Approve &amp; Send to Store</span>
-                  </button>
-                </div>
-              </div>
+            <textarea value={draftText} onChange={(event) => setDraftText(event.target.value)} disabled={draftMutation.isPending} rows={6} placeholder={draftMutation.isPending ? 'Generating suggestion…' : 'Edit the reply before copying it.'} className="w-full resize-y rounded-xl border border-zinc-700 bg-zinc-950 p-3 text-sm leading-relaxed text-zinc-200 outline-none focus:border-indigo-500 disabled:opacity-60" />
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-xs text-zinc-500">Review and edit before publishing.</span>
+              <button type="button" disabled={!draftText || draftMutation.isPending} onClick={copyDraft} className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500 disabled:opacity-40"><span className="material-symbols-outlined text-[17px]">content_copy</span>Copy draft</button>
             </div>
-            {/* Micro-Interactions Script */}
-          </>
+          </div>
+        </aside>
+      )}
+    </main>
   );
 }
