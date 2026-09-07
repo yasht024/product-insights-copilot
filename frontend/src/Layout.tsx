@@ -108,7 +108,7 @@ export default function Layout() {
       </aside>
 
       {/* Main Content Area */}
-      <div className={`flex-1 flex flex-col min-h-screen transition-all duration-300 ${isSidebarOpen ? 'pl-sidebar-w' : 'pl-0'}`}>
+      <div className={`flex-1 flex flex-col min-h-screen transition-all duration-300 min-w-0 ${isSidebarOpen ? 'pl-sidebar-w' : 'pl-0'}`}>
         {/* Header */}
         <header className={`fixed top-0 right-0 h-16 bg-surface-container-lowest/80 backdrop-blur-xl z-40 shadow-[0_1px_8px_rgba(0,0,0,0.04)] transition-all duration-300 ${isSidebarOpen ? 'left-sidebar-w' : 'left-0'}`}>
           <div className="h-16 w-full px-space-lg flex items-center justify-between gap-space-md">
@@ -194,8 +194,8 @@ export default function Layout() {
           </div>
         </header>
 
-        <main className="w-full pt-16 bg-surface flex-1 flex flex-col">
-          <div className="flex flex-col w-full flex-1">
+        <main className="w-full pt-16 bg-surface flex-1 flex flex-col min-w-0">
+          <div className="flex flex-col w-full flex-1 min-w-0">
             <Outlet />
           </div>
         </main>
