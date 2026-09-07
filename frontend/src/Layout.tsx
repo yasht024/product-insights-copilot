@@ -1,9 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 
 export default function Layout() {
   const location = useLocation();
   const currentPath = location.pathname.substring(1) || 'dashboard';
+
+  // Interactive states
+  const [activePlatform, setActivePlatform] = useState('All Platforms');
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [showTimeframe, setShowTimeframe] = useState(false);
+  const [timeframe, setTimeframe] = useState('Last 30 Days');
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showAppSelector, setShowAppSelector] = useState(false);
+
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    setTimeout(() => setIsRefreshing(false), 1500);
+  };
 
   return (
     <div className="flex min-h-screen bg-surface">
@@ -22,14 +35,23 @@ export default function Layout() {
             </div>
           </div>
           
-          <div className="px-space-md">
-            <button className="w-full flex items-center justify-between px-space-sm py-space-xs rounded-xl bg-surface-container-low hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors">
+          <div className="px-space-md relative">
+            <button 
+              onClick={() => setShowAppSelector(!showAppSelector)}
+              className="w-full flex items-center justify-between px-space-sm py-space-xs rounded-xl bg-surface-container-low hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors">
               <div className="flex items-center gap-space-xs overflow-hidden">
                 <span className="material-symbols-outlined text-[18px] text-tertiary">layers</span>
                 <span className="font-body-sm text-body-sm font-medium text-on-surface truncate">Acme Mobile App</span>
               </div>
-              <span className="material-symbols-outlined text-[16px] text-on-surface-variant">unfold_more</span>
+              <span className="material-symbols-outlined text-[16px] text-on-surface-variant">{showAppSelector ? 'expand_less' : 'unfold_more'}</span>
             </button>
+            {showAppSelector && (
+              <div className="absolute top-full left-space-md right-space-md mt-1 bg-surface-container-highest border border-outline-variant rounded-xl shadow-lg z-50 overflow-hidden flex flex-col">
+                <button className="px-3 py-2 text-left text-sm text-on-surface hover:bg-surface-container transition-colors">Acme Mobile App</button>
+                <button className="px-3 py-2 text-left text-sm text-on-surface-variant hover:bg-surface-container transition-colors">Acme Web Portal</button>
+                <button className="px-3 py-2 text-left text-sm text-on-surface-variant hover:bg-surface-container transition-colors">Acme API Dashboard</button>
+              </div>
+            )}
           </div>
           
           <nav className="flex flex-col gap-space-2xs px-space-sm">
@@ -101,26 +123,62 @@ export default function Layout() {
                 <span className="font-mono-metric text-mono-metric text-on-surface-variant">Synced 4m ago</span>
               </div>
             </div>
-            <div className="flex items-center gap-space-sm">
+            <div className="flex items-center gap-space-sm relative">
               <div className="flex items-center bg-surface-container-low p-1 rounded-xl">
-                <button className="px-space-xs py-1 rounded-lg bg-surface-container-high text-on-surface font-body-sm text-body-sm font-medium transition-colors">All Platforms</button>
-                <button className="px-space-xs py-1 rounded-lg text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm transition-colors">iOS</button>
-                <button className="px-space-xs py-1 rounded-lg text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm transition-colors">Android</button>
+                {['All Platforms', 'iOS', 'Android'].map((platform) => (
+                  <button 
+                    key={platform}
+                    onClick={() => setActivePlatform(platform)}
+                    className={`px-space-xs py-1 rounded-lg font-body-sm text-body-sm transition-colors ${activePlatform === platform ? 'bg-surface-container-high text-on-surface font-medium' : 'text-on-surface-variant hover:text-on-surface'}`}
+                  >
+                    {platform}
+                  </button>
+                ))}
               </div>
-              <div className="flex items-center bg-surface-container-low px-space-sm py-1.5 rounded-xl gap-space-xs text-on-surface-variant hover:text-on-surface cursor-pointer">
-                <span className="material-symbols-outlined text-[16px]">calendar_today</span>
-                <span className="font-body-sm text-body-sm">Last 30 Days</span>
-                <span className="material-symbols-outlined text-[16px]">expand_more</span>
+              <div className="relative">
+                <div 
+                  onClick={() => setShowTimeframe(!showTimeframe)}
+                  className="flex items-center bg-surface-container-low px-space-sm py-1.5 rounded-xl gap-space-xs text-on-surface-variant hover:text-on-surface cursor-pointer">
+                  <span className="material-symbols-outlined text-[16px]">calendar_today</span>
+                  <span className="font-body-sm text-body-sm">{timeframe}</span>
+                  <span className="material-symbols-outlined text-[16px]">{showTimeframe ? 'expand_less' : 'expand_more'}</span>
+                </div>
+                {showTimeframe && (
+                  <div className="absolute top-full right-0 mt-1 w-48 bg-surface-container-highest border border-outline-variant rounded-xl shadow-lg z-50 overflow-hidden flex flex-col">
+                    {['Last 7 Days', 'Last 30 Days', 'Last 90 Days', 'Year to Date'].map(t => (
+                      <button 
+                        key={t}
+                        onClick={() => { setTimeframe(t); setShowTimeframe(false); }}
+                        className={`px-3 py-2 text-left text-sm transition-colors ${timeframe === t ? 'bg-primary/10 text-primary font-medium' : 'text-on-surface hover:bg-surface-container'}`}
+                      >
+                        {t}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
-              <button className="flex items-center gap-space-2xs px-space-sm py-1.5 rounded-xl bg-primary-container hover:bg-primary text-on-primary-container font-body-sm text-body-sm font-semibold transition-all shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
-                <span className="material-symbols-outlined text-[16px]">sync</span>
-                <span>Refresh Feeds</span>
+              <button 
+                onClick={handleRefresh}
+                disabled={isRefreshing}
+                className="flex items-center gap-space-2xs px-space-sm py-1.5 rounded-xl bg-primary-container hover:bg-primary text-on-primary-container font-body-sm text-body-sm font-semibold transition-all shadow-[0_1px_8px_rgba(0,0,0,0.04)] disabled:opacity-70">
+                <span className={`material-symbols-outlined text-[16px] ${isRefreshing ? 'animate-spin' : ''}`}>sync</span>
+                <span>{isRefreshing ? 'Refreshing...' : 'Refresh Feeds'}</span>
               </button>
               <div className="h-4 w-px bg-surface-container-highest"></div>
-              <button className="p-space-2xs text-on-surface-variant hover:text-on-surface relative rounded-lg hover:bg-surface-container-high transition-colors">
-                <span className="material-symbols-outlined text-[20px]">notifications</span>
-                <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-tertiary-container"></span>
-              </button>
+              <div className="relative">
+                <button 
+                  onClick={() => setShowNotifications(!showNotifications)}
+                  className="p-space-2xs text-on-surface-variant hover:text-on-surface relative rounded-lg hover:bg-surface-container-high transition-colors">
+                  <span className="material-symbols-outlined text-[20px]">notifications</span>
+                  <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-tertiary-container"></span>
+                </button>
+                {showNotifications && (
+                  <div className="absolute top-full right-0 mt-1 w-64 bg-surface-container-highest border border-outline-variant rounded-xl shadow-lg z-50 overflow-hidden flex flex-col">
+                    <div className="px-3 py-2 border-b border-outline-variant font-medium text-sm text-on-surface">Notifications</div>
+                    <div className="p-4 text-center text-sm text-on-surface-variant">No new notifications</div>
+                  </div>
+                )}
+              </div>
               <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
                 <span className="material-symbols-outlined text-on-primary text-[18px]">person</span>
               </div>

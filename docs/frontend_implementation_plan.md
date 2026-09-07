@@ -78,3 +78,57 @@ When the user clicks the **"Categorize"** button on the main Dashboard, a modal 
 > This updated plan incorporates a phased rollout using the newly designed screens in `stitch_product_insights_copilot`. The phased approach ensures we ship the core dashboard first while maintaining a scalable architecture (React + Tailwind + FastAPI).
 > 
 > If this phased plan looks good to you, we can move forward with execution starting with **Phase 1 (Foundation & Premium Dashboard)**. Let me know if you are ready to proceed!
+
+---
+
+## 6. Button Functionality & UX Interactivity Matrix
+
+To ensure the minimalist dashboard is fully functional, all interactive elements will be hooked up with proper state management, loading indicators, and error handling. 
+
+### 6.1 Dashboard & Layout
+- **Categorize Button**: Opens the `CategorizeReviewsModal` to trigger LLM batch processing. State needed: `isCategorizeModalOpen`.
+- **Date Range Selector**: Filters dashboard stats.
+- **Download Report Button**: Opens the `ReportGeneratorModal`.
+
+### 6.2 Modals
+- **CategorizeReviewsModal**:
+  - **Cancel / Close (X)**: Closes modal and resets form state.
+  - **Start Categorization**: Validates selection, triggers API call, sets `isLoading=true` (shows spinner), and displays a success toast upon completion.
+- **ReportGeneratorModal**:
+  - **Cancel / Close (X)**: Closes modal and resets form state.
+  - **Generate Report**: Validates form, triggers report generation API, sets `isLoading=true` (shows spinner), and initiates file download upon completion.
+
+### 6.3 Reviews Inbox
+- **Search Button / Input**: Debounced text search against review content.
+- **Filter Buttons (Date, Rating, Sentiment, Category)**: Dropdowns that apply array-based filters to the reviews table.
+- **Pagination (Next/Previous)**: Updates the `currentPage` state to paginate through the data.
+- **Export CSV Button**: Downloads currently filtered reviews as a CSV file.
+
+### 6.4 Categories & Taxonomy
+- **New Category Button**: Appends a new editable node in the category tree.
+- **Expand/Collapse All**: Recursively toggles the `isExpanded` boolean on all tree nodes.
+- **Edit / Delete Icons**: Modifies or removes category nodes.
+
+### 6.5 Analytics & Word Cloud
+- **Timeframe Toggles (DAILY, WEEKLY, MONTHLY, QUARTERLY)**: Updates data aggregation interval for Recharts components.
+- **Export Chart Button**: Downloads the chart view.
+
+### 6.6 Ideation & Backlog
+- **Sync Linear / Sync Jira Buttons**: Calls API to create tickets. Replaces icon with a checkmark on success and shows a toast.
+- **View Citations Button**: Opens a side-drawer showing the raw reviews backing an idea.
+
+---
+
+## 7. Global Improvements & Test Strategy
+
+### Improvements
+- **State Management**: Ensure all modals (`isOpen`), loading states (`isLoading`), and form states are correctly managed.
+- **Loading Indicators**: All API-triggering buttons must have a disabled state + spinner during execution to prevent double submission.
+- **Toast Notifications**: Implement global toast notifications for immediate UX feedback on success/failure.
+
+### Test Cases
+- **Case 1 (Categorization Flow)**: User clicks "Categorize" -> selects date range -> clicks "Start" -> Button disables, spinner shows, success toast appears -> Dashboard refreshes.
+- **Case 2 (Report Generation)**: User clicks "Generate Report" -> Validates fields -> Downloads -> Success toast.
+- **Case 3 (Navigation & Filtering)**: User applies a filter in Reviews Inbox that yields 0 results. Expected: "No reviews found" empty state appears.
+- **Case 4 (Ideation Sync)**: User clicks "Sync Linear" -> Mock API delay -> Success feedback on button (check mark).
+- **Case 5 (Pagination)**: User clicks "Next" or "Previous" at boundary conditions (Page 1 or Last Page). Expected: Buttons are disabled.

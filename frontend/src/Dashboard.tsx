@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import CategorizeReviewsModal from './components/CategorizeReviewsModal';
 import {
   LayoutDashboard,
   Inbox,
@@ -152,8 +153,12 @@ export default function Dashboard() {
             </div>
           </div>
         </main>
+        
+        <CategorizeReviewsModal 
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)} 
+        />
     </>
   );
-
 }
 
