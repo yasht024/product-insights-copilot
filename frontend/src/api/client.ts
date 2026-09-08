@@ -218,7 +218,64 @@ export interface AccessStatus {
   team_access: 'owner_only';
 }
 
+export interface PulseReport {
+  id: string;
+  title: string;
+  content: string;
+  themes: { label: string; count: number; share: number }[];
+  quotes: { text: string; rating: number }[];
+  actions: string[];
+  word_count: number;
+  review_count: number;
+  excluded_count: number;
+  cluster_count: number;
+  average_rating: number;
+  days: number;
+  platform: string;
+  period_start: string;
+  period_end: string;
+  method: string;
+}
+
+export interface ReportCapabilities {
+  docs: boolean;
+  draft: boolean;
+  send: boolean;
+  document_id: string;
+  error: string | null;
+}
+
+export type DeliveryAction = 'docs' | 'draft' | 'send';
+export interface DeliveryResult {
+  action: DeliveryAction;
+  status: 'completed';
+  reference: string | null;
+  document_url: string | null;
+  recipients: string[];
+}
+
 export const apiClient = {
+  async generateReport(workspaceId: string, days: number, platform: string): Promise<PulseReport> {
+    const res = await request(`/workspaces/${workspaceId}/reports`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ days, platform }),
+    });
+    return res.json();
+  },
+
+  async getReportCapabilities(workspaceId: string): Promise<ReportCapabilities> {
+    const res = await request(`/workspaces/${workspaceId}/reports/capabilities`);
+    return res.json();
+  },
+
+  async deliverReport(workspaceId: string, reportId: string, action: DeliveryAction,
+    recipients: string[], documentId?: string, message = ''): Promise<DeliveryResult> {
+    const res = await request(`/workspaces/${workspaceId}/reports/${reportId}/deliver`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action, recipients, document_id: documentId || null, message }),
+    });
+    return res.json();
+  },
   async getAccessStatus(): Promise<AccessStatus> {
     const res = await request('/access/status');
     return res.json();

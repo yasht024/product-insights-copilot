@@ -38,7 +38,7 @@ function App() {
                 <Route path="/analytics" element={<Analytics />} />
                 <Route path="/word-cloud" element={<WordCloud />} />
                 <Route path="/ideation" element={<PremiumGate feature="Ideation"><Ideation /></PremiumGate>} />
-                <Route path="/reporting" element={<PremiumGate feature="Reporting"><Reporting /></PremiumGate>} />
+                <Route path="/reporting" element={<Reporting />} />
                 <Route path="/settings" element={<PremiumGate feature="Settings"><Settings /></PremiumGate>} />
                 <Route path="*" element={<Navigate to="/dashboard" replace />} />
               </Route>

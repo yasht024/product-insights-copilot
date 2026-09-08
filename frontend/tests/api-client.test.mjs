@@ -46,6 +46,25 @@ test('an explicitly configured hosted API is used', async (t) => {
   assert.equal(fetch.mock.calls[0].arguments[0], 'https://reviews.example.com/api/workspaces');
 });
 
+test('report delivery includes recipients, owner header and full message in the server request', async (t) => {
+  t.mock.method(globalThis, 'fetch', async () => new Response('{}', {
+    headers: { 'Content-Type': 'application/json' },
+  }));
+  const previousWindow = globalThis.window;
+  globalThis.window = { sessionStorage: { getItem: () => 'test-owner-key' } };
+  t.after(() => { globalThis.window = previousWindow; });
+  const client = await productionClient();
+  await client.generateReport('ws_1', 70, 'All Platforms');
+  await client.getReportCapabilities('ws_1');
+  await client.deliverReport('ws_1', 'report-id', 'send', ['a@example.com', 'b@example.com'], undefined, 'Hi team');
+  const call = fetch.mock.calls[2].arguments;
+  assert.equal(call[0], '/api/workspaces/ws_1/reports/report-id/deliver');
+  assert.equal(call[1].headers.get('X-Owner-Key'), 'test-owner-key');
+  assert.deepEqual(JSON.parse(call[1].body), {
+    action: 'send', recipients: ['a@example.com', 'b@example.com'], document_id: null, message: 'Hi team',
+  });
+});
+
 test('a broken route or offline backend surfaces an error instead of fabricating reviews', async (t) => {
   t.mock.method(globalThis, 'fetch', async () => new Response('<html>SPA</html>', {
     headers: { 'Content-Type': 'text/html' },

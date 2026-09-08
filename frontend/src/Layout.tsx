@@ -109,7 +109,7 @@ export default function Layout() {
               { path: 'analytics', icon: 'monitoring', label: 'Analytics' },
               { path: 'word-cloud', icon: 'cloud', label: 'Word Cloud' },
               { path: 'ideation', icon: 'lightbulb', label: 'Ideation', premium: true },
-              { path: 'reporting', icon: 'description', label: 'Reporting', premium: true },
+              { path: 'reporting', icon: 'description', label: 'Reporting' },
               { path: 'settings', icon: 'settings', label: 'Settings', premium: true },
             ].map(item => {
               return (

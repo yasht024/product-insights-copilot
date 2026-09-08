@@ -32,3 +32,23 @@ class Review(Base):
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
     workspace = relationship("Workspace")
+
+
+class PulseReport(Base):
+    __tablename__ = "pulse_reports"
+
+    id = Column(String, primary_key=True)
+    workspace_id = Column(String, ForeignKey("workspaces.id"), nullable=False)
+    payload = Column(Text, nullable=False)
+    document_id = Column(String, nullable=True)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+
+
+class ReportDelivery(Base):
+    __tablename__ = "report_deliveries"
+
+    # A deterministic key prevents duplicate operations across serverless instances.
+    id = Column(String, primary_key=True)
+    report_id = Column(String, ForeignKey("pulse_reports.id"), nullable=False)
+    status = Column(String, nullable=False, default="pending")
+    result = Column(Text, nullable=True)
