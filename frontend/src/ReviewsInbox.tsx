@@ -2,14 +2,17 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
 import { apiClient, type Review } from './api/client';
-import { useToast } from './components/Toast';
+import { useToast } from './components/toast-context';
+import ScrapeReviewsModal from './components/ScrapeReviewsModal';
 
 const workspaceId = 'ws_1';
 
 function formatDate(value: string | null): string {
   if (!value) return 'Unknown date';
   const normalized = /(?:Z|[+-]\d\d:\d\d)$/.test(value) ? value : `${value}Z`;
-  return new Intl.DateTimeFormat(undefined, { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(normalized));
+  return new Intl.DateTimeFormat(undefined, {
+    day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit',
+  }).format(new Date(normalized));
 }
 
 function statusClass(status: string): string {
@@ -28,6 +31,8 @@ function statusClass(status: string): string {
 
 export default function ReviewsInbox() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [customDays, setCustomDays] = useState(searchParams.get('days') || '90');
+  const [isScrapeOpen, setIsScrapeOpen] = useState(false);
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
   const [selectedRowIds, setSelectedRowIds] = useState<Set<string>>(new Set());
   const [draftText, setDraftText] = useState('');
@@ -40,15 +45,23 @@ export default function ReviewsInbox() {
   const limit = [25, 50, 100].includes(Number(searchParams.get('limit')))
     ? Number(searchParams.get('limit'))
     : 25;
-  const queryString = searchParams.toString();
+  const effectiveSearchParams = new URLSearchParams(searchParams);
+  if (!effectiveSearchParams.has('days')) effectiveSearchParams.set('days', '90');
+  if (!effectiveSearchParams.has('min_words')) effectiveSearchParams.set('min_words', '0');
+  const queryString = effectiveSearchParams.toString();
+  const selectedDays = Number(effectiveSearchParams.get('days'));
+  const minimumWords = Number(effectiveSearchParams.get('min_words'));
+  const averageScope = `${selectedDays ? `Last ${selectedDays} ${selectedDays === 1 ? 'day' : 'days'}` : 'All time'} · ${minimumWords ? `more than ${minimumWords} words` : 'all review lengths'}`;
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, isFetching, dataUpdatedAt, refetch } = useQuery({
     queryKey: ['reviews', workspaceId, queryString],
-    queryFn: () => apiClient.getReviews(workspaceId, searchParams),
+    queryFn: () => apiClient.getReviews(workspaceId, effectiveSearchParams),
+    refetchInterval: 30_000,
   });
-  const { data: summary, isLoading: isSummaryLoading } = useQuery({
+  const { data: summary, isLoading: isSummaryLoading, isError: isSummaryError, refetch: refetchSummary } = useQuery({
     queryKey: ['reviewSummary', workspaceId, queryString],
-    queryFn: () => apiClient.getReviewSummary(workspaceId, searchParams),
+    queryFn: () => apiClient.getReviewSummary(workspaceId, effectiveSearchParams),
+    refetchInterval: 30_000,
   });
 
   const bulkActionMutation = useMutation({
@@ -149,32 +162,38 @@ export default function ReviewsInbox() {
 
   return (
     <main className="mx-auto flex w-full max-w-[1600px] flex-col gap-5 p-4 sm:p-6 lg:p-8">
+      {isScrapeOpen && <ScrapeReviewsModal isOpen onClose={() => setIsScrapeOpen(false)} initialDays={selectedDays || 90} />}
       <header className="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
         <div>
           <div className="mb-2 flex items-center gap-2">
-            <span className="rounded border border-indigo-500/20 bg-indigo-500/10 px-2 py-0.5 font-mono text-[11px] font-semibold uppercase tracking-wider text-indigo-400">Stored reviews</span>
-            <span className="font-mono text-xs text-zinc-500">Groww · iOS and Android</span>
+            <span className="rounded border border-indigo-500/20 bg-indigo-500/10 px-2 py-0.5 tabular-nums text-[11px] font-semibold uppercase tracking-wider text-indigo-400">Stored reviews</span>
+            <span className="tabular-nums text-xs text-zinc-500">Groww · iOS and Android</span>
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-zinc-100 lg:text-3xl">Reviews Inbox</h1>
-          <p className="mt-1 max-w-3xl text-sm text-zinc-400">Search, review, export, and update the customer reviews currently stored in this workspace.</p>
+          <p className="mt-1 max-w-3xl text-sm text-zinc-400">Reviews refresh every 30 seconds while this page is open. Scrape latest reviews to import new feedback from the stores.</p>
         </div>
-        <button type="button" onClick={() => { window.location.href = apiClient.getExportUrl(workspaceId, searchParams); }} className="flex w-fit items-center gap-2 rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:border-indigo-500/50 hover:text-white">
+        <button type="button" onClick={() => { window.location.href = apiClient.getExportUrl(workspaceId, effectiveSearchParams); }} className="flex w-fit items-center gap-2 rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:border-indigo-500/50 hover:text-white">
           <span className="material-symbols-outlined text-[17px]">download</span>
           Export filtered CSV
         </button>
       </header>
 
+      <div className="flex flex-wrap items-center gap-3">
+        <button type="button" onClick={() => setIsScrapeOpen(true)} className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500">Scrape latest reviews</button>
+        <button type="button" disabled={isFetching} onClick={() => { void refetch(); void refetchSummary(); }} className="rounded-lg border border-zinc-700 px-4 py-2 text-sm text-zinc-200 disabled:opacity-50">Refresh now</button>
+        <span role="status" className="text-xs text-zinc-500">{isError || isSummaryError ? 'Refresh failed. Displayed data may be out of date.' : isFetching ? 'Refreshing reviews…' : dataUpdatedAt ? `Updated ${new Date(dataUpdatedAt).toLocaleTimeString()}` : 'Connecting…'}</span>
+      </div>
       <section className="grid grid-cols-2 gap-3 lg:grid-cols-4" aria-label="Filtered review summary">
         {[
           { label: 'Matching reviews', value: summary?.total.toLocaleString() ?? '—', detail: `${summary?.ios || 0} iOS · ${summary?.android || 0} Android`, icon: 'inbox', color: 'text-indigo-400' },
           { label: 'Unread', value: summary?.unread.toLocaleString() ?? '—', detail: 'Within current filters', icon: 'mark_email_unread', color: 'text-sky-400' },
           { label: '1-star reviews', value: summary?.one_star.toLocaleString() ?? '—', detail: 'Within current filters', icon: 'warning', color: 'text-rose-400' },
-          { label: 'Average rating', value: summary?.average_rating == null ? '—' : `${summary.average_rating.toFixed(1)} / 5`, detail: 'Within current filters', icon: 'star', color: 'text-amber-400' },
+          { label: 'Average rating', value: summary?.average_rating == null ? '—' : `${summary.average_rating.toFixed(1)} / 5`, detail: averageScope, icon: 'star', color: 'text-amber-400' },
         ].map((item) => (
           <div key={item.label} className="flex items-center justify-between rounded-xl border border-zinc-800 bg-zinc-900/60 p-4">
             <div>
               <div className="text-xs font-medium uppercase tracking-wide text-zinc-500">{item.label}</div>
-              <div className="mt-1 font-mono text-xl font-bold text-zinc-100">{isSummaryLoading ? '…' : item.value}</div>
+              <div className="mt-1 tabular-nums text-xl font-bold text-zinc-100">{isSummaryLoading ? '…' : item.value}</div>
               <div className="mt-1 text-xs text-zinc-500">{item.detail}</div>
             </div>
             <span className={`material-symbols-outlined ${item.color}`}>{item.icon}</span>
@@ -194,7 +213,7 @@ export default function ReviewsInbox() {
           <div className="relative min-w-0 flex-1">
             <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-zinc-500">search</span>
             <input ref={searchInputRef} value={searchParams.get('q') || ''} onChange={(event) => handleFilterChange('q', event.target.value)} className="w-full rounded-lg border border-transparent bg-zinc-950 py-2.5 pl-10 pr-16 text-sm text-zinc-100 outline-none transition-colors placeholder:text-zinc-600 focus:border-indigo-500" placeholder="Search review text…" />
-            <kbd className="absolute right-3 top-1/2 -translate-y-1/2 rounded bg-zinc-800 px-1.5 py-0.5 font-mono text-[10px] text-zinc-500">Ctrl K</kbd>
+            <kbd className="absolute right-3 top-1/2 -translate-y-1/2 rounded bg-zinc-800 px-1.5 py-0.5 tabular-nums text-[10px] text-zinc-500">Ctrl K</kbd>
           </div>
           <div className="flex flex-wrap gap-2">
             <select aria-label="Platform" value={searchParams.get('platform') || 'All Platforms'} onChange={(event) => handleFilterChange('platform', event.target.value)} className="rounded-lg bg-zinc-950 px-3 py-2.5 text-sm text-zinc-200 outline-none focus:ring-1 focus:ring-indigo-500">
@@ -212,12 +231,19 @@ export default function ReviewsInbox() {
               <option>All Statuses</option>
               {data?.available_statuses.map((status) => <option key={status}>{status}</option>)}
             </select>
-            <select aria-label="Review date range" value={searchParams.get('days') || 'All time'} onChange={(event) => handleFilterChange('days', event.target.value)} className="rounded-lg bg-zinc-950 px-3 py-2.5 text-sm text-zinc-200 outline-none focus:ring-1 focus:ring-indigo-500">
-              <option>All time</option><option value="1">Last 1 day</option><option value="2">Last 2 days</option><option value="7">Last 7 days</option><option value="30">Last 30 days</option><option value="90">Last 90 days</option><option value="365">Last year</option>
+            <select aria-label="Review date range" value={effectiveSearchParams.get('days') || '90'} onChange={(event) => { if (event.target.value !== '0') setCustomDays(event.target.value); handleFilterChange('days', event.target.value); }} className="rounded-lg bg-zinc-950 px-3 py-2.5 text-sm text-zinc-200 outline-none focus:ring-1 focus:ring-indigo-500">
+              {searchParams.get('days') && !['1', '2', '7', '30', '90', '365'].includes(searchParams.get('days')!) && <option value={searchParams.get('days')!}>Last {searchParams.get('days')} days</option>}
+              <option value="0">All time</option><option value="1">Last 1 day</option><option value="2">Last 2 days</option><option value="7">Last 7 days</option><option value="30">Last 30 days</option><option value="90">Last 90 days</option><option value="365">Last year</option>
             </select>
+            <form className="flex items-center gap-2 rounded-lg bg-zinc-950 px-3 py-2" onSubmit={(event) => { event.preventDefault(); const days = Number(customDays); if (Number.isInteger(days) && days >= 1 && days <= 365) handleFilterChange('days', String(days)); }}>
+              <label className="flex items-center gap-2 text-xs text-zinc-400">Last
+                <input aria-label="Custom review days" type="number" required min={1} max={365} step={1} value={customDays} onChange={(event) => setCustomDays(event.target.value)} className="w-16 rounded border border-zinc-700 bg-zinc-900 px-2 py-1 text-zinc-100" /> days
+              </label>
+              <button type="submit" className="text-xs font-medium text-indigo-300 hover:text-white">Apply</button>
+            </form>
             <label className="flex items-center gap-2 rounded-lg bg-zinc-950 px-3 py-2 text-xs text-zinc-500">
               More than
-              <input aria-label="Minimum review word count" type="number" min={0} max={100} value={searchParams.get('min_words') ?? '8'} onChange={(event) => handleFilterChange('min_words', String(Math.min(100, Math.max(0, Number(event.target.value) || 0))))} className="w-12 rounded border border-zinc-700 bg-zinc-900 px-1.5 py-1 text-center font-mono text-zinc-200 outline-none focus:border-indigo-500" />
+              <input aria-label="Minimum review word count" type="number" min={0} max={100} value={effectiveSearchParams.get('min_words') || '0'} onChange={(event) => handleFilterChange('min_words', String(Math.min(100, Math.max(0, Number(event.target.value) || 0))))} className="w-12 rounded border border-zinc-700 bg-zinc-900 px-1.5 py-1 text-center tabular-nums text-zinc-200 outline-none focus:border-indigo-500" />
               words
             </label>
             <button type="button" onClick={() => { setSelectedRowIds(new Set()); setSearchParams(new URLSearchParams()); }} className="flex items-center gap-1 rounded-lg px-3 py-2 text-sm text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-white" title="Reset all filters">
@@ -254,7 +280,7 @@ export default function ReviewsInbox() {
                 <th className="min-w-52 px-4 py-3">Reviewer and store</th>
                 <th className="w-36 px-4 py-3">Rating</th>
                 <th className="min-w-96 px-4 py-3">Review</th>
-                <th className="w-40 px-4 py-3">Version and date</th>
+                <th className="w-44 px-4 py-3">Version and time</th>
                 <th className="w-28 px-4 py-3">Status</th>
                 <th className="w-24 px-4 py-3 text-right">Reply</th>
               </tr>
@@ -275,10 +301,10 @@ export default function ReviewsInbox() {
                       <div className="min-w-0"><div className="truncate font-medium text-zinc-200">{review.author || 'Anonymous'}</div><div className="truncate text-xs text-zinc-500">{review.platform}</div></div>
                     </div>
                   </td>
-                  <td className="px-4 py-3"><div className="flex items-center gap-1" aria-label={`${review.rating} out of 5 stars`}><span className="font-mono font-semibold text-amber-300">{review.rating}.0</span><span className="text-amber-400">★</span></div></td>
+                  <td className="px-4 py-3"><div className="flex items-center gap-1" aria-label={`${review.rating} out of 5 stars`}><span className="tabular-nums font-semibold text-amber-300">{review.rating}.0</span><span className="text-amber-400">★</span></div></td>
                   <td className="px-4 py-3"><p className="line-clamp-3 max-w-2xl leading-relaxed text-zinc-400" title={review.text}>{review.text}</p></td>
-                  <td className="px-4 py-3"><div className="font-mono text-xs text-zinc-300">{review.version || 'Unknown'}</div><div className="mt-1 text-xs text-zinc-500">{formatDate(review.created_at)}</div></td>
-                  <td className="px-4 py-3"><span className={`inline-flex rounded-full px-2 py-1 font-mono text-[10px] font-bold uppercase ${statusClass(review.status)}`}>{review.status}</span></td>
+                  <td className="px-4 py-3"><div className="tabular-nums text-xs text-zinc-300">{review.version || 'Unknown'}</div><div className="mt-1 text-xs text-zinc-500">{formatDate(review.created_at)}</div></td>
+                  <td className="px-4 py-3"><span className={`inline-flex rounded-full px-2 py-1 tabular-nums text-[10px] font-bold uppercase ${statusClass(review.status)}`}>{review.status}</span></td>
                   <td className="px-4 py-3 text-right"><button type="button" onClick={() => openReply(review)} className="rounded-lg p-2 text-zinc-400 transition-colors hover:bg-indigo-500/15 hover:text-indigo-300" title="Create reply suggestion"><span className="material-symbols-outlined text-[18px]">reply</span></button></td>
                 </tr>
               ))}
@@ -288,12 +314,12 @@ export default function ReviewsInbox() {
 
         <footer className="flex flex-col items-center justify-between gap-3 border-t border-zinc-800 bg-zinc-900/70 px-4 py-3 sm:flex-row">
           <div className="flex flex-wrap items-center gap-4 text-sm text-zinc-500">
-            <span>Showing <strong className="font-mono text-zinc-300">{firstResult}–{lastResult}</strong> of <strong className="font-mono text-zinc-300">{data?.total.toLocaleString() || 0}</strong></span>
+            <span>Showing <strong className="tabular-nums text-zinc-300">{firstResult}–{lastResult}</strong> of <strong className="tabular-nums text-zinc-300">{data?.total.toLocaleString() || 0}</strong></span>
             <label className="flex items-center gap-2">Rows <select value={limit} onChange={(event) => updateParams({ limit: event.target.value, page: '1' })} className="rounded-md bg-zinc-800 px-2 py-1 text-zinc-200 outline-none"><option value={25}>25</option><option value={50}>50</option><option value={100}>100</option></select></label>
           </div>
           <div className="flex items-center gap-2">
             <button type="button" disabled={page <= 1} onClick={() => changePage(page - 1)} className="rounded-lg p-1.5 text-zinc-400 hover:bg-zinc-800 hover:text-white disabled:opacity-30"><span className="material-symbols-outlined text-[18px]">chevron_left</span></button>
-            <span className="min-w-28 text-center font-mono text-xs text-zinc-400">Page {Math.min(page, totalPages)} of {totalPages}</span>
+            <span className="min-w-28 text-center tabular-nums text-xs text-zinc-400">Page {Math.min(page, totalPages)} of {totalPages}</span>
             <button type="button" disabled={page >= totalPages} onClick={() => changePage(page + 1)} className="rounded-lg p-1.5 text-zinc-400 hover:bg-zinc-800 hover:text-white disabled:opacity-30"><span className="material-symbols-outlined text-[18px]">chevron_right</span></button>
           </div>
         </footer>

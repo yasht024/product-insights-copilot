@@ -1,29 +1,6 @@
-import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import React, { useState, useCallback, type ReactNode } from 'react';
 import { CheckCircle2, AlertCircle, Info, XCircle, X } from 'lucide-react';
-
-export type ToastType = 'success' | 'error' | 'info' | 'warning';
-
-export interface ToastMessage {
-  id: string;
-  type: ToastType;
-  title: string;
-  message?: string;
-}
-
-interface ToastContextType {
-  addToast: (toast: Omit<ToastMessage, 'id'>) => void;
-  removeToast: (id: string) => void;
-}
-
-const ToastContext = createContext<ToastContextType | undefined>(undefined);
-
-export function useToast() {
-  const context = useContext(ToastContext);
-  if (!context) {
-    throw new Error('useToast must be used within a ToastProvider');
-  }
-  return context;
-}
+import { ToastContext, type ToastMessage, type ToastType } from './toast-context';
 
 const getToastIcon = (type: ToastType) => {
   switch (type) {
@@ -47,7 +24,7 @@ export const ToastProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     setToasts((prev) => [...prev, { ...toast, id }]);
 
     setTimeout(() => {
-      removeToast(id);
+      setToasts((prev) => prev.filter((item) => item.id !== id));
     }, 5000);
   }, []);
 

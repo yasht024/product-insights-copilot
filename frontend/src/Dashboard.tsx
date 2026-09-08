@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useSearchParams } from 'react-router-dom';
-import { Info, SlidersHorizontal, Star } from 'lucide-react';
+import { useOutletContext, useSearchParams } from 'react-router-dom';
+import { Database, Info, RefreshCw, SlidersHorizontal, Star } from 'lucide-react';
 import { apiClient } from './api/client';
 import DashboardPreferencesModal, {
   type DashboardPreferences,
@@ -21,7 +21,13 @@ const DEFAULT_PREFERENCES: DashboardPreferences = {
 function loadPreferences(): DashboardPreferences {
   try {
     const stored = localStorage.getItem(PREFERENCES_KEY);
-    return stored ? { ...DEFAULT_PREFERENCES, ...JSON.parse(stored) } : DEFAULT_PREFERENCES;
+    const value = stored ? { ...DEFAULT_PREFERENCES, ...JSON.parse(stored) } : DEFAULT_PREFERENCES;
+    if (![value.showVolume, value.showRating, value.showAdvocacy].every(flag => typeof flag === 'boolean')
+      || ![value.showVolume, value.showRating, value.showAdvocacy].some(Boolean)
+      || !Number.isInteger(value.advocateMin) || value.advocateMin < 2 || value.advocateMin > 5
+      || !Number.isInteger(value.criticMax) || value.criticMax < 1 || value.criticMax >= value.advocateMin
+      || !Number.isInteger(value.minimumWords) || value.minimumWords < 0 || value.minimumWords > 100) return DEFAULT_PREFERENCES;
+    return value;
   } catch {
     return DEFAULT_PREFERENCES;
   }
@@ -55,6 +61,7 @@ function signed(value: number): string {
 
 export default function Dashboard() {
   const [searchParams] = useSearchParams();
+  const { openScrapeReviews } = useOutletContext<{ openScrapeReviews: () => void }>();
   const platform = searchParams.get('platform') || 'All Platforms';
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false);
   const [preferences, setPreferences] = useState(loadPreferences);
@@ -65,7 +72,9 @@ export default function Dashboard() {
   const [viewDaysInput, setViewDaysInput] = useState(String(viewDays));
   const workspaceId = 'ws_1';
 
-  const { data: metrics, isLoading, isError } = useQuery({
+  const { data: metrics, isLoading, isError, error, refetch, isFetching } = useQuery({
+    refetchInterval: 30_000,
+    retry: 1,
     queryKey: ['dashboardMetrics', workspaceId, platform, preferences.advocateMin, preferences.criticMax, preferences.minimumWords, viewDays],
     queryFn: () => apiClient.getDashboardMetrics(workspaceId, {
       platform,
@@ -103,22 +112,25 @@ export default function Dashboard() {
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
           <div>
             <div className="mb-1 flex items-center gap-2">
-              <span className="rounded border border-indigo-500/20 bg-indigo-500/10 px-2 py-0.5 font-mono text-[11px] font-semibold uppercase tracking-wider text-indigo-400">Database metrics</span>
+              <span className="rounded border border-indigo-500/20 bg-indigo-500/10 px-2 py-0.5 tabular-nums text-[11px] font-semibold uppercase tracking-wider text-indigo-400">Database metrics</span>
               <span className="text-xs text-zinc-600">•</span>
-              <span className="font-mono text-xs text-zinc-400">{platform}</span>
+              <span className="tabular-nums text-xs text-zinc-400">{platform}</span>
             </div>
             <h1 className="text-2xl font-bold tracking-tight text-zinc-100 lg:text-3xl">Executive Dashboard</h1>
-            <p className="mt-0.5 text-sm text-zinc-400">Every value below is calculated from the reviews currently stored in this workspace.</p>
+            <p className="mt-0.5 text-sm text-zinc-400">Metrics from imported store reviews. Refreshes every 30 seconds; scrape reviews to import the latest feedback.</p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
+            <button type="button" onClick={() => void refetch()} disabled={isFetching} className="flex items-center gap-2 rounded-xl border border-zinc-700 px-3 py-2 text-sm font-medium text-zinc-300 hover:bg-zinc-800 disabled:opacity-50">
+              <RefreshCw className={`h-4 w-4 ${isFetching ? 'animate-spin' : ''}`} /> {isFetching ? 'Refreshing…' : 'Refresh'}
+            </button>
             <div className="flex items-center gap-1 rounded-xl border border-zinc-700 bg-zinc-900 p-1" aria-label="Dashboard date range">
               {[1, 2, 7, 30].map((days) => (
-                <button key={days} type="button" onClick={() => applyViewDays(days)} className={`rounded-lg px-2.5 py-1.5 font-mono text-xs transition-colors ${viewDays === days ? 'bg-indigo-600 text-white' : 'text-zinc-400 hover:bg-zinc-800 hover:text-white'}`}>
+                <button key={days} type="button" onClick={() => applyViewDays(days)} className={`rounded-lg px-2.5 py-1.5 tabular-nums text-xs transition-colors ${viewDays === days ? 'bg-indigo-600 text-white' : 'text-zinc-400 hover:bg-zinc-800 hover:text-white'}`}>
                   {days === 7 ? '1W' : days === 30 ? '1M' : `${days}D`}
                 </button>
               ))}
               <div className="relative ml-1">
-                <input type="number" min={1} max={365} value={viewDaysInput} onChange={(event) => setViewDaysInput(event.target.value)} onBlur={() => applyViewDays(Number(viewDaysInput))} onKeyDown={(event) => { if (event.key === 'Enter') applyViewDays(Number(viewDaysInput)); }} aria-label="Custom dashboard days" className="w-20 rounded-lg border border-zinc-700 bg-zinc-950 py-1.5 pl-2 pr-8 font-mono text-xs text-zinc-100 outline-none focus:border-indigo-500" />
+                <input type="number" min={1} max={365} value={viewDaysInput} onChange={(event) => setViewDaysInput(event.target.value)} onBlur={() => applyViewDays(Number(viewDaysInput))} onKeyDown={(event) => { if (event.key === 'Enter') applyViewDays(Number(viewDaysInput)); }} aria-label="Custom dashboard days" className="w-20 rounded-lg border border-zinc-700 bg-zinc-950 py-1.5 pl-2 pr-8 tabular-nums text-xs text-zinc-100 outline-none focus:border-indigo-500" />
                 <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-zinc-500">days</span>
               </div>
             </div>
@@ -128,7 +140,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 rounded-xl border border-zinc-800 bg-zinc-900/50 px-4 py-3 text-xs text-zinc-400">
+        {metrics && <div className="flex flex-wrap items-center gap-x-5 gap-y-2 rounded-xl border border-zinc-800 bg-zinc-900/50 px-4 py-3 text-xs text-zinc-400">
           <span className="flex items-center gap-1">
             <MetricInfo label="data coverage" align="left">These dates and counts describe verified Groww store reviews currently stored locally that match the selected date, platform, and optional word-count filters. Changing the view does not scrape again.</MetricInfo>
             Data coverage
@@ -138,24 +150,37 @@ export default function Dashboard() {
           <span><strong className="text-zinc-200">{metrics?.total_reviews.toLocaleString() || 0}</strong> matching unique reviews</span>
           <span>{formatReviewDate(metrics?.oldest_review_at)} → {formatReviewDate(metrics?.newest_review_at)}</span>
           <span>Source: verified store-review rows</span>
-        </div>
+        </div>}
 
-        {isError && <div role="alert" className="rounded-xl border border-rose-500/30 bg-rose-500/10 p-4 text-sm text-rose-300">Dashboard metrics could not be calculated. Confirm that the API is running and try again.</div>}
+        {isError && <div role="alert" className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-rose-500/30 bg-rose-500/10 p-5 text-sm text-rose-300">
+          <div><p className="font-semibold">{metrics ? 'Could not refresh dashboard' : 'Could not load dashboard'}</p><p className="mt-1">{error.message}</p>{metrics && <p className="mt-1">Showing the last successfully loaded metrics.</p>}</div>
+          <button type="button" onClick={() => void refetch()} disabled={isFetching} className="rounded-lg border border-rose-400/30 px-4 py-2 font-medium disabled:opacity-50">Retry connection</button>
+        </div>}
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+        {isLoading && <div role="status" aria-label="Loading dashboard metrics" className="grid gap-6 md:grid-cols-3">
+          {[1, 2, 3].map(item => <div key={item} className="h-64 animate-pulse rounded-2xl border border-zinc-800 bg-zinc-900 p-6"><div className="h-3 w-28 rounded bg-zinc-800" /><div className="mt-6 h-10 w-32 rounded bg-zinc-800" /><div className="mt-12 h-2 rounded bg-zinc-800" /></div>)}
+          <span className="sr-only">Loading review data…</span>
+        </div>}
+
+        {metrics && !hasReviews && <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-indigo-500/20 bg-indigo-500/5 p-5">
+          <div><h2 className="font-semibold text-zinc-100">No reviews match this view</h2><p className="mt-1 text-sm text-zinc-400">Try a longer date range, adjust your filters, or import recent store reviews.</p></div>
+          <button type="button" onClick={openScrapeReviews} className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500"><Database className="h-4 w-4" /> Scrape reviews</button>
+        </div>}
+
+        {metrics && <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
           {preferences.showVolume && (
             <section className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-900/70 p-6 shadow-xl backdrop-blur-md transition-all hover:border-zinc-700/80">
               <div className="pointer-events-none absolute -right-6 -top-6 h-28 w-28 rounded-full bg-indigo-500/10 blur-2xl" />
               <div>
                 <div className="flex items-center justify-between gap-3">
-                  <span className="font-mono text-xs font-semibold uppercase tracking-wider text-zinc-400">Review volume</span>
+                  <span className="tabular-nums text-xs font-semibold uppercase tracking-wider text-zinc-400">Review volume</span>
                   <MetricInfo label="review volume">The number of unique review IDs stored for the selected platform and date window. Duplicate IDs are skipped during scraping.</MetricInfo>
                 </div>
-                <div className="mt-3 font-mono text-3xl font-bold tracking-tight text-zinc-100 lg:text-4xl">{isLoading ? '…' : metrics?.total_reviews.toLocaleString() || 0}</div>
+                <div className="mt-3 tabular-nums text-3xl font-bold tracking-tight text-zinc-100 lg:text-4xl">{isLoading ? '…' : metrics?.total_reviews.toLocaleString() || 0}</div>
                 <p className="mt-2 text-xs text-zinc-500">Unique reviews in the last {viewDays} {viewDays === 1 ? 'day' : 'days'} · {platform}</p>
               </div>
               <div className="mt-6 flex flex-col gap-2 border-t border-zinc-800/60 pt-4">
-                <div className="flex items-center justify-between font-mono text-xs text-zinc-400">
+                <div className="flex items-center justify-between tabular-nums text-xs text-zinc-400">
                   <span>Store split</span>
                   <span className="text-zinc-200">{metrics?.ios_reviews.toLocaleString() || 0} iOS · {metrics?.android_reviews.toLocaleString() || 0} Android</span>
                 </div>
@@ -172,11 +197,11 @@ export default function Dashboard() {
               <div className="pointer-events-none absolute -right-6 -top-6 h-28 w-28 rounded-full bg-amber-500/10 blur-2xl" />
               <div>
                 <div className="flex items-center justify-between gap-3">
-                  <span className="font-mono text-xs font-semibold uppercase tracking-wider text-zinc-400">Average store rating</span>
+                  <span className="tabular-nums text-xs font-semibold uppercase tracking-wider text-zinc-400">Average store rating</span>
                   <MetricInfo label="average store rating">The arithmetic mean of the 1–5 star ratings in the selected platform and date window. Store averages below always compare iOS and Android over the same date window.</MetricInfo>
                 </div>
                 <div className="mt-3 flex items-baseline gap-2">
-                  <span className="font-mono text-3xl font-bold tracking-tight text-zinc-100 lg:text-4xl">{isLoading ? '…' : hasReviews ? metrics?.average_rating.toFixed(1) : '—'}</span>
+                  <span className="tabular-nums text-3xl font-bold tracking-tight text-zinc-100 lg:text-4xl">{isLoading ? '…' : hasReviews ? metrics?.average_rating.toFixed(1) : '—'}</span>
                   {hasReviews && <span className="text-sm font-medium text-zinc-500">/ 5.0</span>}
                 </div>
                 <p className="mt-2 text-xs text-zinc-500">Mean across {metrics?.total_reviews.toLocaleString() || 0} reviews</p>
@@ -186,9 +211,9 @@ export default function Dashboard() {
                   <div className="flex items-center gap-1 text-amber-400" aria-label={hasReviews ? `${metrics?.average_rating} out of 5 stars` : 'No ratings in this window'}>
                     {[1, 2, 3, 4, 5].map((rating) => <Star key={rating} className={`h-4 w-4 ${hasReviews && rating <= Math.round(metrics?.average_rating || 0) ? 'fill-amber-400' : 'text-amber-400/30'}`} />)}
                   </div>
-                  <span className="font-mono text-xs text-zinc-400">Median {hasReviews ? metrics?.median_rating.toFixed(1) : '—'}</span>
+                  <span className="tabular-nums text-xs text-zinc-400">Median {hasReviews ? metrics?.median_rating.toFixed(1) : '—'}</span>
                 </div>
-                <div className="grid grid-cols-3 gap-2 rounded-lg bg-zinc-950/60 p-2.5 text-center font-mono text-[11px]">
+                <div className="grid grid-cols-3 gap-2 rounded-lg bg-zinc-950/60 p-2.5 text-center tabular-nums text-[11px]">
                   <div><div className="text-zinc-500">iOS</div><div className="mt-0.5 text-zinc-200">{metrics?.ios_average_rating?.toFixed(1) ?? '—'}</div></div>
                   <div><div className="text-zinc-500">Android</div><div className="mt-0.5 text-zinc-200">{metrics?.android_average_rating?.toFixed(1) ?? '—'}</div></div>
                   <div title="iOS average minus Android average"><div className="text-zinc-500">iOS − Android</div><div className={`mt-0.5 ${metrics?.store_rating_difference == null ? 'text-zinc-200' : metrics.store_rating_difference > 0 ? 'text-emerald-400' : metrics.store_rating_difference < 0 ? 'text-rose-400' : 'text-zinc-200'}`}>{metrics?.store_rating_difference == null ? '—' : `${signed(metrics.store_rating_difference)} pts`}</div></div>
@@ -202,10 +227,10 @@ export default function Dashboard() {
               <div className="pointer-events-none absolute -right-6 -top-6 h-28 w-28 rounded-full bg-emerald-500/10 blur-2xl" />
               <div>
                 <div className="flex items-center justify-between gap-3">
-                  <span className="font-mono text-xs font-semibold uppercase tracking-wider text-zinc-400">Rating advocacy</span>
+                  <span className="tabular-nums text-xs font-semibold uppercase tracking-wider text-zinc-400">Rating advocacy</span>
                   <MetricInfo label="rating advocacy">Rating advocacy = 100 × (advocates − critics) ÷ all matching reviews. It ranges from −100 to +100. This is a star-rating proxy, not NPS, which requires a 0–10 recommendation survey.</MetricInfo>
                 </div>
-                <div className="mt-3 font-mono text-3xl font-bold tracking-tight text-zinc-100 lg:text-4xl">{isLoading ? '…' : hasReviews ? signed(metrics?.rating_advocacy_score || 0) : '—'}</div>
+                <div className="mt-3 tabular-nums text-3xl font-bold tracking-tight text-zinc-100 lg:text-4xl">{isLoading ? '…' : hasReviews ? signed(metrics?.rating_advocacy_score || 0) : '—'}</div>
                 <p className="mt-2 text-xs text-zinc-500">Advocates ≥ {preferences.advocateMin}★ minus critics ≤ {preferences.criticMax}★</p>
               </div>
               <div className="mt-6 flex flex-col gap-2 border-t border-zinc-800/60 pt-4">
@@ -214,7 +239,7 @@ export default function Dashboard() {
                   <div className="h-full bg-amber-500" style={{ width: `${metrics?.neutral_percent || 0}%` }} />
                   <div className="h-full rounded-r-full bg-rose-500" style={{ width: `${metrics?.critics_percent || 0}%` }} />
                 </div>
-                <div className="flex items-center justify-between gap-2 font-mono text-[10px] text-zinc-400 sm:text-[11px]">
+                <div className="flex items-center justify-between gap-2 tabular-nums text-[10px] text-zinc-400 sm:text-[11px]">
                   <span>{metrics?.advocates_percent || 0}% advocates ({metrics?.advocates_count || 0})</span>
                   <span>{metrics?.neutral_percent || 0}% neutral ({metrics?.neutral_count || 0})</span>
                   <span>{metrics?.critics_percent || 0}% critics ({metrics?.critics_count || 0})</span>
@@ -222,7 +247,7 @@ export default function Dashboard() {
               </div>
             </section>
           )}
-        </div>
+        </div>}
 
       </main>
 

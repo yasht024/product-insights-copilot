@@ -1,4 +1,3 @@
-import React from 'react';
 
 export default function Ideation() {
   return (
@@ -6,7 +5,7 @@ export default function Ideation() {
 {/* 1. Hero Title & Context Strip */}
 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-surface-container-low border border-card-border p-5 rounded-2xl shadow-sm">
 <div className="flex flex-col gap-1.5 max-w-3xl">
-<div className="flex items-center gap-2 text-xs font-mono text-on-surface-variant">
+<div className="flex items-center gap-2 text-xs tabular-nums text-on-surface-variant">
 <span className="px-2 py-0.5 rounded-full bg-primary-container/20 text-primary border border-primary/25 font-semibold text-[11px]">AI Sprint 24.4</span>
 <span className="text-card-border">•</span>
 <span className="text-tertiary">Opportunity Engine Online</span>
@@ -45,24 +44,24 @@ export default function Ideation() {
 {/* KPI 1: Synthesized Opportunities */}
 <div className="bg-surface-container-low border border-card-border p-4 rounded-xl flex flex-col justify-between relative overflow-hidden group hover:border-card-border/90 transition-all">
 <div className="flex items-center justify-between">
-<span className="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant font-semibold">Synthesized Opportunities</span>
+<span className="text-[11px] tabular-nums uppercase tracking-wider text-on-surface-variant font-semibold">Synthesized Opportunities</span>
 <div className="w-8 h-8 rounded-lg bg-primary-container/20 text-primary flex items-center justify-center">
 <span className="material-symbols-outlined text-[18px]">lightbulb</span>
 </div>
 </div>
 <div className="my-2 flex items-baseline gap-2">
-<span className="text-3xl font-bold font-mono text-on-surface">34</span>
-<span className="px-1.5 py-0.5 rounded bg-primary-container/20 text-primary text-[11px] font-mono font-medium">+8 this cycle</span>
+<span className="text-3xl font-bold tabular-nums text-on-surface">34</span>
+<span className="px-1.5 py-0.5 rounded bg-primary-container/20 text-primary text-[11px] tabular-nums font-medium">+8 this cycle</span>
 </div>
 <div className="flex items-center justify-between text-xs text-on-surface-variant pt-2 border-t border-card-border/60">
 <span>From 9,420 user quotes</span>
-<span className="text-tertiary font-mono font-medium">94% classified</span>
+<span className="text-tertiary tabular-nums font-medium">94% classified</span>
 </div>
 </div>
 {/* KPI 2: Top Customer Friction */}
 <div className="bg-surface-container-low border border-card-border p-4 rounded-xl flex flex-col justify-between relative overflow-hidden group hover:border-card-border/90 transition-all">
 <div className="flex items-center justify-between">
-<span className="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant font-semibold">Top Customer Friction</span>
+<span className="text-[11px] tabular-nums uppercase tracking-wider text-on-surface-variant font-semibold">Top Customer Friction</span>
 <div className="w-8 h-8 rounded-lg bg-crimson-accent/20 text-crimson-accent flex items-center justify-center">
 <span className="material-symbols-outlined text-[18px]">warning</span>
 </div>
@@ -70,49 +69,49 @@ export default function Ideation() {
 <div className="my-2">
 <div className="text-sm font-semibold text-on-surface truncate" title="Batch Photo Export &amp; RAW Editing">Batch RAW Photo Export</div>
 <div className="flex items-center gap-2 mt-1">
-<span className="px-1.5 py-0.2 rounded bg-crimson-accent/20 text-crimson-accent text-[10px] font-mono font-bold">Friction 96/100</span>
-<span className="text-xs text-on-surface-variant font-mono">3,420 mentions</span>
+<span className="px-1.5 py-0.2 rounded bg-crimson-accent/20 text-crimson-accent text-[10px] tabular-nums font-bold">Friction 96/100</span>
+<span className="text-xs text-on-surface-variant tabular-nums">3,420 mentions</span>
 </div>
 </div>
 <div className="flex items-center justify-between text-xs text-on-surface-variant pt-2 border-t border-card-border/60">
 <span>Detractor Churn Risk</span>
-<span className="text-crimson-accent font-mono font-semibold">68% Churn Threat</span>
+<span className="text-crimson-accent tabular-nums font-semibold">68% Churn Threat</span>
 </div>
 </div>
 {/* KPI 3: Projected NPS Lift */}
 <div className="bg-surface-container-low border border-card-border p-4 rounded-xl flex flex-col justify-between relative overflow-hidden group hover:border-card-border/90 transition-all">
 <div className="flex items-center justify-between">
-<span className="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant font-semibold">Projected NPS Lift</span>
+<span className="text-[11px] tabular-nums uppercase tracking-wider text-on-surface-variant font-semibold">Projected NPS Lift</span>
 <div className="w-8 h-8 rounded-lg bg-tertiary/20 text-tertiary flex items-center justify-center">
 <span className="material-symbols-outlined text-[18px]">trending_up</span>
 </div>
 </div>
 <div className="my-2 flex items-baseline gap-2">
-<span className="text-3xl font-bold font-mono text-tertiary">+14.2</span>
+<span className="text-3xl font-bold tabular-nums text-tertiary">+14.2</span>
 <span className="text-xs text-on-surface-variant">pts estimated</span>
 </div>
 <div className="flex items-center justify-between text-xs text-on-surface-variant pt-2 border-t border-card-border/60">
 <span>Across Top 5 Backlog Items</span>
-<span className="text-on-surface font-mono font-medium">Target: NPS 58</span>
+<span className="text-on-surface tabular-nums font-medium">Target: NPS 58</span>
 </div>
 </div>
 {/* KPI 4: Dev Readiness Index */}
 <div className="bg-surface-container-low border border-card-border p-4 rounded-xl flex flex-col justify-between relative overflow-hidden group hover:border-card-border/90 transition-all">
 <div className="flex items-center justify-between">
-<span className="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant font-semibold">Dev Readiness Index</span>
+<span className="text-[11px] tabular-nums uppercase tracking-wider text-on-surface-variant font-semibold">Dev Readiness Index</span>
 <div className="w-8 h-8 rounded-lg bg-emerald-accent/20 text-emerald-accent flex items-center justify-center">
 <span className="material-symbols-outlined text-[18px]">verified</span>
 </div>
 </div>
 <div className="my-2 flex items-center gap-3">
-<span className="text-3xl font-bold font-mono text-on-surface">78%</span>
+<span className="text-3xl font-bold tabular-nums text-on-surface">78%</span>
 <div className="flex-1 bg-surface-container-lowest h-2 rounded-full overflow-hidden border border-card-border/50">
 <div className="bg-gradient-to-r from-primary-container to-tertiary h-full rounded-full" style={{"width": "78%"}}></div>
 </div>
 </div>
 <div className="flex items-center justify-between text-xs text-on-surface-variant pt-2 border-t border-card-border/60">
 <span>12 AI Specs Complete</span>
-<span className="text-emerald-accent font-mono font-medium">Acceptance Criteria Ready</span>
+<span className="text-emerald-accent tabular-nums font-medium">Acceptance Criteria Ready</span>
 </div>
 </div>
 </div>
@@ -131,7 +130,7 @@ export default function Ideation() {
 </div>
 </div>
 {/* Legend Pills */}
-<div className="flex items-center gap-3 text-[11px] font-mono">
+<div className="flex items-center gap-3 text-[11px] tabular-nums">
 <span className="flex items-center gap-1 text-crimson-accent">
 <span className="w-2 h-2 rounded-full bg-crimson-accent"></span> Critical Pain
               </span>
@@ -149,23 +148,23 @@ export default function Ideation() {
 <div className="absolute inset-x-0 top-1/2 h-px bg-card-border/70 pointer-events-none"></div>
 <div className="absolute inset-y-0 left-1/2 w-px bg-card-border/70 pointer-events-none"></div>
 {/* Quadrant Labels / Watermarks */}
-<div className="absolute top-3 left-4 text-[11px] font-mono text-tertiary/90 font-semibold tracking-wide flex items-center gap-1 uppercase">
+<div className="absolute top-3 left-4 text-[11px] tabular-nums text-tertiary/90 font-semibold tracking-wide flex items-center gap-1 uppercase">
 <span className="material-symbols-outlined text-[15px]">bolt</span> Quick Wins (High Impact • Low Effort)
             </div>
-<div className="absolute top-3 right-4 text-[11px] font-mono text-secondary/90 font-semibold tracking-wide flex items-center gap-1 uppercase">
+<div className="absolute top-3 right-4 text-[11px] tabular-nums text-secondary/90 font-semibold tracking-wide flex items-center gap-1 uppercase">
 <span className="material-symbols-outlined text-[15px]">diamond</span> Strategic Bets (High Impact • High Effort)
             </div>
-<div className="absolute bottom-3 left-4 text-[11px] font-mono text-on-surface-variant/60 font-semibold tracking-wide uppercase">
+<div className="absolute bottom-3 left-4 text-[11px] tabular-nums text-on-surface-variant/60 font-semibold tracking-wide uppercase">
               Incremental Refinements (Low Effort)
             </div>
-<div className="absolute bottom-3 right-4 text-[11px] font-mono text-on-surface-variant/50 font-semibold tracking-wide uppercase">
+<div className="absolute bottom-3 right-4 text-[11px] tabular-nums text-on-surface-variant/50 font-semibold tracking-wide uppercase">
               Time Sinks (High Effort • Low Return)
             </div>
 {/* Axis Direction Arrows */}
-<div className="absolute left-2.5 top-1/2 -translate-y-1/2 -rotate-90 origin-center text-[10px] font-mono text-outline uppercase tracking-widest pointer-events-none">
+<div className="absolute left-2.5 top-1/2 -translate-y-1/2 -rotate-90 origin-center text-[10px] tabular-nums text-outline uppercase tracking-widest pointer-events-none">
               ← Impact / Customer Reach ↑
             </div>
-<div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 text-[10px] font-mono text-outline uppercase tracking-widest pointer-events-none">
+<div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 text-[10px] tabular-nums text-outline uppercase tracking-widest pointer-events-none">
               Dev Effort / Complexity →
             </div>
 {/* PLOTTED FEATURE NODES */}
@@ -174,7 +173,7 @@ export default function Ideation() {
 <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-high/90 hover:bg-surface-bright border border-tertiary/40 shadow-lg backdrop-blur-md transition-all group-hover:scale-105">
 <span className="w-2 h-2 rounded-full bg-crimson-accent animate-pulse"></span>
 <span className="text-xs font-semibold text-on-surface">HEIC Buffer Auto-Purge</span>
-<span className="px-1.5 py-0.2 rounded bg-tertiary/20 text-tertiary font-mono text-[10px] font-bold">RICE 96</span>
+<span className="px-1.5 py-0.2 rounded bg-tertiary/20 text-tertiary tabular-nums text-[10px] font-bold">RICE 96</span>
 </div>
 {/* Tooltip on hover */}
 <div className="hidden group-hover:flex flex-col absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 p-2.5 rounded-lg bg-surface-container-highest border border-card-border text-on-surface shadow-2xl z-30 pointer-events-none">
@@ -189,7 +188,7 @@ export default function Ideation() {
 <div className="flex items-center gap-1.5 px-2.5 py-1.2 rounded-lg bg-surface-container-high/80 hover:bg-surface-bright border border-card-border shadow-md backdrop-blur-md transition-all group-hover:scale-105">
 <span className="w-2 h-2 rounded-full bg-tertiary"></span>
 <span className="text-xs text-on-surface">Sub Pause &amp; Receipt Log</span>
-<span className="px-1.5 py-0.2 rounded bg-surface-container text-tertiary font-mono text-[10px]">RICE 92</span>
+<span className="px-1.5 py-0.2 rounded bg-surface-container text-tertiary tabular-nums text-[10px]">RICE 92</span>
 </div>
 </div>
 {/* 3. iPad Stage Manager Canvas (Strategic Bet: High Impact, High Effort) */}
@@ -197,7 +196,7 @@ export default function Ideation() {
 <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-high/90 hover:bg-surface-bright border border-secondary/50 shadow-[0_0_15px_rgba(221,183,255,0.25)] backdrop-blur-md transition-all group-hover:scale-105">
 <span className="w-2 h-2 rounded-full bg-secondary animate-ping"></span>
 <span className="text-xs font-semibold text-secondary">iPad Stage Manager Canvas</span>
-<span className="px-1.5 py-0.2 rounded bg-secondary/20 text-secondary font-mono text-[10px] font-bold">RICE 98</span>
+<span className="px-1.5 py-0.2 rounded bg-secondary/20 text-secondary tabular-nums text-[10px] font-bold">RICE 98</span>
 </div>
 <div className="hidden group-hover:flex flex-col absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-60 p-2.5 rounded-lg bg-surface-container-highest border border-card-border text-on-surface shadow-2xl z-30 pointer-events-none">
 <span className="text-xs font-bold text-secondary flex items-center gap-1">
@@ -211,7 +210,7 @@ export default function Ideation() {
 <div className="flex items-center gap-1.5 px-2.5 py-1.2 rounded-lg bg-surface-container-high/80 hover:bg-surface-bright border border-card-border shadow-md backdrop-blur-md transition-all group-hover:scale-105">
 <span className="w-2 h-2 rounded-full bg-secondary"></span>
 <span className="text-xs text-on-surface">E2EE Background Cloud Sync</span>
-<span className="px-1.5 py-0.2 rounded bg-surface-container text-secondary font-mono text-[10px]">RICE 91</span>
+<span className="px-1.5 py-0.2 rounded bg-surface-container text-secondary tabular-nums text-[10px]">RICE 91</span>
 </div>
 </div>
 {/* 5. Pure Black OLED #000000 (Incremental Refinement: Low Effort) */}
@@ -219,7 +218,7 @@ export default function Ideation() {
 <div className="flex items-center gap-1.5 px-2.5 py-1.2 rounded-lg bg-surface-container-high/70 hover:bg-surface-bright border border-card-border shadow-sm backdrop-blur-md transition-all group-hover:scale-105">
 <span className="w-2 h-2 rounded-full bg-primary"></span>
 <span className="text-xs text-on-surface">Pure Black OLED #000000</span>
-<span className="px-1.5 py-0.2 rounded bg-surface-container text-on-surface-variant font-mono text-[10px]">RICE 79</span>
+<span className="px-1.5 py-0.2 rounded bg-surface-container text-on-surface-variant tabular-nums text-[10px]">RICE 79</span>
 </div>
 </div>
 {/* 6. Custom Palette Hex Support (Time Sink / Lower Return) */}
@@ -227,12 +226,12 @@ export default function Ideation() {
 <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-surface-container/60 hover:bg-surface-container-high border border-card-border/60 shadow-sm backdrop-blur-md transition-all">
 <span className="w-1.5 h-1.5 rounded-full bg-outline"></span>
 <span className="text-[11px] text-on-surface-variant">Custom Palette Hex Support</span>
-<span className="px-1.5 py-0.2 rounded bg-surface-container-lowest text-outline font-mono text-[9px]">RICE 68</span>
+<span className="px-1.5 py-0.2 rounded bg-surface-container-lowest text-outline tabular-nums text-[9px]">RICE 68</span>
 </div>
 </div>
 </div>
 {/* Footer Formula Bar */}
-<div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs text-on-surface-variant font-mono gap-2 pt-1">
+<div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs text-on-surface-variant tabular-nums gap-2 pt-1">
 <div className="flex items-center gap-1.5">
 <span className="material-symbols-outlined text-[16px] text-tertiary">functions</span>
 <span>RICE Weighting Formula: (Reach × Sentiment Drop × Confidence) / Dev Sprints</span>
@@ -246,9 +245,9 @@ export default function Ideation() {
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-1.5">
 <span className="material-symbols-outlined text-primary text-[18px]">auto_awesome</span>
-<span className="text-[11px] font-mono uppercase font-bold text-primary tracking-wider">Top Recommendation</span>
+<span className="text-[11px] tabular-nums uppercase font-bold text-primary tracking-wider">Top Recommendation</span>
 </div>
-<span className="px-2 py-0.5 rounded-full bg-tertiary/15 text-tertiary font-mono text-xs font-bold border border-tertiary/30">ROI: 3.4x</span>
+<span className="px-2 py-0.5 rounded-full bg-tertiary/15 text-tertiary tabular-nums text-xs font-bold border border-tertiary/30">ROI: 3.4x</span>
 </div>
 <div>
 <h3 className="text-base font-bold text-on-surface leading-snug">
@@ -262,20 +261,20 @@ export default function Ideation() {
 <div className="flex flex-col gap-2 bg-surface-container-lowest border border-card-border/60 p-3 rounded-xl">
 <div className="flex items-center justify-between text-xs">
 <span className="text-on-surface-variant">Annualized Churn Risk Mitigated:</span>
-<span className="font-mono text-tertiary font-bold">$142,000 ARR</span>
+<span className="tabular-nums text-tertiary font-bold">$142,000 ARR</span>
 </div>
 <div className="flex items-center justify-between text-xs">
 <span className="text-on-surface-variant">Estimated Dev Effort:</span>
-<span className="font-mono text-on-surface">1.5 Sprints (Low)</span>
+<span className="tabular-nums text-on-surface">1.5 Sprints (Low)</span>
 </div>
 <div className="flex items-center justify-between text-xs">
 <span className="text-on-surface-variant">Customer Confidence Index:</span>
-<span className="font-mono text-secondary font-bold">98.2%</span>
+<span className="tabular-nums text-secondary font-bold">98.2%</span>
 </div>
 </div>
 {/* Sentiment Shift Bar */}
 <div className="flex flex-col gap-1.5 mt-1">
-<div className="flex justify-between text-[11px] font-mono text-on-surface-variant">
+<div className="flex justify-between text-[11px] tabular-nums text-on-surface-variant">
 <span>Sentiment Shift: <span className="text-crimson-accent font-semibold">-0.92</span></span>
 <span className="text-emerald-accent font-semibold">→ Projected +0.45</span>
 </div>
@@ -291,7 +290,7 @@ export default function Ideation() {
 <span className="material-symbols-outlined text-[17px]">auto_stories</span>
 <span>Draft PRD &amp; Acceptance Stories</span>
 </button>
-<div className="flex items-center justify-between text-xs text-on-surface-variant px-1 font-mono">
+<div className="flex items-center justify-between text-xs text-on-surface-variant px-1 tabular-nums">
 <span>Linked: Zendesk #8910</span>
 <span className="text-primary hover:underline cursor-pointer">Inspect Citations (312) →</span>
 </div>
@@ -307,14 +306,14 @@ export default function Ideation() {
 <span className="material-symbols-outlined text-[20px]">terminal</span>
 </div>
 <div>
-<div className="flex items-center gap-2 text-xs font-mono">
+<div className="flex items-center gap-2 text-xs tabular-nums">
 <span className="px-2 py-0.2 rounded bg-primary-container/20 text-primary font-bold">AI SPEC READY</span>
 <span className="text-on-surface-variant">SPEC-2024-884</span>
 </div>
 <h2 className="text-base font-bold text-on-surface">Native Stage Manager &amp; Split-View Canvas Viewport Support</h2>
 </div>
 </div>
-<div className="flex items-center gap-2 text-xs font-mono">
+<div className="flex items-center gap-2 text-xs tabular-nums">
 <span className="px-2.5 py-1 rounded-lg bg-surface-container border border-card-border text-tertiary">
               98.4% Customer Match
             </span>
@@ -328,21 +327,21 @@ export default function Ideation() {
 {/* Problem Definition (5 cols) */}
 <div className="lg:col-span-5 flex flex-col gap-3">
 <div>
-<span className="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant font-semibold">Synthesized Problem Statement</span>
+<span className="text-[11px] tabular-nums uppercase tracking-wider text-on-surface-variant font-semibold">Synthesized Problem Statement</span>
 <p className="text-xs text-on-surface mt-1.5 bg-surface-container-lowest border border-card-border/60 p-3 rounded-xl leading-relaxed">
                 Professional iPad creators migrating from desktop are heavily blocked when multitasking: <strong className="text-crimson-accent">82% of 2-star reviews</strong> in v2.4 mention canvas reset or dropped WebGL buffers when iPadOS Stage Manager resizes the viewport to 1/2 or 2/3 width.
               </p>
 </div>
 <div className="flex flex-col gap-1.5">
-<span className="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant font-semibold">Telemetry &amp; Evidence Sources</span>
+<span className="text-[11px] tabular-nums uppercase tracking-wider text-on-surface-variant font-semibold">Telemetry &amp; Evidence Sources</span>
 <div className="flex items-center gap-2 flex-wrap">
-<span className="px-2.5 py-1 rounded-lg bg-surface-container border border-card-border text-xs text-on-surface font-mono flex items-center gap-1.5">
+<span className="px-2.5 py-1 rounded-lg bg-surface-container border border-card-border text-xs text-on-surface tabular-nums flex items-center gap-1.5">
 <span className="material-symbols-outlined text-[14px] text-tertiary">file_download</span> App Store (3,840)
                 </span>
-<span className="px-2.5 py-1 rounded-lg bg-surface-container border border-card-border text-xs text-on-surface font-mono flex items-center gap-1.5">
+<span className="px-2.5 py-1 rounded-lg bg-surface-container border border-card-border text-xs text-on-surface tabular-nums flex items-center gap-1.5">
 <span className="material-symbols-outlined text-[14px] text-secondary">forum</span> Discord #ipad-creators (240)
                 </span>
-<span className="px-2.5 py-1 rounded-lg bg-surface-container border border-card-border text-xs text-on-surface font-mono flex items-center gap-1.5">
+<span className="px-2.5 py-1 rounded-lg bg-surface-container border border-card-border text-xs text-on-surface tabular-nums flex items-center gap-1.5">
 <span className="material-symbols-outlined text-[14px] text-crimson-accent">bug_report</span> Sentry Cluster #302
                 </span>
 </div>
@@ -351,17 +350,17 @@ export default function Ideation() {
 {/* User Stories & Acceptance Criteria (7 cols) */}
 <div className="lg:col-span-7 flex flex-col gap-2.5">
 <div className="flex items-center justify-between">
-<span className="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant font-semibold">Generated User Stories &amp; Acceptance Criteria</span>
+<span className="text-[11px] tabular-nums uppercase tracking-wider text-on-surface-variant font-semibold">Generated User Stories &amp; Acceptance Criteria</span>
 <span className="text-xs text-primary hover:underline cursor-pointer">Regenerate with Claude 3.5 →</span>
 </div>
 {/* Story 1 */}
 <div className="p-3 rounded-xl bg-surface-container-lowest border border-card-border/60 flex items-start gap-3">
-<span className="font-mono text-xs font-bold text-primary bg-primary-container/20 px-2 py-0.5 rounded border border-primary/20">US-1</span>
+<span className="tabular-nums text-xs font-bold text-primary bg-primary-container/20 px-2 py-0.5 rounded border border-primary/20">US-1</span>
 <div className="flex-1">
 <p className="text-xs text-on-surface leading-relaxed">
 <strong>As an iPad power user</strong>, I want the canvas viewport to persist its active zoom and pan state when snapped to 1/2 or 2/3 width without reloading WebGL textures.
                 </p>
-<div className="flex items-center gap-3 mt-1.5 text-[11px] font-mono text-tertiary">
+<div className="flex items-center gap-3 mt-1.5 text-[11px] tabular-nums text-tertiary">
 <span className="flex items-center gap-1">✓ Zero buffer reload</span>
 <span className="flex items-center gap-1">✓ 60fps continuous gesture response</span>
 </div>
@@ -369,12 +368,12 @@ export default function Ideation() {
 </div>
 {/* Story 2 */}
 <div className="p-3 rounded-xl bg-surface-container-lowest border border-card-border/60 flex items-start gap-3">
-<span className="font-mono text-xs font-bold text-primary bg-primary-container/20 px-2 py-0.5 rounded border border-primary/20">US-2</span>
+<span className="tabular-nums text-xs font-bold text-primary bg-primary-container/20 px-2 py-0.5 rounded border border-primary/20">US-2</span>
 <div className="flex-1">
 <p className="text-xs text-on-surface leading-relaxed">
 <strong>As a creative lead</strong>, I want multi-window Drag &amp; Drop for RAW photo layers directly from Apple Files and Lightroom into separate workspace tabs.
                 </p>
-<div className="flex items-center gap-3 mt-1.5 text-[11px] font-mono text-tertiary">
+<div className="flex items-center gap-3 mt-1.5 text-[11px] tabular-nums text-tertiary">
 <span className="flex items-center gap-1">✓ Support .DNG, .CR3, .ARW formats</span>
 <span className="flex items-center gap-1">✓ Background thumbnail parsing</span>
 </div>
@@ -420,7 +419,7 @@ export default function Ideation() {
 <div className="overflow-x-auto">
 <table className="w-full text-left border-collapse text-xs">
 <thead>
-<tr className="bg-surface-container-lowest text-on-surface-variant font-mono uppercase tracking-wider text-[10px] border-b border-card-border/60">
+<tr className="bg-surface-container-lowest text-on-surface-variant tabular-nums uppercase tracking-wider text-[10px] border-b border-card-border/60">
 <th className="py-2.5 px-4 font-semibold">Feature / Opportunity</th>
 <th className="py-2.5 px-3 font-semibold">Mentions &amp; Velocity</th>
 <th className="py-2.5 px-3 font-semibold">Sentiment</th>
@@ -443,7 +442,7 @@ export default function Ideation() {
 <div className="font-semibold text-on-surface group-hover:text-primary transition-colors cursor-pointer">
                         iPad Pro Landscape Canvas &amp; Stage Manager
                       </div>
-<div className="flex items-center gap-1.5 text-[10px] font-mono text-on-surface-variant mt-0.5">
+<div className="flex items-center gap-1.5 text-[10px] tabular-nums text-on-surface-variant mt-0.5">
 <span className="px-1.5 py-0.2 rounded bg-surface-container">Core Engine</span>
 <span>•</span>
 <span className="text-tertiary">High Detractor Volume</span>
@@ -451,31 +450,31 @@ export default function Ideation() {
 </div>
 </div>
 </td>
-<td className="py-3 px-3 font-mono">
+<td className="py-3 px-3 tabular-nums">
 <div className="font-bold text-on-surface">4,120</div>
 <div className="text-[10px] text-crimson-accent flex items-center gap-0.5">
 <span className="material-symbols-outlined text-[12px]">trending_up</span> +95% spike
                   </div>
 </td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-full bg-crimson-accent/15 text-crimson-accent font-mono font-bold text-[10px]">
+<span className="px-2 py-0.5 rounded-full bg-crimson-accent/15 text-crimson-accent tabular-nums font-bold text-[10px]">
                     -0.65 Negative
                   </span>
 </td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-md bg-secondary/15 border border-secondary/30 text-secondary font-mono font-bold text-[11px] inline-flex items-center gap-1">
+<span className="px-2 py-0.5 rounded-md bg-secondary/15 border border-secondary/30 text-secondary tabular-nums font-bold text-[11px] inline-flex items-center gap-1">
 <span className="material-symbols-outlined text-[13px]">stars</span> 98
                   </span>
 </td>
-<td className="py-3 px-3 font-mono">
+<td className="py-3 px-3 tabular-nums">
 <div className="text-crimson-accent font-bold">$320k ARR</div>
 <div className="text-[10px] text-on-surface-variant">42 Enterprise accounts</div>
 </td>
-<td className="py-3 px-3 font-mono">
+<td className="py-3 px-3 tabular-nums">
 <span className="px-2 py-0.5 rounded bg-surface-container border border-card-border text-on-surface text-[10px]">v2.5.0</span>
 </td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-full bg-primary-container/20 text-primary border border-primary/20 font-mono text-[10px] inline-flex items-center gap-1">
+<span className="px-2 py-0.5 rounded-full bg-primary-container/20 text-primary border border-primary/20 tabular-nums text-[10px] inline-flex items-center gap-1">
 <span className="w-1.5 h-1.5 rounded-full bg-primary"></span> Spec Drafted
                   </span>
 </td>
@@ -497,7 +496,7 @@ export default function Ideation() {
 <div className="font-semibold text-on-surface group-hover:text-primary transition-colors cursor-pointer">
                         HEIC Buffer Auto-Garbage Collection
                       </div>
-<div className="flex items-center gap-1.5 text-[10px] font-mono text-on-surface-variant mt-0.5">
+<div className="flex items-center gap-1.5 text-[10px] tabular-nums text-on-surface-variant mt-0.5">
 <span className="px-1.5 py-0.2 rounded bg-surface-container">Memory • Crash</span>
 <span>•</span>
 <span className="text-crimson-accent font-semibold">P0 Blocker</span>
@@ -505,31 +504,31 @@ export default function Ideation() {
 </div>
 </div>
 </td>
-<td className="py-3 px-3 font-mono">
+<td className="py-3 px-3 tabular-nums">
 <div className="font-bold text-on-surface">3,120</div>
 <div className="text-[10px] text-crimson-accent flex items-center gap-0.5">
 <span className="material-symbols-outlined text-[12px]">trending_up</span> +480% surge
                   </div>
 </td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-full bg-crimson-accent/20 text-crimson-accent font-mono font-bold text-[10px]">
+<span className="px-2 py-0.5 rounded-full bg-crimson-accent/20 text-crimson-accent tabular-nums font-bold text-[10px]">
                     -0.88 Crash
                   </span>
 </td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-md bg-tertiary/15 border border-tertiary/30 text-tertiary font-mono font-bold text-[11px] inline-flex items-center gap-1">
+<span className="px-2 py-0.5 rounded-md bg-tertiary/15 border border-tertiary/30 text-tertiary tabular-nums font-bold text-[11px] inline-flex items-center gap-1">
 <span className="material-symbols-outlined text-[13px]">bolt</span> 96
                   </span>
 </td>
-<td className="py-3 px-3 font-mono">
+<td className="py-3 px-3 tabular-nums">
 <div className="text-crimson-accent font-bold">$195k ARR</div>
 <div className="text-[10px] text-on-surface-variant">Immediate Churn</div>
 </td>
-<td className="py-3 px-3 font-mono">
+<td className="py-3 px-3 tabular-nums">
 <span className="px-2 py-0.5 rounded bg-crimson-accent/20 text-crimson-accent text-[10px] font-semibold">v2.4.2 Hotfix</span>
 </td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-full bg-crimson-accent/15 text-crimson-accent border border-crimson-accent/20 font-mono text-[10px] inline-flex items-center gap-1">
+<span className="px-2 py-0.5 rounded-full bg-crimson-accent/15 text-crimson-accent border border-crimson-accent/20 tabular-nums text-[10px] inline-flex items-center gap-1">
 <span className="w-1.5 h-1.5 rounded-full bg-crimson-accent animate-pulse"></span> In Dev Sprints
                   </span>
 </td>
@@ -551,7 +550,7 @@ export default function Ideation() {
 <div className="font-semibold text-on-surface group-hover:text-primary transition-colors cursor-pointer">
                         In-App Subscription Transparency &amp; Receipt History
                       </div>
-<div className="flex items-center gap-1.5 text-[10px] font-mono text-on-surface-variant mt-0.5">
+<div className="flex items-center gap-1.5 text-[10px] tabular-nums text-on-surface-variant mt-0.5">
 <span className="px-1.5 py-0.2 rounded bg-surface-container">Billing &amp; Auth</span>
 <span>•</span>
 <span className="text-tertiary font-semibold">Fast Implementation</span>
@@ -559,31 +558,31 @@ export default function Ideation() {
 </div>
 </div>
 </td>
-<td className="py-3 px-3 font-mono">
+<td className="py-3 px-3 tabular-nums">
 <div className="font-bold text-on-surface">2,410</div>
 <div className="text-[10px] text-tertiary flex items-center gap-0.5">
 <span className="material-symbols-outlined text-[12px]">trending_up</span> +64% drift
                   </div>
 </td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-full bg-crimson-accent/15 text-crimson-accent font-mono font-bold text-[10px]">
+<span className="px-2 py-0.5 rounded-full bg-crimson-accent/15 text-crimson-accent tabular-nums font-bold text-[10px]">
                     -0.92 Severe
                   </span>
 </td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-md bg-tertiary/15 border border-tertiary/30 text-tertiary font-mono font-bold text-[11px] inline-flex items-center gap-1">
+<span className="px-2 py-0.5 rounded-md bg-tertiary/15 border border-tertiary/30 text-tertiary tabular-nums font-bold text-[11px] inline-flex items-center gap-1">
 <span className="material-symbols-outlined text-[13px]">bolt</span> 92
                   </span>
 </td>
-<td className="py-3 px-3 font-mono">
+<td className="py-3 px-3 tabular-nums">
 <div className="text-crimson-accent font-bold">$180k ARR</div>
 <div className="text-[10px] text-on-surface-variant">Card chargeback risk</div>
 </td>
-<td className="py-3 px-3 font-mono">
+<td className="py-3 px-3 tabular-nums">
 <span className="px-2 py-0.5 rounded bg-surface-container border border-card-border text-on-surface text-[10px]">v2.5.0</span>
 </td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-full bg-tertiary/15 text-tertiary border border-tertiary/20 font-mono text-[10px] inline-flex items-center gap-1">
+<span className="px-2 py-0.5 rounded-full bg-tertiary/15 text-tertiary border border-tertiary/20 tabular-nums text-[10px] inline-flex items-center gap-1">
 <span className="w-1.5 h-1.5 rounded-full bg-tertiary"></span> Ready for RFC
                   </span>
 </td>
@@ -605,7 +604,7 @@ export default function Ideation() {
 <div className="font-semibold text-on-surface group-hover:text-primary transition-colors cursor-pointer">
                         Bulk Background Export Queue &amp; Push Notification
                       </div>
-<div className="flex items-center gap-1.5 text-[10px] font-mono text-on-surface-variant mt-0.5">
+<div className="flex items-center gap-1.5 text-[10px] tabular-nums text-on-surface-variant mt-0.5">
 <span className="px-1.5 py-0.2 rounded bg-surface-container">Exports</span>
 <span>•</span>
 <span className="text-on-surface-variant">Photographer Workflow</span>
@@ -613,31 +612,31 @@ export default function Ideation() {
 </div>
 </div>
 </td>
-<td className="py-3 px-3 font-mono">
+<td className="py-3 px-3 tabular-nums">
 <div className="font-bold text-on-surface">1,890</div>
 <div className="text-[10px] text-crimson-accent flex items-center gap-0.5">
 <span className="material-symbols-outlined text-[12px]">trending_up</span> +210% surge
                   </div>
 </td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-full bg-crimson-accent/15 text-crimson-accent font-mono font-bold text-[10px]">
+<span className="px-2 py-0.5 rounded-full bg-crimson-accent/15 text-crimson-accent tabular-nums font-bold text-[10px]">
                     -0.60 Friction
                   </span>
 </td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-md bg-surface-container border border-card-border font-mono font-bold text-on-surface text-[11px]">
+<span className="px-2 py-0.5 rounded-md bg-surface-container border border-card-border tabular-nums font-bold text-on-surface text-[11px]">
                     89
                   </span>
 </td>
-<td className="py-3 px-3 font-mono">
+<td className="py-3 px-3 tabular-nums">
 <div className="text-on-surface font-bold">$85k ARR</div>
 <div className="text-[10px] text-on-surface-variant">Pro churn correlation</div>
 </td>
-<td className="py-3 px-3 font-mono">
+<td className="py-3 px-3 tabular-nums">
 <span className="px-2 py-0.5 rounded bg-surface-container border border-card-border text-on-surface text-[10px]">v2.5.1</span>
 </td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-mono text-[10px] inline-flex items-center gap-1">
+<span className="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant tabular-nums text-[10px] inline-flex items-center gap-1">
 <span className="w-1.5 h-1.5 rounded-full bg-outline"></span> In Backlog
                   </span>
 </td>
@@ -659,7 +658,7 @@ export default function Ideation() {
 <div className="font-semibold text-on-surface group-hover:text-primary transition-colors cursor-pointer">
                         Granular Dark Mode Palette (Pure AMOLED #000000)
                       </div>
-<div className="flex items-center gap-1.5 text-[10px] font-mono text-on-surface-variant mt-0.5">
+<div className="flex items-center gap-1.5 text-[10px] tabular-nums text-on-surface-variant mt-0.5">
 <span className="px-1.5 py-0.2 rounded bg-surface-container">Theme / UI</span>
 <span>•</span>
 <span className="text-emerald-accent">Battery Saving Feature</span>
@@ -667,31 +666,31 @@ export default function Ideation() {
 </div>
 </div>
 </td>
-<td className="py-3 px-3 font-mono">
+<td className="py-3 px-3 tabular-nums">
 <div className="font-bold text-on-surface">1,450</div>
 <div className="text-[10px] text-tertiary flex items-center gap-0.5">
 <span className="material-symbols-outlined text-[12px]">trending_flat</span> +42% steady
                   </div>
 </td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-full bg-emerald-accent/15 text-emerald-accent font-mono font-bold text-[10px]">
+<span className="px-2 py-0.5 rounded-full bg-emerald-accent/15 text-emerald-accent tabular-nums font-bold text-[10px]">
                     +0.72 Delight
                   </span>
 </td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-md bg-surface-container border border-card-border font-mono font-bold text-on-surface-variant text-[11px]">
+<span className="px-2 py-0.5 rounded-md bg-surface-container border border-card-border tabular-nums font-bold text-on-surface-variant text-[11px]">
                     79
                   </span>
 </td>
-<td className="py-3 px-3 font-mono">
+<td className="py-3 px-3 tabular-nums">
 <div className="text-on-surface-variant font-medium">N/A</div>
 <div className="text-[10px] text-on-surface-variant">NPS Lift Driver</div>
 </td>
-<td className="py-3 px-3 font-mono">
+<td className="py-3 px-3 tabular-nums">
 <span className="px-2 py-0.5 rounded bg-surface-container border border-card-border text-on-surface text-[10px]">v2.6.0</span>
 </td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-full bg-primary-container/20 text-primary border border-primary/20 font-mono text-[10px] inline-flex items-center gap-1">
+<span className="px-2 py-0.5 rounded-full bg-primary-container/20 text-primary border border-primary/20 tabular-nums text-[10px] inline-flex items-center gap-1">
 <span className="w-1.5 h-1.5 rounded-full bg-primary"></span> Synced Linear
                   </span>
 </td>
@@ -713,7 +712,7 @@ export default function Ideation() {
 <div className="font-semibold text-on-surface group-hover:text-primary transition-colors cursor-pointer">
                         Apple Pencil Pro Barrel Roll &amp; Haptic Squeeze
                       </div>
-<div className="flex items-center gap-1.5 text-[10px] font-mono text-on-surface-variant mt-0.5">
+<div className="flex items-center gap-1.5 text-[10px] tabular-nums text-on-surface-variant mt-0.5">
 <span className="px-1.5 py-0.2 rounded bg-surface-container">Hardware API</span>
 <span>•</span>
 <span className="text-secondary">Keynote Feature</span>
@@ -721,31 +720,31 @@ export default function Ideation() {
 </div>
 </div>
 </td>
-<td className="py-3 px-3 font-mono">
+<td className="py-3 px-3 tabular-nums">
 <div className="font-bold text-on-surface">980</div>
 <div className="text-[10px] text-secondary flex items-center gap-0.5">
 <span className="material-symbols-outlined text-[12px]">trending_up</span> +112% new
                   </div>
 </td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-full bg-secondary/15 text-secondary font-mono font-bold text-[10px]">
+<span className="px-2 py-0.5 rounded-full bg-secondary/15 text-secondary tabular-nums font-bold text-[10px]">
                     +0.88 Delight
                   </span>
 </td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-md bg-surface-container border border-card-border font-mono font-bold text-on-surface-variant text-[11px]">
+<span className="px-2 py-0.5 rounded-md bg-surface-container border border-card-border tabular-nums font-bold text-on-surface-variant text-[11px]">
                     76
                   </span>
 </td>
-<td className="py-3 px-3 font-mono">
+<td className="py-3 px-3 tabular-nums">
 <div className="text-secondary font-semibold">App Store Feature</div>
 <div className="text-[10px] text-on-surface-variant">Editorial Spotlight</div>
 </td>
-<td className="py-3 px-3 font-mono">
+<td className="py-3 px-3 tabular-nums">
 <span className="px-2 py-0.5 rounded bg-surface-container border border-card-border text-on-surface text-[10px]">v2.6.0</span>
 </td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-mono text-[10px] inline-flex items-center gap-1">
+<span className="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant tabular-nums text-[10px] inline-flex items-center gap-1">
 <span className="w-1.5 h-1.5 rounded-full bg-outline"></span> Product Review
                   </span>
 </td>
@@ -767,7 +766,7 @@ export default function Ideation() {
 <div className="font-semibold text-on-surface-variant group-hover:text-primary transition-colors cursor-pointer">
                         Custom Accent Theme Tokens &amp; Hex Code Support
                       </div>
-<div className="flex items-center gap-1.5 text-[10px] font-mono text-outline mt-0.5">
+<div className="flex items-center gap-1.5 text-[10px] tabular-nums text-outline mt-0.5">
 <span className="px-1.5 py-0.2 rounded bg-surface-container">Design System</span>
 <span>•</span>
 <span>Longtail Request</span>
@@ -775,31 +774,31 @@ export default function Ideation() {
 </div>
 </div>
 </td>
-<td className="py-3 px-3 font-mono">
+<td className="py-3 px-3 tabular-nums">
 <div className="font-medium text-on-surface-variant">720</div>
 <div className="text-[10px] text-on-surface-variant flex items-center gap-0.5">
 <span className="material-symbols-outlined text-[12px]">trending_flat</span> +18% steady
                   </div>
 </td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-full bg-surface-container text-tertiary font-mono font-bold text-[10px]">
+<span className="px-2 py-0.5 rounded-full bg-surface-container text-tertiary tabular-nums font-bold text-[10px]">
                     +0.65 Positive
                   </span>
 </td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-md bg-surface-container border border-card-border font-mono font-bold text-outline text-[11px]">
+<span className="px-2 py-0.5 rounded-md bg-surface-container border border-card-border tabular-nums font-bold text-outline text-[11px]">
                     68
                   </span>
 </td>
-<td className="py-3 px-3 font-mono">
+<td className="py-3 px-3 tabular-nums">
 <div className="text-outline">&lt;$10k ARR</div>
 <div className="text-[10px] text-outline">Low risk factor</div>
 </td>
-<td className="py-3 px-3 font-mono">
+<td className="py-3 px-3 tabular-nums">
 <span className="px-2 py-0.5 rounded bg-surface-container text-outline text-[10px]">Backlog</span>
 </td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-full bg-surface-container text-outline font-mono text-[10px] inline-flex items-center gap-1">
+<span className="px-2 py-0.5 rounded-full bg-surface-container text-outline tabular-nums text-[10px] inline-flex items-center gap-1">
 <span className="w-1.5 h-1.5 rounded-full bg-outline"></span> Icebox
                   </span>
 </td>
@@ -814,10 +813,10 @@ export default function Ideation() {
 </table>
 </div>
 {/* Table Pagination & Count Strip */}
-<div className="p-3 bg-surface-container-lowest border-t border-card-border/60 flex items-center justify-between text-xs text-on-surface-variant font-mono">
+<div className="p-3 bg-surface-container-lowest border-t border-card-border/60 flex items-center justify-between text-xs text-on-surface-variant tabular-nums">
 <span>Showing 7 of 34 opportunity clusters (filtered from 9,420 quotes)</span>
 <div className="flex items-center gap-1.5">
-<button className="px-2 py-1 rounded-lg bg-surface-container border border-card-border text-on-surface-variant hover:text-on-surface disabled:opacity-40" disabled="">Previous</button>
+<button className="px-2 py-1 rounded-lg bg-surface-container border border-card-border text-on-surface-variant hover:text-on-surface disabled:opacity-40" disabled>Previous</button>
 <button className="px-2.5 py-1 rounded-lg bg-primary-container text-white font-bold">1</button>
 <button className="px-2.5 py-1 rounded-lg bg-surface-container border border-card-border hover:bg-surface-container-high text-on-surface">2</button>
 <button className="px-2.5 py-1 rounded-lg bg-surface-container border border-card-border hover:bg-surface-container-high text-on-surface">3</button>
@@ -832,7 +831,7 @@ export default function Ideation() {
 <h2 className="text-sm font-semibold text-on-surface">Synthesized Customer Verbatims</h2>
 <p className="text-[11px] text-on-surface-variant">Raw evidence and natural language signals feeding the feature synthesis engine</p>
 </div>
-<span className="px-2.5 py-1 rounded-full bg-primary-container/15 text-primary border border-primary/20 text-xs font-mono flex items-center gap-1.5">
+<span className="px-2.5 py-1 rounded-full bg-primary-container/15 text-primary border border-primary/20 text-xs tabular-nums flex items-center gap-1.5">
 <span className="material-symbols-outlined text-[15px]">psychology</span>
 <span>Entity Recognition Active</span>
 </span>
@@ -846,13 +845,13 @@ export default function Ideation() {
 <span className="material-symbols-outlined text-[15px] text-tertiary">phone_iphone</span>
 <span>App Store (US)</span>
 </div>
-<span className="text-[10px] font-mono text-crimson-accent font-bold px-1.5 py-0.2 rounded bg-crimson-accent/15">1 Star • v2.4.1</span>
+<span className="text-[10px] tabular-nums text-crimson-accent font-bold px-1.5 py-0.2 rounded bg-crimson-accent/15">1 Star • v2.4.1</span>
 </div>
 <p className="text-xs text-on-surface leading-relaxed mt-1">
                 “I literally cannot use this on my iPad Pro M2 anymore. The second I turn on <mark className="bg-amber-400/25 text-amber-200 px-1 py-0.5 rounded font-medium">Stage Manager</mark> to bring up reference photos, the entire <mark className="bg-amber-400/25 text-amber-200 px-1 py-0.5 rounded font-medium">canvas resets and reloads</mark>, losing all my unsaved layer adjustments. Total workflow killer for paid subscribers.”
               </p>
 </div>
-<div className="pt-3 mt-3 border-t border-card-border/60 flex items-center justify-between text-[11px] text-on-surface-variant font-mono">
+<div className="pt-3 mt-3 border-t border-card-border/60 flex items-center justify-between text-[11px] text-on-surface-variant tabular-nums">
 <div className="flex items-center gap-1.5">
 <span className="w-2 h-2 rounded-full bg-crimson-accent"></span>
 <span className="text-on-surface">@studio_marcus</span>
@@ -868,13 +867,13 @@ export default function Ideation() {
 <span className="material-symbols-outlined text-[15px] text-secondary">android</span>
 <span>Google Play</span>
 </div>
-<span className="text-[10px] font-mono text-crimson-accent font-bold px-1.5 py-0.2 rounded bg-crimson-accent/15">1 Star • v2.4.0</span>
+<span className="text-[10px] tabular-nums text-crimson-accent font-bold px-1.5 py-0.2 rounded bg-crimson-accent/15">1 Star • v2.4.0</span>
 </div>
 <p className="text-xs text-on-surface leading-relaxed mt-1">
                 “Exporting more than 15 <mark className="bg-amber-400/25 text-amber-200 px-1 py-0.5 rounded font-medium">HEIC images</mark> simultaneously causes a direct <mark className="bg-amber-400/25 text-amber-200 px-1 py-0.5 rounded font-medium">out-of-memory crash</mark> on Galaxy S24 Ultra. The memory buffer never clears itself out until you hard force close the app.”
               </p>
 </div>
-<div className="pt-3 mt-3 border-t border-card-border/60 flex items-center justify-between text-[11px] text-on-surface-variant font-mono">
+<div className="pt-3 mt-3 border-t border-card-border/60 flex items-center justify-between text-[11px] text-on-surface-variant tabular-nums">
 <div className="flex items-center gap-1.5">
 <span className="w-2 h-2 rounded-full bg-crimson-accent"></span>
 <span className="text-on-surface">@alex_creative</span>
@@ -890,13 +889,13 @@ export default function Ideation() {
 <span className="material-symbols-outlined text-[15px] text-tertiary">support_agent</span>
 <span>Zendesk Ticket #9481</span>
 </div>
-<span className="text-[10px] font-mono text-tertiary font-bold px-1.5 py-0.2 rounded bg-tertiary/15">Detractor CSAT</span>
+<span className="text-[10px] tabular-nums text-tertiary font-bold px-1.5 py-0.2 rounded bg-tertiary/15">Detractor CSAT</span>
 </div>
 <p className="text-xs text-on-surface leading-relaxed mt-1">
                 “My card expired while I was traveling on a shoot. Instead of a simple grace period, your app locked all my local project files until I went to desktop web. Please add <mark className="bg-amber-400/25 text-amber-200 px-1 py-0.5 rounded font-medium">in-app invoice &amp; renewal grace</mark>!”
               </p>
 </div>
-<div className="pt-3 mt-3 border-t border-card-border/60 flex items-center justify-between text-[11px] text-on-surface-variant font-mono">
+<div className="pt-3 mt-3 border-t border-card-border/60 flex items-center justify-between text-[11px] text-on-surface-variant tabular-nums">
 <div className="flex items-center gap-1.5">
 <span className="w-2 h-2 rounded-full bg-secondary"></span>
 <span className="text-on-surface">Enterprise Lead (14 seats)</span>

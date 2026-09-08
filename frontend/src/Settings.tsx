@@ -1,5 +1,4 @@
-import React from 'react';
-import { useToast } from './components/Toast';
+import { useToast } from './components/toast-context';
 
 export default function Settings() {
   const { addToast } = useToast();
@@ -99,7 +98,7 @@ export default function Settings() {
 <label className="font-body-sm text-body-sm font-medium text-on-surface">Workspace Slug</label>
 <div className="flex items-center rounded-lg border border-surface-container-highest/60 bg-surface-container-low overflow-hidden focus-within:border-primary-container focus-within:ring-1 focus-within:ring-primary-container">
 <input className="bg-transparent border-0 px-3 py-2 text-on-surface text-body-sm focus:ring-0 w-full" type="text" value="acme-mobile-app"/>
-<span className="pr-3 text-on-surface-variant font-mono-metric text-mono-metric text-[12px]">.copilot.ai</span>
+<span className="pr-3 text-on-surface-variant tabular-nums text-mono-metric text-[12px]">.copilot.ai</span>
 </div>
 </div>
 <div className="flex flex-col gap-1.5">
@@ -110,7 +109,7 @@ export default function Settings() {
 <label className="font-body-sm text-body-sm font-medium text-on-surface">Default Timezone</label>
 <div className="relative">
 <select className="w-full bg-surface-container-low border border-surface-container-highest/60 rounded-lg px-3 py-2 text-on-surface text-body-sm appearance-none focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-colors cursor-pointer">
-<option selected="">UTC-05:00 Eastern Time (US &amp; Canada)</option>
+<option>UTC-05:00 Eastern Time (US &amp; Canada)</option>
 <option>UTC-08:00 Pacific Time (US &amp; Canada)</option>
 <option>UTC+00:00 Coordinated Universal Time (UTC)</option>
 <option>UTC+01:00 Central European Time (Frankfurt)</option>
@@ -147,7 +146,7 @@ export default function Settings() {
 <div className="md:col-span-2">
 <div className="relative">
 <select className="w-full bg-surface-container-low border border-surface-container-highest/60 rounded-lg px-3 py-2 text-on-surface text-body-sm appearance-none focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-colors cursor-pointer">
-<option selected="">Anthropic Claude 3.5 Sonnet (Recommended — Highest verbatim fidelity)</option>
+<option>Anthropic Claude 3.5 Sonnet (Recommended — Highest verbatim fidelity)</option>
 <option>OpenAI GPT-4o (High-throughput multithreaded synthesis)</option>
 <option>Google Gemini 1.5 Pro (Ultra-large contextual memory buffer)</option>
 </select>
@@ -161,7 +160,7 @@ export default function Settings() {
 <div className="flex flex-col gap-0.5">
 <div className="flex items-center gap-2">
 <span className="font-body-sm text-body-sm font-medium text-on-surface">Hallucination &amp; Citation Strictness</span>
-<span className="px-2 py-0.5 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-emerald-400 font-mono-metric text-[11px]">Strict Mode</span>
+<span className="px-2 py-0.5 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-emerald-400 tabular-nums text-[11px]">Strict Mode</span>
 </div>
 <p className="text-on-surface-variant text-[13px] max-w-xl">
                   Require strict 100% citation grounding against raw review verbatims before surfacing insights. Suppresses ungrounded speculative recommendations.
@@ -169,7 +168,7 @@ export default function Settings() {
 </div>
 {/* Active toggle switch */}
 <label className="relative inline-flex items-center cursor-pointer shrink-0 mt-1">
-<input checked="" className="sr-only peer" type="checkbox"/>
+<input defaultChecked className="sr-only peer" type="checkbox"/>
 <div className="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-primary-container after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-container"></div>
 </label>
 </div>
@@ -182,7 +181,7 @@ export default function Settings() {
 </div>
 <div className="md:col-span-2 flex items-center gap-space-md">
 <input className="w-full accent-primary cursor-pointer" max="99" min="50" type="range" value="85"/>
-<div className="px-3 py-1 rounded-lg bg-surface-container-low border border-surface-container-highest/60 font-mono-metric text-mono-metric text-primary font-semibold text-sm shrink-0">
+<div className="px-3 py-1 rounded-lg bg-surface-container-low border border-surface-container-highest/60 tabular-nums text-mono-metric text-primary font-semibold text-sm shrink-0">
                   85%
                 </div>
 </div>
@@ -205,7 +204,7 @@ export default function Settings() {
 <label className="p-3 rounded-lg border border-primary-container/70 bg-primary-container/10 flex flex-col gap-1 cursor-pointer transition-colors">
 <div className="flex items-center justify-between">
 <span className="font-body-sm text-body-sm font-medium text-on-surface">Daily Digest</span>
-<input checked="" className="accent-primary" name="cadence" type="radio"/>
+<input defaultChecked className="accent-primary" name="cadence" type="radio"/>
 </div>
 <span className="text-[11px] text-primary">08:00 UTC batch generation</span>
 </label>
@@ -250,7 +249,7 @@ export default function Settings() {
 <div className="flex flex-col">
 <div className="flex items-center gap-2">
 <span className="font-body-md text-body-md font-medium text-on-surface">Apple App Store Connect</span>
-<span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-high font-mono-metric text-[11px] text-tertiary border border-surface-container-highest/50">
+<span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-high tabular-nums text-[11px] text-tertiary border border-surface-container-highest/50">
 <span className="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
                       Connected • Synced 4m ago
                     </span>
@@ -276,7 +275,7 @@ export default function Settings() {
 <div className="flex flex-col">
 <div className="flex items-center gap-2">
 <span className="font-body-md text-body-md font-medium text-on-surface">Google Play Console</span>
-<span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-high font-mono-metric text-[11px] text-emerald-400 border border-surface-container-highest/50">
+<span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-high tabular-nums text-[11px] text-emerald-400 border border-surface-container-highest/50">
 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                       Connected • Real-time SSE
                     </span>
@@ -302,7 +301,7 @@ export default function Settings() {
 <div className="flex flex-col">
 <div className="flex items-center gap-2">
 <span className="font-body-md text-body-md font-medium text-on-surface">Zendesk Enterprise</span>
-<span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-high font-mono-metric text-[11px] text-tertiary border border-surface-container-highest/50">
+<span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-high tabular-nums text-[11px] text-tertiary border border-surface-container-highest/50">
 <span className="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
                       Connected • High priority tickets
                     </span>
@@ -328,7 +327,7 @@ export default function Settings() {
 <div className="flex flex-col">
 <div className="flex items-center gap-2">
 <span className="font-body-md text-body-md font-medium text-on-surface">Linear Workspace</span>
-<span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-high font-mono-metric text-[11px] text-tertiary border border-surface-container-highest/50">
+<span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-high tabular-nums text-[11px] text-tertiary border border-surface-container-highest/50">
 <span className="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
                       Connected • Two-Way Sync
                     </span>
@@ -354,7 +353,7 @@ export default function Settings() {
 <div className="flex flex-col">
 <div className="flex items-center gap-2">
 <span className="font-body-md text-body-md font-medium text-on-surface">Slack Workspace</span>
-<span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-high font-mono-metric text-[11px] text-tertiary border border-surface-container-highest/50">
+<span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-high tabular-nums text-[11px] text-tertiary border border-surface-container-highest/50">
 <span className="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
                       Connected • Bot Active
                     </span>
@@ -380,7 +379,7 @@ export default function Settings() {
 <div className="flex flex-col">
 <div className="flex items-center gap-2">
 <span className="font-body-md text-body-md font-medium text-on-surface">Snowflake Data Lakehouse</span>
-<span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-high font-mono-metric text-[11px] text-tertiary border border-surface-container-highest/50">
+<span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-high tabular-nums text-[11px] text-tertiary border border-surface-container-highest/50">
 <span className="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
                       Connected • Hourly Batch
                     </span>
@@ -414,14 +413,14 @@ export default function Settings() {
 <div className="flex flex-col gap-0.5">
 <div className="flex items-center gap-2">
 <span className="font-body-sm text-body-sm font-medium text-on-surface">Automated PII Scrubbing</span>
-<span className="px-2 py-0.5 rounded-full bg-surface-container-high font-mono-metric text-[11px] text-primary border border-surface-container-highest/50">Zero Leaks Detected</span>
+<span className="px-2 py-0.5 rounded-full bg-surface-container-high tabular-nums text-[11px] text-primary border border-surface-container-highest/50">Zero Leaks Detected</span>
 </div>
 <p className="text-on-surface-variant text-[13px] max-w-xl">
                   Automatically redact credit cards, emails, phone numbers, and SSNs before sending customer review data to external LLM inference gateways.
                 </p>
 </div>
 <label className="relative inline-flex items-center cursor-pointer shrink-0 mt-1">
-<input checked="" className="sr-only peer" type="checkbox"/>
+<input defaultChecked className="sr-only peer" type="checkbox"/>
 <div className="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-primary-container after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-container"></div>
 </label>
 </div>
@@ -432,7 +431,7 @@ export default function Settings() {
 <label className="font-body-sm text-body-sm font-medium text-on-surface">Data Retention Period</label>
 <div className="relative">
 <select className="w-full bg-surface-container-low border border-surface-container-highest/60 rounded-lg px-3 py-2 text-on-surface text-body-sm appearance-none focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-colors cursor-pointer">
-<option selected="">365 days (Enterprise Standard)</option>
+<option>365 days (Enterprise Standard)</option>
 <option>90 days (Compliance Minimized)</option>
 <option>Indefinite (Archive Mode)</option>
 </select>
@@ -444,7 +443,7 @@ export default function Settings() {
 <label className="font-body-sm text-body-sm font-medium text-on-surface">SOC-2 Data Residency &amp; Cloud Region</label>
 <div className="relative">
 <select className="w-full bg-surface-container-low border border-surface-container-highest/60 rounded-lg px-3 py-2 text-on-surface text-body-sm appearance-none focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-colors cursor-pointer">
-<option selected="">US-East (N. Virginia — AWS us-east-1)</option>
+<option>US-East (N. Virginia — AWS us-east-1)</option>
 <option>EU-West (Frankfurt — AWS eu-central-1)</option>
 <option>AP-Southeast (Singapore — AWS ap-southeast-1)</option>
 </select>

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import * as htmlToImage from 'html-to-image';
 import { saveAs } from 'file-saver';
 
@@ -113,12 +113,12 @@ export default function ReportGeneratorModal({ isOpen, onClose }: ReportGenerato
                 </div>
                 <div className="flex flex-col">
                   <span className="text-xl font-bold tracking-tight text-gray-900">Executive Dossier</span>
-                  <span className="text-xs font-mono text-gray-500 uppercase tracking-widest">Insights Copilot Enterprise</span>
+                  <span className="text-xs tabular-nums text-gray-500 uppercase tracking-widest">Insights Copilot Enterprise</span>
                 </div>
               </div>
               <div className="text-right flex flex-col">
                 <span className="text-sm font-semibold text-gray-900">{platform}</span>
-                <span className="text-xs text-gray-500 font-mono">{dateRange} • Generated {new Date().toLocaleDateString()}</span>
+                <span className="text-xs text-gray-500 tabular-nums">{dateRange} • Generated {new Date().toLocaleDateString()}</span>
               </div>
             </div>
 

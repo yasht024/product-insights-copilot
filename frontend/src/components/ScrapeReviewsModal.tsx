@@ -2,15 +2,16 @@ import { CheckCircle2, Database, Loader2, X } from 'lucide-react';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { apiClient, type SyncResult } from '../api/client';
-import { useToast } from './Toast';
+import { useToast } from './toast-context';
 
 interface ScrapeReviewsModalProps {
   isOpen: boolean;
+  initialDays?: number;
   onClose: () => void;
 }
 
-export default function ScrapeReviewsModal({ isOpen, onClose }: ScrapeReviewsModalProps) {
-  const [days, setDays] = useState('30');
+export default function ScrapeReviewsModal({ isOpen, onClose, initialDays = 30 }: ScrapeReviewsModalProps) {
+  const [days, setDays] = useState(String(initialDays));
   const [maxReviewsPerStore, setMaxReviewsPerStore] = useState(200);
   const [isScraping, setIsScraping] = useState(false);
   const [result, setResult] = useState<SyncResult | null>(null);
@@ -37,6 +38,7 @@ export default function ScrapeReviewsModal({ isOpen, onClose }: ScrapeReviewsMod
       setResult(syncResult);
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ['dashboardMetrics'] }),
+        queryClient.invalidateQueries({ queryKey: ['analytics'] }),
         queryClient.invalidateQueries({ queryKey: ['reviews'] }),
         queryClient.invalidateQueries({ queryKey: ['reviewSummary'] }),
         queryClient.invalidateQueries({ queryKey: ['syncStatus'] }),
@@ -124,9 +126,9 @@ export default function ScrapeReviewsModal({ isOpen, onClose }: ScrapeReviewsMod
                 <span className="font-semibold">Imported {result.new_reviews} new reviews</span>
               </div>
               <div className="grid grid-cols-2 gap-3 text-xs text-zinc-400">
-                <span>Google Play</span><span className="text-right font-mono text-zinc-200">{result.source_counts.google_play}</span>
-                <span>Apple App Store</span><span className="text-right font-mono text-zinc-200">{result.source_counts.apple_app_store}</span>
-                <span>Existing duplicates skipped</span><span className="text-right font-mono text-zinc-200">{result.duplicate_counts.google_play + result.duplicate_counts.apple_app_store}</span>
+                <span>Google Play</span><span className="text-right tabular-nums text-zinc-200">{result.source_counts.google_play}</span>
+                <span>Apple App Store</span><span className="text-right tabular-nums text-zinc-200">{result.source_counts.apple_app_store}</span>
+                <span>Existing duplicates skipped</span><span className="text-right tabular-nums text-zinc-200">{result.duplicate_counts.google_play + result.duplicate_counts.apple_app_store}</span>
               </div>
               {result.errors.length > 0 && (
                 <p className="mt-3 border-t border-zinc-700/60 pt-3 text-xs text-amber-300">{result.errors.join('. ')}.</p>

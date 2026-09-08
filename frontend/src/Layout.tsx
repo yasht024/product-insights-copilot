@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { NavLink, Outlet, useLocation, useSearchParams } from 'react-router-dom';
 import { apiClient } from './api/client';
@@ -40,14 +40,15 @@ export default function Layout() {
   const [isScrapeModalOpen, setIsScrapeModalOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showAppSelector, setShowAppSelector] = useState(false);
-  const { data: syncStatus } = useQuery({
+  const { data: syncStatus, isError: isSyncError, isPending: isSyncPending } = useQuery({
     queryKey: ['syncStatus', 'ws_1'],
     queryFn: () => apiClient.getSyncStatus('ws_1'),
     refetchInterval: 60_000,
   });
-  const { data: inboxSummary } = useQuery({
+  const { data: inboxSummary, isError: isSummaryError } = useQuery({
     queryKey: ['reviewSummary', 'ws_1', 'sidebar-all'],
     queryFn: () => apiClient.getReviewSummary('ws_1', new URLSearchParams({ min_words: '0' })),
+    refetchInterval: 30_000,
   });
   const syncTimestamp = syncStatus?.last_synced_at
     ? new Date(/(?:Z|[+-]\d\d:\d\d)$/.test(syncStatus.last_synced_at) ? syncStatus.last_synced_at : `${syncStatus.last_synced_at}Z`)
@@ -98,7 +99,7 @@ export default function Layout() {
           <nav className="flex flex-col gap-space-2xs px-space-sm">
             {[
               { path: 'dashboard', icon: 'grid_view', label: 'Dashboard' },
-              { path: 'reviews-inbox', icon: 'inbox', label: 'Reviews Inbox', badge: inboxSummary?.unread.toLocaleString() ?? '…' },
+              { path: 'reviews-inbox', icon: 'inbox', label: 'Reviews Inbox', badge: inboxSummary?.unread.toLocaleString() ?? (isSummaryError ? '—' : '…') },
               { path: 'analytics', icon: 'monitoring', label: 'Analytics' },
               { path: 'word-cloud', icon: 'cloud', label: 'Word Cloud' },
               { path: 'ideation', icon: 'lightbulb', label: 'Ideation' },
@@ -119,7 +120,7 @@ export default function Layout() {
                     <span className="font-body-md text-body-md">{item.label}</span>
                   </div>
                   {item.badge && (
-                    <span className="px-space-xs py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-mono-metric text-mono-metric">{item.badge}</span>
+                    <span className="px-space-xs py-0.5 rounded-full bg-secondary-container text-on-secondary-container tabular-nums text-mono-metric">{item.badge}</span>
                   )}
                 </NavLink>
               );
@@ -151,7 +152,7 @@ export default function Layout() {
       {/* Main Content Area */}
       <div className={`flex-1 flex flex-col min-h-screen transition-all duration-300 min-w-0 ${isSidebarOpen ? 'lg:pl-sidebar-w' : 'pl-0'}`}>
         {/* Header */}
-        <header className={`fixed top-0 right-0 h-16 bg-surface-container-lowest/80 backdrop-blur-xl z-30 shadow-[0_1px_8px_rgba(0,0,0,0.04)] transition-all duration-300 ${isSidebarOpen ? 'lg:left-sidebar-w' : 'left-0'}`}>
+        <header className={`fixed top-0 right-0 left-0 h-16 bg-surface-container-lowest/80 backdrop-blur-xl z-30 shadow-[0_1px_8px_rgba(0,0,0,0.04)] transition-all duration-300 ${isSidebarOpen ? 'lg:left-sidebar-w' : 'left-0'}`}>
           <div className="h-16 w-full px-space-sm sm:px-space-lg flex items-center justify-between gap-space-xs sm:gap-space-md">
             <div className="flex items-center gap-space-xs sm:gap-space-md min-w-0">
               <button 
@@ -168,12 +169,12 @@ export default function Layout() {
               </div>
               <div className="hidden md:block h-4 w-px bg-surface-container-highest"></div>
               <div className="hidden md:flex items-center gap-space-2xs">
-                <span className={`h-2 w-2 rounded-full ${syncStatus?.status === 'success' ? 'bg-emerald-500' : syncStatus?.status === 'partial' ? 'bg-amber-500' : 'bg-zinc-500'}`}></span>
+                <span className={`h-2 w-2 rounded-full ${isSyncError ? 'bg-rose-500' : syncStatus?.status === 'success' ? 'bg-emerald-500' : syncStatus?.status === 'partial' ? 'bg-amber-500' : 'bg-zinc-500'}`}></span>
                 <span
-                  className="font-mono-metric text-mono-metric text-on-surface-variant"
+                  className="tabular-nums text-mono-metric text-on-surface-variant"
                   title={syncTimestamp ? `${syncStatus?.status === 'partial' ? 'Partial scrape' : 'Successful scrape'} at ${syncTimestamp.toLocaleString()}` : 'Run a scrape to start tracking its status.'}
                 >
-                  {relativeScrapeTime(syncStatus?.last_synced_at)}
+                  {isSyncError ? 'Review service offline' : isSyncPending ? 'Connecting to review service…' : relativeScrapeTime(syncStatus?.last_synced_at)}
                 </span>
               </div>
             </div>
@@ -219,7 +220,7 @@ export default function Layout() {
 
         <main className="w-full pt-16 bg-surface flex-1 flex flex-col min-w-0">
           <div className="flex flex-col w-full flex-1 min-w-0">
-            <Outlet />
+            <Outlet context={{ openScrapeReviews: () => setIsScrapeModalOpen(true) }} />
           </div>
         </main>
       </div>

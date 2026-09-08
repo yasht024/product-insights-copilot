@@ -1,4 +1,27 @@
-const API_BASE = 'http://127.0.0.1:8000/api';
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/$/, '');
+
+async function request(path: string, options?: RequestInit): Promise<Response> {
+  let response: Response;
+  try {
+    response = await fetch(`${API_BASE}${path}`, {
+      ...options,
+      signal: AbortSignal.timeout(options?.method === 'POST' ? 300_000 : 15_000),
+    });
+  } catch {
+    throw new Error('Cannot connect to the review service. Check that the app services are running, then retry.');
+  }
+  if (!response.ok) {
+    const body = await response.json().catch(() => null);
+    const detail = typeof body?.detail === 'string' ? body.detail : null;
+    throw new Error(detail || (response.status >= 500
+      ? 'The review service is unavailable. Restart the app services and retry.'
+      : `The review request failed (${response.status}). Please retry.`));
+  }
+  if (!response.headers.get('content-type')?.includes('application/json')) {
+    throw new Error('The review API is not configured at this address. Check the app service connection.');
+  }
+  return response;
+}
 
 export interface Workspace {
   id: string;
@@ -70,6 +93,74 @@ export interface DashboardMetricOptions {
   minWords: number;
 }
 
+export type AnalyticsGranularity = 'daily' | 'weekly' | 'monthly' | 'quarterly';
+
+export interface AnalyticsPoint {
+  period: string;
+  ios: number;
+  android: number;
+  total: number;
+  average_rating: number | null;
+  critical_percent: number;
+}
+
+export interface AnalyticsVersion {
+  version: string;
+  reviews: number;
+  average_rating: number;
+}
+
+export interface AnalyticsData {
+  generated_at: string;
+  days: number;
+  granularity: AnalyticsGranularity;
+  platform: string;
+  total_reviews: number;
+  reviews_per_day: number;
+  velocity_change_percent: number | null;
+  average_rating: number | null;
+  previous_average_rating: number | null;
+  rating_change: number | null;
+  critical_reviews: number;
+  critical_percent: number;
+  critical_change_points: number | null;
+  ios_reviews: number;
+  android_reviews: number;
+  oldest_review_at: string | null;
+  newest_review_at: string | null;
+  rating_distribution: Record<'1' | '2' | '3' | '4' | '5', number>;
+  series: AnalyticsPoint[];
+  versions: AnalyticsVersion[];
+}
+
+export type WordCloudSentiment = 'all' | 'positive' | 'neutral' | 'negative';
+
+export interface WordCloudTerm {
+  term: string;
+  kind: 'unigram' | 'bigram';
+  mentions: number;
+  polarity: number;
+  average_rating: number;
+  velocity_percent: number | null;
+  is_new: boolean;
+  sample_review: string;
+}
+
+export interface WordCloudData {
+  generated_at: string;
+  days: number;
+  platform: string;
+  sentiment: WordCloudSentiment;
+  review_count: number;
+  total_matching_reviews: number;
+  truncated: boolean;
+  distinct_terms: number;
+  min_frequency: number;
+  top_positive: WordCloudTerm | null;
+  top_negative: WordCloudTerm | null;
+  terms: WordCloudTerm[];
+}
+
 export interface SyncResult {
   status: 'success' | 'partial';
   days: number;
@@ -97,14 +188,12 @@ export interface SyncStatus {
 
 export const apiClient = {
   async getWorkspaces(): Promise<Workspace[]> {
-    const res = await fetch(`${API_BASE}/workspaces`);
-    if (!res.ok) throw new Error('Failed to fetch workspaces');
+    const res = await request(`/workspaces`);
     return res.json();
   },
 
   async getReviews(workspaceId: string, params: URLSearchParams): Promise<PaginatedReviews> {
-    const res = await fetch(`${API_BASE}/workspaces/${workspaceId}/reviews?${params.toString()}`);
-    if (!res.ok) throw new Error('Failed to fetch reviews');
+    const res = await request(`/workspaces/${workspaceId}/reviews?${params.toString()}`);
     return res.json();
   },
 
@@ -112,8 +201,7 @@ export const apiClient = {
     const summaryParams = new URLSearchParams(params);
     summaryParams.delete('page');
     summaryParams.delete('limit');
-    const res = await fetch(`${API_BASE}/workspaces/${workspaceId}/reviews/summary?${summaryParams.toString()}`);
-    if (!res.ok) throw new Error('Failed to fetch review summary');
+    const res = await request(`/workspaces/${workspaceId}/reviews/summary?${summaryParams.toString()}`);
     return res.json();
   },
 
@@ -125,28 +213,49 @@ export const apiClient = {
       days: String(options.days),
       min_words: String(options.minWords),
     });
-    const res = await fetch(`${API_BASE}/workspaces/${workspaceId}/dashboard/metrics?${params}`);
-    if (!res.ok) throw new Error('Failed to fetch dashboard metrics');
+    const res = await request(`/workspaces/${workspaceId}/dashboard/metrics?${params}`);
+    return res.json();
+  },
+
+  async getAnalytics(workspaceId: string, days: number, granularity: AnalyticsGranularity, platform: string): Promise<AnalyticsData> {
+    const params = new URLSearchParams({ days: String(days), granularity, platform });
+    const res = await request(`/workspaces/${workspaceId}/analytics?${params}`);
+    return res.json();
+  },
+
+  async getWordCloud(
+    workspaceId: string,
+    days: number,
+    platform: string,
+    sentiment: WordCloudSentiment,
+    minFrequency: number,
+  ): Promise<WordCloudData> {
+    const params = new URLSearchParams({
+      days: String(days),
+      platform,
+      sentiment,
+      min_frequency: String(minFrequency),
+      limit: '60',
+    });
+    const res = await request(`/workspaces/${workspaceId}/word-cloud?${params}`);
     return res.json();
   },
 
   async bulkAction(workspaceId: string, reviewIds: string[], action: string, value?: string): Promise<{ success: boolean; updated_count: number }> {
-    const res = await fetch(`${API_BASE}/workspaces/${workspaceId}/reviews/bulk`, {
+    const res = await request(`/workspaces/${workspaceId}/reviews/bulk`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ review_ids: reviewIds, action, value })
     });
-    if (!res.ok) throw new Error('Bulk action failed');
     return res.json();
   },
 
   async generateDraft(workspaceId: string, reviewId: string, tone: string = 'concise'): Promise<{ draft: string }> {
-    const res = await fetch(`${API_BASE}/workspaces/${workspaceId}/reviews/${reviewId}/draft`, {
+    const res = await request(`/workspaces/${workspaceId}/reviews/${reviewId}/draft`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ tone })
     });
-    if (!res.ok) throw new Error('Failed to generate draft');
     return res.json();
   },
 
@@ -155,18 +264,16 @@ export const apiClient = {
   },
   
   async syncFeeds(workspaceId: string, days: number, maxReviewsPerStore: number): Promise<SyncResult> {
-    const res = await fetch(`${API_BASE}/workspaces/${workspaceId}/sync`, {
+    const res = await request(`/workspaces/${workspaceId}/sync`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ days, max_reviews_per_store: maxReviewsPerStore })
     });
-    if (!res.ok) throw new Error('Failed to sync feeds');
     return res.json();
   },
 
   async getSyncStatus(workspaceId: string): Promise<SyncStatus> {
-    const res = await fetch(`${API_BASE}/workspaces/${workspaceId}/sync-status`);
-    if (!res.ok) throw new Error('Failed to fetch scrape status');
+    const res = await request(`/workspaces/${workspaceId}/sync-status`);
     return res.json();
   },
 

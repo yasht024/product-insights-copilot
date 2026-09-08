@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import ReportGeneratorModal from './components/ReportGeneratorModal';
 
 export default function Reporting() {
@@ -8,7 +8,7 @@ export default function Reporting() {
 {/* 1. Hero Title & Context Strip */}
 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-surface-container-low border border-card-border p-5 rounded-2xl shadow-sm">
 <div className="flex flex-col gap-1.5 max-w-3xl">
-<div className="flex items-center gap-2 text-xs font-mono text-on-surface-variant">
+<div className="flex items-center gap-2 text-xs tabular-nums text-on-surface-variant">
 <span className="px-2 py-0.5 rounded-full bg-primary-container/20 text-primary border border-primary/25 font-semibold text-[11px]">Sprint 24.4 Synthesis</span>
 <span className="text-card-border">•</span>
 <span className="text-tertiary">Executive Dispatch Engine Online</span>
@@ -47,79 +47,79 @@ export default function Reporting() {
 {/* KPI 1: Synthesized Executive Briefs */}
 <div className="bg-surface-container-low border border-card-border p-4 rounded-xl flex flex-col justify-between relative overflow-hidden group hover:border-card-border/90 transition-all">
 <div className="flex items-center justify-between">
-<span className="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant font-semibold">Synthesized Executive Briefs</span>
+<span className="text-[11px] tabular-nums uppercase tracking-wider text-on-surface-variant font-semibold">Synthesized Executive Briefs</span>
 <div className="w-8 h-8 rounded-lg bg-primary-container/20 text-primary flex items-center justify-center">
 <span className="material-symbols-outlined text-[18px]">description</span>
 </div>
 </div>
 <div className="my-2 flex items-baseline gap-2">
-<span className="text-3xl font-bold font-mono text-on-surface">18</span>
-<span className="px-1.5 py-0.5 rounded bg-primary-container/20 text-primary text-[11px] font-mono font-medium">+4 this cycle</span>
+<span className="text-3xl font-bold tabular-nums text-on-surface">18</span>
+<span className="px-1.5 py-0.5 rounded bg-primary-container/20 text-primary text-[11px] tabular-nums font-medium">+4 this cycle</span>
 </div>
 <div className="flex items-center justify-between text-xs text-on-surface-variant pt-2 border-t border-card-border/60">
 <span>From 12,480 user reviews</span>
-<span className="text-tertiary font-mono font-medium">100% AI Synthesized</span>
+<span className="text-tertiary tabular-nums font-medium">100% AI Synthesized</span>
 </div>
 </div>
 {/* KPI 2: Stakeholder Reach */}
 <div className="bg-surface-container-low border border-card-border p-4 rounded-xl flex flex-col justify-between relative overflow-hidden group hover:border-card-border/90 transition-all">
 <div className="flex items-center justify-between">
-<span className="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant font-semibold">Stakeholder Reach</span>
+<span className="text-[11px] tabular-nums uppercase tracking-wider text-on-surface-variant font-semibold">Stakeholder Reach</span>
 <div className="w-8 h-8 rounded-lg bg-tertiary/20 text-tertiary flex items-center justify-center">
 <span className="material-symbols-outlined text-[18px]">diversity_3</span>
 </div>
 </div>
 <div className="my-2">
 <div className="flex items-baseline gap-2">
-<span className="text-3xl font-bold font-mono text-on-surface">142</span>
-<span className="text-xs text-on-surface-variant font-mono">Cross-functional</span>
+<span className="text-3xl font-bold tabular-nums text-on-surface">142</span>
+<span className="text-xs text-on-surface-variant tabular-nums">Cross-functional</span>
 </div>
 <div className="flex items-center gap-2 mt-1">
-<span className="px-1.5 py-0.2 rounded bg-tertiary/20 text-tertiary text-[10px] font-mono font-bold">96% OPEN RATE</span>
-<span className="text-xs text-on-surface-variant font-mono">4.2m avg engagement</span>
+<span className="px-1.5 py-0.2 rounded bg-tertiary/20 text-tertiary text-[10px] tabular-nums font-bold">96% OPEN RATE</span>
+<span className="text-xs text-on-surface-variant tabular-nums">4.2m avg engagement</span>
 </div>
 </div>
 <div className="flex items-center justify-between text-xs text-on-surface-variant pt-2 border-t border-card-border/60">
 <span>Product • Eng • CX • Executive</span>
-<span className="text-emerald-accent font-mono font-semibold">Active Sync</span>
+<span className="text-emerald-accent tabular-nums font-semibold">Active Sync</span>
 </div>
 </div>
 {/* KPI 3: Automated Time Saved */}
 <div className="bg-surface-container-low border border-card-border p-4 rounded-xl flex flex-col justify-between relative overflow-hidden group hover:border-card-border/90 transition-all">
 <div className="flex items-center justify-between">
-<span className="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant font-semibold">Automated Time Saved</span>
+<span className="text-[11px] tabular-nums uppercase tracking-wider text-on-surface-variant font-semibold">Automated Time Saved</span>
 <div className="w-8 h-8 rounded-lg bg-secondary/20 text-secondary flex items-center justify-center">
 <span className="material-symbols-outlined text-[18px]">bolt</span>
 </div>
 </div>
 <div className="my-2 flex items-baseline gap-2">
-<span className="text-3xl font-bold font-mono text-secondary">~46.5</span>
-<span className="text-xs text-on-surface-variant font-mono">hrs / mo</span>
-<span className="px-1.5 py-0.5 rounded bg-secondary/20 text-secondary text-[11px] font-mono font-medium ml-auto">+14.2% vs Q2</span>
+<span className="text-3xl font-bold tabular-nums text-secondary">~46.5</span>
+<span className="text-xs text-on-surface-variant tabular-nums">hrs / mo</span>
+<span className="px-1.5 py-0.5 rounded bg-secondary/20 text-secondary text-[11px] tabular-nums font-medium ml-auto">+14.2% vs Q2</span>
 </div>
 <div className="flex items-center justify-between text-xs text-on-surface-variant pt-2 border-t border-card-border/60">
 <span>Avg 11.6h saved / week per PM</span>
-<span className="text-on-surface font-mono font-medium">8 Sprints equiv</span>
+<span className="text-on-surface tabular-nums font-medium">8 Sprints equiv</span>
 </div>
 </div>
 {/* KPI 4: Synthesized Sentiment */}
 <div className="bg-surface-container-low border border-card-border p-4 rounded-xl flex flex-col justify-between relative overflow-hidden group hover:border-card-border/90 transition-all">
 <div className="flex items-center justify-between">
-<span className="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant font-semibold">Synthesized Sentiment</span>
+<span className="text-[11px] tabular-nums uppercase tracking-wider text-on-surface-variant font-semibold">Synthesized Sentiment</span>
 <div className="w-8 h-8 rounded-lg bg-emerald-accent/20 text-emerald-accent flex items-center justify-center">
 <span className="material-symbols-outlined text-[18px]">verified</span>
 </div>
 </div>
 <div className="my-2 flex items-center gap-3">
-<span className="text-3xl font-bold font-mono text-on-surface">4.42</span>
-<span className="text-xs text-on-surface-variant font-mono">/ 5.0</span>
+<span className="text-3xl font-bold tabular-nums text-on-surface">4.42</span>
+<span className="text-xs text-on-surface-variant tabular-nums">/ 5.0</span>
 <div className="flex-1 bg-surface-container-lowest h-2 rounded-full overflow-hidden border border-card-border/50 ml-1">
 <div className="bg-gradient-to-r from-primary-container to-tertiary h-full rounded-full" style={{"width": "88.4%"}}></div>
 </div>
 </div>
 <div className="flex items-center justify-between text-xs text-on-surface-variant pt-2 border-t border-card-border/60">
-<span className="text-emerald-accent font-mono font-medium">+0.38 pt net lift</span>
-<span className="text-on-surface-variant font-mono">18.4k reviews analyzed</span>
+<span className="text-emerald-accent tabular-nums font-medium">+0.38 pt net lift</span>
+<span className="text-on-surface-variant tabular-nums">18.4k reviews analyzed</span>
 </div>
 </div>
 </div>
@@ -138,7 +138,7 @@ export default function Reporting() {
 </div>
 </div>
 {/* Legend Status Pills */}
-<div className="flex items-center gap-3 text-[11px] font-mono">
+<div className="flex items-center gap-3 text-[11px] tabular-nums">
 <span className="flex items-center gap-1 text-primary">
 <span className="w-2 h-2 rounded-full bg-primary-container"></span> Board Ready
               </span>
@@ -156,10 +156,10 @@ export default function Reporting() {
 <div className="bg-surface-container-lowest border border-card-border/70 hover:border-primary-container/60 p-4 rounded-xl flex flex-col justify-between group transition-all shadow-sm">
 <div className="flex flex-col gap-2.5">
 <div className="flex items-center justify-between">
-<span className="px-2 py-0.5 rounded-md bg-primary-container/20 text-primary border border-primary-container/30 font-mono text-[10px] font-bold inline-flex items-center gap-1">
+<span className="px-2 py-0.5 rounded-md bg-primary-container/20 text-primary border border-primary-container/30 tabular-nums text-[10px] font-bold inline-flex items-center gap-1">
 <span className="material-symbols-outlined text-[12px]">stars</span> BOARD READY
                   </span>
-<span className="text-[11px] font-mono text-on-surface-variant">18 Pages • Keynote &amp; PDF</span>
+<span className="text-[11px] tabular-nums text-on-surface-variant">18 Pages • Keynote &amp; PDF</span>
 </div>
 <h3 className="text-sm font-semibold text-on-surface group-hover:text-primary transition-colors leading-snug">
                   Q3 Product Health &amp; Voice of Customer Brief
@@ -169,7 +169,7 @@ export default function Reporting() {
                 </p>
 </div>
 <div className="mt-4 pt-3 border-t border-card-border/60 flex items-center justify-between">
-<div className="flex items-center gap-1.5 font-mono text-xs">
+<div className="flex items-center gap-1.5 tabular-nums text-xs">
 <span className="w-2 h-2 rounded-full bg-crimson-accent"></span>
 <span className="text-on-surface-variant">ARR Risk:</span>
 <span className="text-crimson-accent font-semibold">-$142k</span>
@@ -191,10 +191,10 @@ export default function Reporting() {
 <div className="bg-surface-container-lowest border border-card-border/70 hover:border-tertiary/60 p-4 rounded-xl flex flex-col justify-between group transition-all shadow-sm">
 <div className="flex flex-col gap-2.5">
 <div className="flex items-center justify-between">
-<span className="px-2 py-0.5 rounded-md bg-tertiary/15 text-tertiary border border-tertiary/30 font-mono text-[10px] font-bold inline-flex items-center gap-1">
+<span className="px-2 py-0.5 rounded-md bg-tertiary/15 text-tertiary border border-tertiary/30 tabular-nums text-[10px] font-bold inline-flex items-center gap-1">
 <span className="material-symbols-outlined text-[12px]">schedule</span> WEEKLY CADENCE
                   </span>
-<span className="text-[11px] font-mono text-tertiary font-medium">Dispatched Mon 9:00 AM</span>
+<span className="text-[11px] tabular-nums text-tertiary font-medium">Dispatched Mon 9:00 AM</span>
 </div>
 <h3 className="text-sm font-semibold text-on-surface group-hover:text-tertiary transition-colors leading-snug">
                   Weekly Sentiment Drift &amp; App Store Digest
@@ -204,7 +204,7 @@ export default function Reporting() {
                 </p>
 </div>
 <div className="mt-4 pt-3 border-t border-card-border/60 flex items-center justify-between">
-<div className="flex items-center gap-1.5 font-mono text-xs text-on-surface-variant">
+<div className="flex items-center gap-1.5 tabular-nums text-xs text-on-surface-variant">
 <span className="material-symbols-outlined text-[15px] text-tertiary">group</span>
 <span>28 Stakeholders in #leadership</span>
 </div>
@@ -222,10 +222,10 @@ export default function Reporting() {
 <div className="bg-surface-container-lowest border border-card-border/70 hover:border-crimson-accent/60 p-4 rounded-xl flex flex-col justify-between group transition-all shadow-sm">
 <div className="flex flex-col gap-2.5">
 <div className="flex items-center justify-between">
-<span className="px-2 py-0.5 rounded-md bg-crimson-accent/20 text-crimson-accent border border-crimson-accent/30 font-mono text-[10px] font-bold inline-flex items-center gap-1">
+<span className="px-2 py-0.5 rounded-md bg-crimson-accent/20 text-crimson-accent border border-crimson-accent/30 tabular-nums text-[10px] font-bold inline-flex items-center gap-1">
 <span className="material-symbols-outlined text-[12px]">warning</span> INCIDENT POST-MORTEM
                   </span>
-<span className="text-[11px] font-mono text-crimson-accent font-semibold">v2.4.0 Hotfix</span>
+<span className="text-[11px] tabular-nums text-crimson-accent font-semibold">v2.4.0 Hotfix</span>
 </div>
 <h3 className="text-sm font-semibold text-on-surface group-hover:text-crimson-accent transition-colors leading-snug">
                   v2.4.0 Negative Surge &amp; Incident Recovery
@@ -235,7 +235,7 @@ export default function Reporting() {
                 </p>
 </div>
 <div className="mt-4 pt-3 border-t border-card-border/60 flex items-center justify-between">
-<div className="flex items-center gap-1.5 font-mono text-xs text-emerald-accent">
+<div className="flex items-center gap-1.5 tabular-nums text-xs text-emerald-accent">
 <span className="w-2 h-2 rounded-full bg-emerald-accent"></span>
 <span>Recovery: +94.2%</span>
 </div>
@@ -253,10 +253,10 @@ export default function Reporting() {
 <div className="bg-surface-container-lowest border border-card-border/70 hover:border-amber-accent/60 p-4 rounded-xl flex flex-col justify-between group transition-all shadow-sm">
 <div className="flex flex-col gap-2.5">
 <div className="flex items-center justify-between">
-<span className="px-2 py-0.5 rounded-md bg-amber-accent/15 text-amber-accent border border-amber-accent/30 font-mono text-[10px] font-bold inline-flex items-center gap-1">
+<span className="px-2 py-0.5 rounded-md bg-amber-accent/15 text-amber-accent border border-amber-accent/30 tabular-nums text-[10px] font-bold inline-flex items-center gap-1">
 <span className="material-symbols-outlined text-[12px]">alt_route</span> DEV ATTRIBUTION
                   </span>
-<span className="text-[11px] font-mono text-on-surface-variant">Linear • Jira</span>
+<span className="text-[11px] tabular-nums text-on-surface-variant">Linear • Jira</span>
 </div>
 <h3 className="text-sm font-semibold text-on-surface group-hover:text-amber-accent transition-colors leading-snug">
                   Linear &amp; Jira Issue Attribution Report
@@ -266,7 +266,7 @@ export default function Reporting() {
                 </p>
 </div>
 <div className="mt-4 pt-3 border-t border-card-border/60 flex items-center justify-between">
-<div className="flex items-center gap-1.5 font-mono text-xs text-on-surface-variant">
+<div className="flex items-center gap-1.5 tabular-nums text-xs text-on-surface-variant">
 <span className="material-symbols-outlined text-[15px] text-amber-accent">commit</span>
 <span className="text-amber-accent font-semibold">87 Linked PRs</span>
 </div>
@@ -282,7 +282,7 @@ export default function Reporting() {
 </div>
 </div>
 {/* Footer Synthesis Formula Bar */}
-<div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs text-on-surface-variant font-mono gap-2 pt-1 border-t border-card-border/50">
+<div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs text-on-surface-variant tabular-nums gap-2 pt-1 border-t border-card-border/50">
 <div className="flex items-center gap-1.5">
 <span className="material-symbols-outlined text-[16px] text-tertiary">functions</span>
 <span>Automated Digest Cadence: Every Monday 09:00 AM UTC • Multi-Platform Synthesis</span>
@@ -296,9 +296,9 @@ export default function Reporting() {
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-1.5">
 <span className="material-symbols-outlined text-primary text-[18px]">auto_awesome</span>
-<span className="text-[11px] font-mono uppercase font-bold text-primary tracking-wider">Top Executive Recommendation</span>
+<span className="text-[11px] tabular-nums uppercase font-bold text-primary tracking-wider">Top Executive Recommendation</span>
 </div>
-<span className="px-2 py-0.5 rounded-full bg-tertiary/15 text-tertiary font-mono text-xs font-bold border border-tertiary/30">ROI: 4.8x</span>
+<span className="px-2 py-0.5 rounded-full bg-tertiary/15 text-tertiary tabular-nums text-xs font-bold border border-tertiary/30">ROI: 4.8x</span>
 </div>
 <div>
 <h3 className="text-base font-bold text-on-surface leading-snug">
@@ -312,25 +312,25 @@ export default function Reporting() {
 <div className="flex flex-col gap-2 bg-surface-container-lowest border border-card-border/60 p-3 rounded-xl">
 <div className="flex items-center justify-between text-xs">
 <span className="text-on-surface-variant">Annualized Churn Risk Mitigated:</span>
-<span className="font-mono text-tertiary font-bold">$142,000 ARR</span>
+<span className="tabular-nums text-tertiary font-bold">$142,000 ARR</span>
 </div>
 <div className="flex items-center justify-between text-xs">
 <span className="text-on-surface-variant">Executive Read Time:</span>
-<span className="font-mono text-on-surface font-semibold">3.5 Mins (Dense)</span>
+<span className="tabular-nums text-on-surface font-semibold">3.5 Mins (Dense)</span>
 </div>
 <div className="flex items-center justify-between text-xs">
 <span className="text-on-surface-variant">Customer Confidence Index:</span>
-<span className="font-mono text-secondary font-bold">98.4%</span>
+<span className="tabular-nums text-secondary font-bold">98.4%</span>
 </div>
 </div>
 {/* Sparkline Trajectory Chart */}
 <div className="rounded-xl bg-surface-container-lowest border border-card-border/60 p-3 flex flex-col gap-1">
-<div className="flex items-center justify-between text-[11px] font-mono">
+<div className="flex items-center justify-between text-[11px] tabular-nums">
 <span className="text-on-surface-variant uppercase text-[10px]">Sentiment Trajectory</span>
 <span className="text-tertiary font-semibold">+18.4% Net Lift</span>
 </div>
 <div className="w-full h-16 pt-1">
-<svg className="w-full h-full" fill="none" preserveaspectratio="none" viewBox="0 0 320 50">
+<svg className="w-full h-full" fill="none" preserveAspectRatio="none" viewBox="0 0 320 50">
 <defs>
 <linearGradient id="recGrad" x1="0" x2="0" y1="0" y2="1">
 <stop offset="0%" stop-color="#4cd7f6" stop-opacity="0.35"></stop>
@@ -343,7 +343,7 @@ export default function Reporting() {
 <circle className="fill-tertiary" cx="320" cy="5" r="3.5" />
 </svg>
 </div>
-<div className="flex items-center justify-between text-on-surface-variant font-mono text-[9px] pt-1">
+<div className="flex items-center justify-between text-on-surface-variant tabular-nums text-[9px] pt-1">
 <span>W26 • Jul 1</span>
 <span>W32 • Hotfix v2.4</span>
 <span>W38 • Current (+18.4%)</span>
@@ -356,7 +356,7 @@ export default function Reporting() {
 <span className="material-symbols-outlined text-[17px]">send</span>
 <span>Draft Executive Memo &amp; Push to Board</span>
 </button>
-<div className="flex items-center justify-between text-xs text-on-surface-variant px-1 font-mono">
+<div className="flex items-center justify-between text-xs text-on-surface-variant px-1 tabular-nums">
 <span>Encrypted PDF • Keynote</span>
 <span className="text-primary hover:underline cursor-pointer">Inspect Citations (412) →</span>
 </div>
@@ -372,14 +372,14 @@ export default function Reporting() {
 <span className="material-symbols-outlined text-[20px]">terminal</span>
 </div>
 <div>
-<div className="flex items-center gap-2 text-xs font-mono">
+<div className="flex items-center gap-2 text-xs tabular-nums">
 <span className="px-2 py-0.2 rounded bg-primary-container/20 text-primary font-bold">AI REPORT BLUEPRINT READY</span>
 <span className="text-on-surface-variant">REP-2024-Q3</span>
 </div>
 <h2 className="text-base font-bold text-on-surface">Confidential Executive Sheet: Q3 VOC &amp; Retention Telemetry</h2>
 </div>
 </div>
-<div className="flex items-center gap-2 text-xs font-mono">
+<div className="flex items-center gap-2 text-xs tabular-nums">
 <span className="px-2.5 py-1 rounded-lg bg-surface-container border border-card-border text-tertiary">
               98.4% Executive Alignment
             </span>
@@ -393,21 +393,21 @@ export default function Reporting() {
 {/* Problem Definition (5 cols) */}
 <div className="lg:col-span-5 flex flex-col gap-3">
 <div>
-<span className="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant font-semibold">Synthesized Problem &amp; Findings Statement</span>
+<span className="text-[11px] tabular-nums uppercase tracking-wider text-on-surface-variant font-semibold">Synthesized Problem &amp; Findings Statement</span>
 <p className="text-xs text-on-surface mt-1.5 bg-surface-container-lowest border border-card-border/60 p-3 rounded-xl leading-relaxed">
                 Enterprise cohort retention dropped by <strong className="text-crimson-accent">3.4% during July</strong> due to camera crash anomalies on Android 14 and SAML timeout loops. The emergency hotfix stabilized 94.2% of detractor sentiment, but remaining billing UX issues jeopardize <strong className="text-amber-accent">$142,000 in recurring ARR</strong> across 42 high-value accounts.
               </p>
 </div>
 <div className="flex flex-col gap-1.5">
-<span className="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant font-semibold">Telemetry &amp; Evidence Sources</span>
+<span className="text-[11px] tabular-nums uppercase tracking-wider text-on-surface-variant font-semibold">Telemetry &amp; Evidence Sources</span>
 <div className="flex items-center gap-2 flex-wrap">
-<span className="px-2.5 py-1 rounded-lg bg-surface-container border border-card-border text-xs text-on-surface font-mono flex items-center gap-1.5">
+<span className="px-2.5 py-1 rounded-lg bg-surface-container border border-card-border text-xs text-on-surface tabular-nums flex items-center gap-1.5">
 <span className="material-symbols-outlined text-[14px] text-tertiary">file_download</span> App Store (8,140)
                 </span>
-<span className="px-2.5 py-1 rounded-lg bg-surface-container border border-card-border text-xs text-on-surface font-mono flex items-center gap-1.5">
+<span className="px-2.5 py-1 rounded-lg bg-surface-container border border-card-border text-xs text-on-surface tabular-nums flex items-center gap-1.5">
 <span className="material-symbols-outlined text-[14px] text-secondary">forum</span> Google Play (4,340)
                 </span>
-<span className="px-2.5 py-1 rounded-lg bg-surface-container border border-card-border text-xs text-on-surface font-mono flex items-center gap-1.5">
+<span className="px-2.5 py-1 rounded-lg bg-surface-container border border-card-border text-xs text-on-surface tabular-nums flex items-center gap-1.5">
 <span className="material-symbols-outlined text-[14px] text-crimson-accent">bug_report</span> Zendesk &amp; Sentry (412)
                 </span>
 </div>
@@ -416,21 +416,21 @@ export default function Reporting() {
 {/* Friction Vectors & Impact Stories (7 cols) */}
 <div className="lg:col-span-7 flex flex-col gap-2.5">
 <div className="flex items-center justify-between">
-<span className="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant font-semibold">Executive Telemetry &amp; ARR Friction Vectors</span>
+<span className="text-[11px] tabular-nums uppercase tracking-wider text-on-surface-variant font-semibold">Executive Telemetry &amp; ARR Friction Vectors</span>
 <span className="text-xs text-primary hover:underline cursor-pointer">Regenerate with Claude 3.5 →</span>
 </div>
 {/* Vector 1 */}
 <div className="p-3 rounded-xl bg-surface-container-lowest border border-card-border/60 flex items-start gap-3">
-<span className="font-mono text-xs font-bold text-crimson-accent bg-crimson-accent/20 px-2 py-0.5 rounded border border-crimson-accent/20 whitespace-nowrap">HIGH RISK</span>
+<span className="tabular-nums text-xs font-bold text-crimson-accent bg-crimson-accent/20 px-2 py-0.5 rounded border border-crimson-accent/20 whitespace-nowrap">HIGH RISK</span>
 <div className="flex-1">
 <div className="flex items-center justify-between">
 <p className="text-xs font-semibold text-on-surface">Camera Permissions &amp; SDK Latency</p>
-<span className="font-mono text-xs text-crimson-accent font-bold">$68,400 ARR</span>
+<span className="tabular-nums text-xs text-crimson-accent font-bold">$68,400 ARR</span>
 </div>
 <p className="text-xs text-on-surface-variant mt-0.5 leading-relaxed">
                   40 enterprise warehouse scanners blocked during initial v2.4 migration. Emergency v2.4.2 patch restored optical capture.
                 </p>
-<div className="flex items-center gap-3 mt-1.5 text-[11px] font-mono text-tertiary">
+<div className="flex items-center gap-3 mt-1.5 text-[11px] tabular-nums text-tertiary">
 <span className="flex items-center gap-1">✓ 94.2% Sentiment Recovery</span>
 <span className="flex items-center gap-1">✓ Zero WebGL buffer drop</span>
 </div>
@@ -438,16 +438,16 @@ export default function Reporting() {
 </div>
 {/* Vector 2 */}
 <div className="p-3 rounded-xl bg-surface-container-lowest border border-card-border/60 flex items-start gap-3">
-<span className="font-mono text-xs font-bold text-amber-accent bg-amber-accent/20 px-2 py-0.5 rounded border border-amber-accent/20 whitespace-nowrap">AUTH LOOP</span>
+<span className="tabular-nums text-xs font-bold text-amber-accent bg-amber-accent/20 px-2 py-0.5 rounded border border-amber-accent/20 whitespace-nowrap">AUTH LOOP</span>
 <div className="flex-1">
 <div className="flex items-center justify-between">
 <p className="text-xs font-semibold text-on-surface">SAML SSO Session Timeout Loop</p>
-<span className="font-mono text-xs text-amber-accent font-bold">$44,100 ARR</span>
+<span className="tabular-nums text-xs text-amber-accent font-bold">$44,100 ARR</span>
 </div>
 <p className="text-xs text-on-surface-variant mt-0.5 leading-relaxed">
                   Floor supervisors forced to re-authenticate every 2 hours via Okta, causing friction and negative app reviews.
                 </p>
-<div className="flex items-center gap-3 mt-1.5 text-[11px] font-mono text-tertiary">
+<div className="flex items-center gap-3 mt-1.5 text-[11px] tabular-nums text-tertiary">
 <span className="flex items-center gap-1">✓ PR #412 Drafted in Linear</span>
 <span className="flex items-center gap-1">✓ 8h refresh token lifecycle</span>
 </div>
@@ -455,16 +455,16 @@ export default function Reporting() {
 </div>
 {/* Vector 3 */}
 <div className="p-3 rounded-xl bg-surface-container-lowest border border-card-border/60 flex items-start gap-3">
-<span className="font-mono text-xs font-bold text-primary bg-primary-container/20 px-2 py-0.5 rounded border border-primary/20 whitespace-nowrap">BILLING UX</span>
+<span className="tabular-nums text-xs font-bold text-primary bg-primary-container/20 px-2 py-0.5 rounded border border-primary/20 whitespace-nowrap">BILLING UX</span>
 <div className="flex-1">
 <div className="flex items-center justify-between">
 <p className="text-xs font-semibold text-on-surface">CSV Billing Export Truncation</p>
-<span className="font-mono text-xs text-secondary font-bold">$29,500 ARR</span>
+<span className="tabular-nums text-xs text-secondary font-bold">$29,500 ARR</span>
 </div>
 <p className="text-xs text-on-surface-variant mt-0.5 leading-relaxed">
                   Finance teams unable to export invoices with more than 500 line items directly from mobile view.
                 </p>
-<div className="flex items-center gap-3 mt-1.5 text-[11px] font-mono text-tertiary">
+<div className="flex items-center gap-3 mt-1.5 text-[11px] tabular-nums text-tertiary">
 <span className="flex items-center gap-1">✓ S3 Streaming Fix Queued</span>
 </div>
 </div>
@@ -514,7 +514,7 @@ export default function Reporting() {
 <div className="overflow-x-auto">
 <table className="w-full text-left border-collapse text-xs">
 <thead>
-<tr className="bg-surface-container-lowest text-on-surface-variant font-mono uppercase tracking-wider text-[10px] border-b border-card-border/60">
+<tr className="bg-surface-container-lowest text-on-surface-variant tabular-nums uppercase tracking-wider text-[10px] border-b border-card-border/60">
 <th className="py-2.5 px-4 font-semibold">Channel &amp; Stakeholder</th>
 <th className="py-2.5 px-3 font-semibold">Report Type</th>
 <th className="py-2.5 px-3 font-semibold">Cadence</th>
@@ -537,7 +537,7 @@ export default function Reporting() {
 <div className="font-semibold text-on-surface group-hover:text-primary transition-colors cursor-pointer">
                         #exec-product-sync
                       </div>
-<div className="flex items-center gap-1.5 text-[10px] font-mono text-on-surface-variant mt-0.5">
+<div className="flex items-center gap-1.5 text-[10px] tabular-nums text-on-surface-variant mt-0.5">
 <span className="px-1.5 py-0.2 rounded bg-surface-container">Slack Webhook</span>
 <span>•</span>
 <span className="text-tertiary">44 members</span>
@@ -547,24 +547,24 @@ export default function Reporting() {
 </td>
 <td className="py-3 px-3 font-medium text-on-surface">Weekly Sentiment Drift</td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-full bg-tertiary/15 border border-tertiary/30 text-tertiary font-mono text-[10px] inline-flex items-center gap-1">
+<span className="px-2 py-0.5 rounded-full bg-tertiary/15 border border-tertiary/30 text-tertiary tabular-nums text-[10px] inline-flex items-center gap-1">
 <span className="material-symbols-outlined text-[12px]">schedule</span> Weekly • Mon 9:00 AM
                   </span>
 </td>
 <td className="py-3 px-3">
 <div className="flex items-center gap-1.5">
-<span className="px-2 py-0.5 rounded bg-surface-container border border-card-border font-mono text-[10px] text-on-surface">PDF + Keynote</span>
-<span className="px-2 py-0.5 rounded bg-surface-container border border-card-border font-mono text-[10px] text-on-surface-variant">Slack BlockKit</span>
+<span className="px-2 py-0.5 rounded bg-surface-container border border-card-border tabular-nums text-[10px] text-on-surface">PDF + Keynote</span>
+<span className="px-2 py-0.5 rounded bg-surface-container border border-card-border tabular-nums text-[10px] text-on-surface-variant">Slack BlockKit</span>
 </div>
 </td>
-<td className="py-3 px-3 font-mono text-on-surface-variant">Mon, Oct 7 • 09:00</td>
-<td className="py-3 px-3 font-mono">
+<td className="py-3 px-3 tabular-nums text-on-surface-variant">Mon, Oct 7 • 09:00</td>
+<td className="py-3 px-3 tabular-nums">
 <div className="text-primary font-semibold flex items-center gap-1">
 <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> In 3d 14h
                   </div>
 </td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-full bg-emerald-accent/15 text-emerald-accent border border-emerald-accent/20 font-mono text-[10px] inline-flex items-center gap-1">
+<span className="px-2 py-0.5 rounded-full bg-emerald-accent/15 text-emerald-accent border border-emerald-accent/20 tabular-nums text-[10px] inline-flex items-center gap-1">
 <span className="w-1.5 h-1.5 rounded-full bg-emerald-accent"></span> Active
                   </span>
 </td>
@@ -587,7 +587,7 @@ export default function Reporting() {
 <div className="font-semibold text-on-surface group-hover:text-secondary transition-colors cursor-pointer">
                         Board Audit Distribution List
                       </div>
-<div className="flex items-center gap-1.5 text-[10px] font-mono text-on-surface-variant mt-0.5">
+<div className="flex items-center gap-1.5 text-[10px] tabular-nums text-on-surface-variant mt-0.5">
 <span className="px-1.5 py-0.2 rounded bg-surface-container">board-briefs@company.internal</span>
 </div>
 </div>
@@ -595,20 +595,20 @@ export default function Reporting() {
 </td>
 <td className="py-3 px-3 font-medium text-on-surface">Quarterly Health &amp; ARR Brief</td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-full bg-secondary/15 border border-secondary/30 text-secondary font-mono text-[10px] inline-flex items-center gap-1">
+<span className="px-2 py-0.5 rounded-full bg-secondary/15 border border-secondary/30 text-secondary tabular-nums text-[10px] inline-flex items-center gap-1">
 <span className="material-symbols-outlined text-[12px]">calendar_month</span> Quarterly • 1st of Qtr
                   </span>
 </td>
 <td className="py-3 px-3">
 <div className="flex items-center gap-1.5">
-<span className="px-2 py-0.5 rounded bg-surface-container border border-card-border font-mono text-[10px] text-on-surface">Executive PDF</span>
-<span className="px-2 py-0.5 rounded bg-surface-container border border-card-border font-mono text-[10px] text-on-surface-variant">Encrypted Keynote</span>
+<span className="px-2 py-0.5 rounded bg-surface-container border border-card-border tabular-nums text-[10px] text-on-surface">Executive PDF</span>
+<span className="px-2 py-0.5 rounded bg-surface-container border border-card-border tabular-nums text-[10px] text-on-surface-variant">Encrypted Keynote</span>
 </div>
 </td>
-<td className="py-3 px-3 font-mono text-on-surface-variant">Oct 1 • 06:00</td>
-<td className="py-3 px-3 font-mono text-on-surface-variant">In 82 days</td>
+<td className="py-3 px-3 tabular-nums text-on-surface-variant">Oct 1 • 06:00</td>
+<td className="py-3 px-3 tabular-nums text-on-surface-variant">In 82 days</td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-full bg-emerald-accent/15 text-emerald-accent border border-emerald-accent/20 font-mono text-[10px] inline-flex items-center gap-1">
+<span className="px-2 py-0.5 rounded-full bg-emerald-accent/15 text-emerald-accent border border-emerald-accent/20 tabular-nums text-[10px] inline-flex items-center gap-1">
 <span className="w-1.5 h-1.5 rounded-full bg-emerald-accent"></span> Active
                   </span>
 </td>
@@ -631,7 +631,7 @@ export default function Reporting() {
 <div className="font-semibold text-on-surface group-hover:text-tertiary transition-colors cursor-pointer">
                         Linear Triage Automation
                       </div>
-<div className="flex items-center gap-1.5 text-[10px] font-mono text-on-surface-variant mt-0.5">
+<div className="flex items-center gap-1.5 text-[10px] tabular-nums text-on-surface-variant mt-0.5">
 <span className="px-1.5 py-0.2 rounded bg-surface-container">API Integration</span>
 <span>•</span>
 <span className="text-on-surface-variant">#eng-mobile</span>
@@ -641,24 +641,24 @@ export default function Reporting() {
 </td>
 <td className="py-3 px-3 font-medium text-on-surface">Daily Bug &amp; Crash Surge Attribution</td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-full bg-tertiary/15 border border-tertiary/30 text-tertiary font-mono text-[10px] inline-flex items-center gap-1">
+<span className="px-2 py-0.5 rounded-full bg-tertiary/15 border border-tertiary/30 text-tertiary tabular-nums text-[10px] inline-flex items-center gap-1">
 <span className="material-symbols-outlined text-[12px]">schedule</span> Daily • 00:00 UTC
                   </span>
 </td>
 <td className="py-3 px-3">
 <div className="flex items-center gap-1.5">
-<span className="px-2 py-0.5 rounded bg-surface-container border border-card-border font-mono text-[10px] text-on-surface">Linear Tickets</span>
-<span className="px-2 py-0.5 rounded bg-surface-container border border-card-border font-mono text-[10px] text-on-surface-variant">CSV Sync</span>
+<span className="px-2 py-0.5 rounded bg-surface-container border border-card-border tabular-nums text-[10px] text-on-surface">Linear Tickets</span>
+<span className="px-2 py-0.5 rounded bg-surface-container border border-card-border tabular-nums text-[10px] text-on-surface-variant">CSV Sync</span>
 </div>
 </td>
-<td className="py-3 px-3 font-mono text-on-surface-variant">Today • 00:00</td>
-<td className="py-3 px-3 font-mono">
+<td className="py-3 px-3 tabular-nums text-on-surface-variant">Today • 00:00</td>
+<td className="py-3 px-3 tabular-nums">
 <div className="text-tertiary font-semibold flex items-center gap-1">
 <span className="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></span> In 4h 22m
                   </div>
 </td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-full bg-emerald-accent/15 text-emerald-accent border border-emerald-accent/20 font-mono text-[10px] inline-flex items-center gap-1">
+<span className="px-2 py-0.5 rounded-full bg-emerald-accent/15 text-emerald-accent border border-emerald-accent/20 tabular-nums text-[10px] inline-flex items-center gap-1">
 <span className="w-1.5 h-1.5 rounded-full bg-emerald-accent"></span> Active
                   </span>
 </td>
@@ -681,7 +681,7 @@ export default function Reporting() {
 <div className="font-semibold text-on-surface group-hover:text-primary transition-colors cursor-pointer">
                         Data Warehouse S3 Raw Bucket
                       </div>
-<div className="flex items-center gap-1.5 text-[10px] font-mono text-outline mt-0.5">
+<div className="flex items-center gap-1.5 text-[10px] tabular-nums text-outline mt-0.5">
 <span>s3://insights-copilot-raw-exports</span>
 </div>
 </div>
@@ -689,19 +689,19 @@ export default function Reporting() {
 </td>
 <td className="py-3 px-3 font-medium text-on-surface">All Review Transcripts &amp; Vector Embeddings</td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-full bg-surface-container border border-card-border font-mono text-[10px] text-on-surface-variant inline-flex items-center gap-1">
+<span className="px-2 py-0.5 rounded-full bg-surface-container border border-card-border tabular-nums text-[10px] text-on-surface-variant inline-flex items-center gap-1">
                     Hourly Batch
                   </span>
 </td>
 <td className="py-3 px-3">
 <div className="flex items-center gap-1.5">
-<span className="px-2 py-0.5 rounded bg-surface-container border border-card-border font-mono text-[10px] text-on-surface">Parquet / JSONL</span>
+<span className="px-2 py-0.5 rounded bg-surface-container border border-card-border tabular-nums text-[10px] text-on-surface">Parquet / JSONL</span>
 </div>
 </td>
-<td className="py-3 px-3 font-mono text-on-surface-variant">42 mins ago</td>
-<td className="py-3 px-3 font-mono text-on-surface-variant">In 18 mins</td>
+<td className="py-3 px-3 tabular-nums text-on-surface-variant">42 mins ago</td>
+<td className="py-3 px-3 tabular-nums text-on-surface-variant">In 18 mins</td>
 <td className="py-3 px-3">
-<span className="px-2 py-0.5 rounded-full bg-emerald-accent/15 text-emerald-accent border border-emerald-accent/20 font-mono text-[10px] inline-flex items-center gap-1">
+<span className="px-2 py-0.5 rounded-full bg-emerald-accent/15 text-emerald-accent border border-emerald-accent/20 tabular-nums text-[10px] inline-flex items-center gap-1">
 <span className="w-1.5 h-1.5 rounded-full bg-emerald-accent"></span> Streaming
                   </span>
 </td>
@@ -717,10 +717,10 @@ export default function Reporting() {
 </table>
 </div>
 {/* Table Pagination & Count Strip */}
-<div className="p-3 bg-surface-container-lowest border-t border-card-border/60 flex items-center justify-between text-xs text-on-surface-variant font-mono">
+<div className="p-3 bg-surface-container-lowest border-t border-card-border/60 flex items-center justify-between text-xs text-on-surface-variant tabular-nums">
 <span>Showing 4 active automated pipelines across 142 stakeholders</span>
 <div className="flex items-center gap-1.5">
-<button className="px-2 py-1 rounded-lg bg-surface-container border border-card-border text-on-surface-variant hover:text-on-surface disabled:opacity-40" disabled="">Previous</button>
+<button className="px-2 py-1 rounded-lg bg-surface-container border border-card-border text-on-surface-variant hover:text-on-surface disabled:opacity-40" disabled>Previous</button>
 <button className="px-2.5 py-1 rounded-lg bg-primary-container text-white font-bold">1</button>
 <button className="px-2.5 py-1 rounded-lg bg-surface-container border border-card-border hover:bg-surface-container-high text-on-surface">2</button>
 <button className="px-2 py-1 rounded-lg bg-surface-container border border-card-border hover:bg-surface-container-high text-on-surface">Next</button>
@@ -734,7 +734,7 @@ export default function Reporting() {
 <h2 className="text-sm font-semibold text-on-surface">Grounded Evidence Verbatims Wall</h2>
 <p className="text-[11px] text-on-surface-variant">Raw evidence and natural language signals feeding executive synthesis models</p>
 </div>
-<span className="px-2.5 py-1 rounded-full bg-primary-container/15 text-primary border border-primary/20 text-xs font-mono flex items-center gap-1.5">
+<span className="px-2.5 py-1 rounded-full bg-primary-container/15 text-primary border border-primary/20 text-xs tabular-nums flex items-center gap-1.5">
 <span className="material-symbols-outlined text-[15px]">psychology</span>
 <span>Entity Recognition Active</span>
 </span>
@@ -748,13 +748,13 @@ export default function Reporting() {
 <span className="material-symbols-outlined text-[15px] text-tertiary">phone_iphone</span>
 <span>App Store (US)</span>
 </div>
-<span className="text-[10px] font-mono text-crimson-accent font-bold px-1.5 py-0.2 rounded bg-crimson-accent/15">1 Star • v2.4.0</span>
+<span className="text-[10px] tabular-nums text-crimson-accent font-bold px-1.5 py-0.2 rounded bg-crimson-accent/15">1 Star • v2.4.0</span>
 </div>
 <p className="text-xs text-on-surface leading-relaxed mt-1">
                 “After the v2.4 update our warehouse barcode scanning failed on 40 devices due to a <mark className="bg-amber-400/25 text-amber-200 px-1 py-0.5 rounded font-medium">camera crash</mark> anomaly. The emergency hotfix restored trust, but session timeouts still interrupt floor workers.”
               </p>
 </div>
-<div className="pt-3 mt-3 border-t border-card-border/60 flex items-center justify-between text-[11px] text-on-surface-variant font-mono">
+<div className="pt-3 mt-3 border-t border-card-border/60 flex items-center justify-between text-[11px] text-on-surface-variant tabular-nums">
 <div className="flex items-center gap-1.5">
 <span className="w-2 h-2 rounded-full bg-crimson-accent"></span>
 <span className="text-on-surface">@studio_marcus</span>
@@ -770,13 +770,13 @@ export default function Reporting() {
 <span className="material-symbols-outlined text-[15px] text-secondary">android</span>
 <span>Google Play</span>
 </div>
-<span className="text-[10px] font-mono text-crimson-accent font-bold px-1.5 py-0.2 rounded bg-crimson-accent/15">2 Star • v2.4.1</span>
+<span className="text-[10px] tabular-nums text-crimson-accent font-bold px-1.5 py-0.2 rounded bg-crimson-accent/15">2 Star • v2.4.1</span>
 </div>
 <p className="text-xs text-on-surface leading-relaxed mt-1">
                 “Finance team cannot reconcile monthly seat additions. Exporting CSV cuts off halfway and there is no <mark className="bg-amber-400/25 text-amber-200 px-1 py-0.5 rounded font-medium">in-app invoice</mark> download for enterprise accounts. Fix this before renewal!”
               </p>
 </div>
-<div className="pt-3 mt-3 border-t border-card-border/60 flex items-center justify-between text-[11px] text-on-surface-variant font-mono">
+<div className="pt-3 mt-3 border-t border-card-border/60 flex items-center justify-between text-[11px] text-on-surface-variant tabular-nums">
 <div className="flex items-center gap-1.5">
 <span className="w-2 h-2 rounded-full bg-crimson-accent"></span>
 <span className="text-on-surface">@alex_creative</span>
@@ -792,13 +792,13 @@ export default function Reporting() {
 <span className="material-symbols-outlined text-[15px] text-tertiary">support_agent</span>
 <span>Zendesk Ticket #9481</span>
 </div>
-<span className="text-[10px] font-mono text-tertiary font-bold px-1.5 py-0.2 rounded bg-tertiary/15">Detractor CSAT</span>
+<span className="text-[10px] tabular-nums text-tertiary font-bold px-1.5 py-0.2 rounded bg-tertiary/15">Detractor CSAT</span>
 </div>
 <p className="text-xs text-on-surface leading-relaxed mt-1">
                 “Our executive team relies on iPad presentations during weekly reviews. When resizing windows in <mark className="bg-amber-400/25 text-amber-200 px-1 py-0.5 rounded font-medium">stage manager</mark>, the KPI graph resets and loses filters. Needs persistent state.”
               </p>
 </div>
-<div className="pt-3 mt-3 border-t border-card-border/60 flex items-center justify-between text-[11px] text-on-surface-variant font-mono">
+<div className="pt-3 mt-3 border-t border-card-border/60 flex items-center justify-between text-[11px] text-on-surface-variant tabular-nums">
 <div className="flex items-center gap-1.5">
 <span className="w-2 h-2 rounded-full bg-secondary"></span>
 <span className="text-on-surface">Enterprise Lead (14 seats)</span>

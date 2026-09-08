@@ -1,4 +1,4 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, type ErrorInfo, type ReactNode } from 'react';
 import { AlertTriangle } from 'lucide-react';
 
 interface Props {
@@ -42,7 +42,7 @@ export class ErrorBoundary extends Component<Props, State> {
             </p>
             {this.state.error && (
               <div className="bg-surface-container-highest p-space-sm rounded-xl text-left overflow-auto max-h-48 mb-space-md border border-outline-variant">
-                <code className="text-body-sm font-mono text-error">
+                <code className="text-body-sm tabular-nums text-error">
                   {this.state.error.toString()}
                 </code>
               </div>

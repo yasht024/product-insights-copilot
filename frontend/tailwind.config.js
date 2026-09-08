@@ -7,8 +7,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        mono: ['JetBrains Mono', 'monospace'],
+        sans: ['Inter Variable', 'Segoe UI', 'system-ui', 'sans-serif'],
+        mono: ['Inter Variable', 'Segoe UI', 'system-ui', 'sans-serif'],
       },
       colors: {
         primary: '#6366f1',
@@ -48,14 +48,14 @@ export default {
         'sidebar-w': '16rem',
       },
       fontSize: {
-        'body-sm': ['0.75rem', { lineHeight: '1rem' }],
-        'body-md': ['0.875rem', { lineHeight: '1.25rem' }],
+        'body-sm': ['0.8125rem', { lineHeight: '1.25rem' }],
+        'body-md': ['0.875rem', { lineHeight: '1.5rem' }],
         'body-lg': ['1rem', { lineHeight: '1.5rem' }],
         'title-md': ['1rem', { lineHeight: '1.5rem', fontWeight: '500' }],
         'title-lg': ['1.125rem', { lineHeight: '1.75rem', fontWeight: '500' }],
         'display-sm': ['1.5rem', { lineHeight: '2rem', fontWeight: '600' }],
         'label-caps': ['0.625rem', { lineHeight: '0.75rem', letterSpacing: '0.05em', fontWeight: '600' }],
-        'mono-metric': ['0.875rem', { lineHeight: '1.25rem', letterSpacing: '0.025em', fontWeight: '500' }],
+        'mono-metric': ['0.875rem', { lineHeight: '1.25rem', letterSpacing: '-0.015em', fontWeight: '500' }],
       }
     },
   },

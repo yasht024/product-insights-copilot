@@ -7,9 +7,11 @@ from sqlalchemy.orm import sessionmaker
 
 from product_insights.api.main import (
     SyncRequest,
+    get_analytics,
     get_dashboard_metrics,
     get_reviews_summary,
     get_sync_status,
+    get_word_cloud,
     sync_workspace,
 )
 from product_insights.db.models import Base, Review, Workspace
@@ -153,6 +155,97 @@ def test_rating_advocacy_uses_raw_counts_before_rounding() -> None:
     assert metrics["advocates_percent"] == 16.7
     assert metrics["critics_percent"] == 33.3
     assert metrics["rating_advocacy_score"] == -16.7
+
+
+def test_analytics_uses_live_reviews_and_selected_platform() -> None:
+    engine = create_engine("sqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    session = sessionmaker(bind=engine)()
+    now = datetime.now(UTC).replace(tzinfo=None)
+    session.add(Workspace(id="ws_test", name="Test", slug="test"))
+    session.add_all(
+        [
+            Review(
+                id="ios_now", workspace_id="ws_test", platform="Apple App Store",
+                rating=5, text="A", version="2.0", created_at=now - timedelta(days=2),
+            ),
+            Review(
+                id="android_now", workspace_id="ws_test", platform="Google Play Store",
+                rating=2, text="B", version="2.0", created_at=now - timedelta(days=3),
+            ),
+            Review(
+                id="ios_previous", workspace_id="ws_test", platform="Apple App Store",
+                rating=3, text="C", version="1.9", created_at=now - timedelta(days=10),
+            ),
+        ]
+    )
+    session.commit()
+
+    all_data = asyncio.run(get_analytics("ws_test", "All Platforms", 7, "daily", session))
+    ios_data = asyncio.run(get_analytics("ws_test", "iOS", 7, "daily", session))
+
+    assert all_data["total_reviews"] == 2
+    assert all_data["ios_reviews"] == 1
+    assert all_data["android_reviews"] == 1
+    assert all_data["average_rating"] == 3.5
+    assert all_data["critical_percent"] == 50.0
+    assert all_data["rating_change"] == 0.5
+    assert sum(point["total"] for point in all_data["series"]) == 2
+    assert all_data["versions"] == [{"version": "2.0", "reviews": 2, "average_rating": 3.5}]
+    assert ios_data["total_reviews"] == 1
+    assert ios_data["android_reviews"] == 0
+    assert ios_data["average_rating"] == 5.0
+
+
+def test_word_cloud_extracts_live_terms_and_prior_window_velocity() -> None:
+    engine = create_engine("sqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    session = sessionmaker(bind=engine)()
+    now = datetime.now(UTC).replace(tzinfo=None)
+    session.add(Workspace(id="ws_test", name="Test", slug="test"))
+    session.add_all(
+        [
+            Review(
+                id="positive_now",
+                workspace_id="ws_test",
+                platform="Apple App Store",
+                rating=5,
+                text="Fast payments and reliable support. Fast.",
+                created_at=now - timedelta(days=2),
+            ),
+            Review(
+                id="negative_now",
+                workspace_id="ws_test",
+                platform="Google Play Store",
+                rating=1,
+                text="Slow payments and login failure",
+                created_at=now - timedelta(days=3),
+            ),
+            Review(
+                id="previous",
+                workspace_id="ws_test",
+                platform="Google Play Store",
+                rating=2,
+                text="Payments were slow and login failure",
+                created_at=now - timedelta(days=10),
+            ),
+        ]
+    )
+    session.commit()
+
+    data = asyncio.run(get_word_cloud("ws_test", "All Platforms", "all", 7, 2, 50, session))
+    negative = asyncio.run(
+        get_word_cloud("ws_test", "All Platforms", "negative", 7, 1, 50, session)
+    )
+
+    assert data["review_count"] == 2
+    assert data["distinct_terms"] == 1
+    assert data["terms"][0]["term"] == "payments"
+    assert data["terms"][0]["mentions"] == 2
+    assert data["terms"][0]["polarity"] == 0
+    assert data["terms"][0]["velocity_percent"] == 100.0
+    assert negative["review_count"] == 1
+    assert all(term["average_rating"] == 1 for term in negative["terms"])
 
 
 def test_review_summary_normalizes_store_and_legacy_statuses() -> None:

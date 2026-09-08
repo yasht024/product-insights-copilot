@@ -1,9 +1,11 @@
 import os
+from pathlib import Path
 from sqlalchemy import create_engine, inspect, text
 from sqlalchemy.orm import sessionmaker
 
 # Use a SQLite database for Phase 1 development until Postgres is provisioned
-DATABASE_URL = os.environ.get("DATABASE_URL", "sqlite:///./product_insights.db")
+DEFAULT_DB_PATH = Path(__file__).resolve().parents[3] / "product_insights.db"
+DATABASE_URL = os.environ.get("DATABASE_URL", f"sqlite:///{DEFAULT_DB_PATH.as_posix()}")
 
 # SQLite needs check_same_thread=False for FastAPI
 connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}

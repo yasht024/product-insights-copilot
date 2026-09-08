@@ -10,7 +10,9 @@ from sqlalchemy.orm import Session
 from sqlalchemy import or_, func
 import io
 import csv
+import re
 from datetime import UTC, datetime, timedelta
+from collections import Counter, defaultdict
 from statistics import median
 import requests
 from google_play_scraper import Sort, reviews as gp_reviews
@@ -30,6 +32,13 @@ app.add_middleware(
 )
 
 api_router = APIRouter(prefix="/api")
+
+@api_router.get("/health")
+def health_check(db: Session = Depends(get_db)):
+    # Check the schema as well as connectivity before declaring the API ready.
+    db.query(Workspace.id).first()
+    db.query(Review.id).first()
+    return {"status": "ok", "service": "product-insights-dashboard"}
 
 class WorkspaceResponse(BaseModel):
     id: str
@@ -298,6 +307,293 @@ async def get_dashboard_metrics(
         "critic_max": critic_max,
         "days": days,
         "min_words": min_words,
+    }
+
+
+def _analytics_bucket(value: datetime, granularity: str) -> datetime:
+    if granularity == "daily":
+        return value.replace(hour=0, minute=0, second=0, microsecond=0)
+    if granularity == "weekly":
+        day = value.replace(hour=0, minute=0, second=0, microsecond=0)
+        return day - timedelta(days=day.weekday())
+    if granularity == "monthly":
+        return value.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    month = ((value.month - 1) // 3) * 3 + 1
+    return value.replace(month=month, day=1, hour=0, minute=0, second=0, microsecond=0)
+
+
+def _analytics_platform(value: str | None) -> str:
+    normalized = (value or "").casefold()
+    return "ios" if "apple" in normalized or "ios" in normalized else "android"
+
+
+_WORD_CLOUD_STOP_WORDS = {
+    "about", "after", "again", "also", "and", "any", "app", "are", "been", "being",
+    "but", "can", "could", "did", "does", "doing", "for", "from", "get", "getting",
+    "good", "got", "groww", "had", "has", "have", "how", "into", "its", "just",
+    "like", "more", "most", "much", "not", "now", "only", "our", "out", "please",
+    "really", "should", "some", "than", "that", "the", "their", "them", "then",
+    "there", "these", "they", "this", "too", "use", "used", "user", "using", "very",
+    "want", "was", "were", "what", "when", "which", "while", "will", "with", "would",
+    "you", "your",
+}
+_WORD_CLOUD_TOKEN = re.compile(r"[^\W_][\w']{2,}", re.UNICODE)
+_WORD_CLOUD_GENERIC_UNIGRAMS = {
+    "aap", "all", "apps", "awesome", "bad", "best", "easy", "even", "excellent",
+    "friendly", "great", "grow", "hai", "it's", "nice", "new", "one", "other",
+    "super", "work", "worst",
+}
+
+
+def _review_terms(text: str | None) -> set[tuple[str, str]]:
+    """Return unique meaningful unigrams and adjacent bigrams for one review."""
+    tokens = [token.casefold().strip("'") for token in _WORD_CLOUD_TOKEN.findall(text or "")]
+    valid = [token if token not in _WORD_CLOUD_STOP_WORDS and not token.isdigit() else None for token in tokens]
+    terms = {
+        (token, "unigram")
+        for token in valid
+        if token and token not in _WORD_CLOUD_GENERIC_UNIGRAMS
+    }
+    terms.update(
+        (f"{left} {right}", "bigram")
+        for left, right in zip(valid, valid[1:])
+        if left and right and left != right
+    )
+    return terms
+
+
+@api_router.get("/workspaces/{workspace_id}/word-cloud")
+async def get_word_cloud(
+    workspace_id: str,
+    platform: str = Query("All Platforms"),
+    sentiment: str = Query("all", pattern="^(all|positive|neutral|negative)$"),
+    days: int = Query(30, ge=1, le=365),
+    min_frequency: int = Query(2, ge=1, le=500),
+    limit: int = Query(50, ge=10, le=100),
+    db: Session = Depends(get_db),  # noqa: B008
+):
+    """Extract a fast, deterministic live term cloud from stored review text."""
+    if db.get(Workspace, workspace_id) is None:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+
+    now = datetime.now(UTC).replace(tzinfo=None)
+    cutoff = now - timedelta(days=days)
+    previous_cutoff = cutoff - timedelta(days=days)
+    query = _store_reviews_query(db, workspace_id).filter(Review.created_at >= previous_cutoff)
+    query = _apply_review_filters(query, platform=platform)
+    if sentiment == "positive":
+        query = query.filter(Review.rating >= 4)
+    elif sentiment == "negative":
+        query = query.filter(Review.rating <= 2)
+    elif sentiment == "neutral":
+        query = query.filter(Review.rating == 3)
+
+    total_matching_reviews = query.count()
+    rows = (
+        query.with_entities(Review.text, Review.rating, Review.created_at)
+        .order_by(Review.created_at.desc())
+        .limit(10_000)
+        .all()
+    )
+    current_rows = [row for row in rows if row.created_at and row.created_at >= cutoff]
+    previous_rows = [row for row in rows if row.created_at and row.created_at < cutoff]
+
+    current_counts: Counter[tuple[str, str]] = Counter()
+    previous_counts: Counter[tuple[str, str]] = Counter()
+    rating_totals: Counter[tuple[str, str]] = Counter()
+    rating_counts: Counter[tuple[str, str]] = Counter()
+    samples: dict[tuple[str, str], str] = {}
+
+    for text_value, rating, _created_at in current_rows:
+        review_terms = _review_terms(text_value)
+        current_counts.update(review_terms)
+        for term_key in review_terms:
+            if rating is not None:
+                rating_totals[term_key] += rating
+                rating_counts[term_key] += 1
+            if text_value and term_key not in samples:
+                samples[term_key] = text_value.strip()
+
+    for text_value, _rating, _created_at in previous_rows:
+        previous_counts.update(_review_terms(text_value))
+
+    eligible = [key for key, count in current_counts.items() if count >= min_frequency]
+    eligible.sort(key=lambda key: (-current_counts[key], key[0]))
+    unigram_limit = max(1, round(limit * 2 / 3))
+    unigram_keys = [key for key in eligible if key[1] == "unigram"][:unigram_limit]
+    bigram_keys = [key for key in eligible if key[1] == "bigram"][: limit - unigram_limit]
+    display_keys = sorted(
+        [*unigram_keys, *bigram_keys],
+        key=lambda key: (-current_counts[key], key[0]),
+    )
+    terms = []
+    for key in display_keys:
+        mentions = current_counts[key]
+        previous_mentions = previous_counts[key]
+        average_rating = rating_totals[key] / rating_counts[key] if rating_counts[key] else 3
+        polarity = round((average_rating - 3) / 2, 2)
+        terms.append(
+            {
+                "term": key[0],
+                "kind": key[1],
+                "mentions": mentions,
+                "polarity": polarity,
+                "average_rating": round(average_rating, 2),
+                "velocity_percent": (
+                    round((mentions - previous_mentions) / previous_mentions * 100, 1)
+                    if previous_mentions
+                    else None
+                ),
+                "is_new": bool(previous_rows) and previous_mentions == 0,
+                "sample_review": samples.get(key, ""),
+            }
+        )
+
+    positive_terms = [term for term in terms if term["polarity"] > 0]
+    negative_terms = [term for term in terms if term["polarity"] < 0]
+    positive_phrases = [term for term in positive_terms if term["kind"] == "bigram"]
+    negative_phrases = [term for term in negative_terms if term["kind"] == "bigram"]
+    return {
+        "generated_at": now.isoformat(),
+        "days": days,
+        "platform": platform,
+        "sentiment": sentiment,
+        "review_count": len(current_rows),
+        "total_matching_reviews": total_matching_reviews,
+        "truncated": total_matching_reviews > len(rows),
+        "distinct_terms": len(eligible),
+        "min_frequency": min_frequency,
+        "top_positive": max(
+            positive_phrases or positive_terms,
+            key=lambda term: term["polarity"],
+            default=None,
+        ),
+        "top_negative": min(
+            negative_phrases or negative_terms,
+            key=lambda term: term["polarity"],
+            default=None,
+        ),
+        "terms": terms,
+    }
+
+
+@api_router.get("/workspaces/{workspace_id}/analytics")
+async def get_analytics(
+    workspace_id: str,
+    platform: str = Query("All Platforms"),
+    days: int = Query(90, ge=7, le=365),
+    granularity: str = Query("weekly", pattern="^(daily|weekly|monthly|quarterly)$"),
+    db: Session = Depends(get_db),  # noqa: B008
+):
+    """Return live, review-backed trend data for the analytics screen."""
+    if db.get(Workspace, workspace_id) is None:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+
+    now = datetime.now(UTC).replace(tzinfo=None)
+    cutoff = now - timedelta(days=days)
+    previous_cutoff = cutoff - timedelta(days=days)
+    query = _store_reviews_query(db, workspace_id).filter(Review.created_at >= previous_cutoff)
+    if platform == "iOS":
+        query = query.filter(
+            or_(Review.platform.ilike("%Apple%"), Review.platform.ilike("%iOS%"))
+        )
+    elif platform == "Android":
+        query = query.filter(
+            or_(Review.platform.ilike("%Google%"), Review.platform.ilike("%Android%"))
+        )
+
+    rows = query.order_by(Review.created_at.asc()).all()
+    current = [row for row in rows if row.created_at and row.created_at >= cutoff]
+    previous = [row for row in rows if row.created_at and row.created_at < cutoff]
+
+    def average(items) -> float | None:
+        ratings = [row.rating for row in items if row.rating is not None]
+        return round(sum(ratings) / len(ratings), 2) if ratings else None
+
+    buckets = defaultdict(lambda: {"ios": 0, "android": 0, "ratings": []})
+    for row in current:
+        bucket = _analytics_bucket(row.created_at, granularity)
+        buckets[bucket][_analytics_platform(row.platform)] += 1
+        if row.rating is not None:
+            buckets[bucket]["ratings"].append(row.rating)
+
+    series = []
+    for bucket, values in sorted(buckets.items()):
+        ratings = values["ratings"]
+        series.append(
+            {
+                "period": bucket.date().isoformat(),
+                "ios": values["ios"],
+                "android": values["android"],
+                "total": values["ios"] + values["android"],
+                "average_rating": round(sum(ratings) / len(ratings), 2) if ratings else None,
+                "critical_percent": (
+                    round(sum(rating <= 3 for rating in ratings) / len(ratings) * 100, 1)
+                    if ratings
+                    else 0
+                ),
+            }
+        )
+
+    current_average = average(current)
+    previous_average = average(previous)
+    current_critical = sum(row.rating <= 3 for row in current if row.rating is not None)
+    previous_critical = sum(row.rating <= 3 for row in previous if row.rating is not None)
+    current_critical_percent = round(current_critical / len(current) * 100, 1) if current else 0
+    previous_critical_percent = (
+        round(previous_critical / len(previous) * 100, 1) if previous else 0
+    )
+    velocity_change = (
+        round((len(current) - len(previous)) / len(previous) * 100, 1) if previous else None
+    )
+    version_groups = defaultdict(list)
+    for row in current:
+        version_groups[row.version or "Unknown"].append(row.rating)
+    versions = [
+        {
+            "version": version,
+            "reviews": len(ratings),
+            "average_rating": round(sum(ratings) / len(ratings), 2),
+        }
+        for version, ratings in version_groups.items()
+        if ratings
+    ]
+    versions.sort(key=lambda item: (-item["reviews"], item["version"]))
+
+    ios = sum(_analytics_platform(row.platform) == "ios" for row in current)
+    android = len(current) - ios
+    return {
+        "generated_at": now.isoformat(),
+        "days": days,
+        "granularity": granularity,
+        "platform": platform,
+        "total_reviews": len(current),
+        "reviews_per_day": round(len(current) / days, 1),
+        "velocity_change_percent": velocity_change,
+        "average_rating": current_average,
+        "previous_average_rating": previous_average,
+        "rating_change": (
+            round(current_average - previous_average, 2)
+            if current_average is not None and previous_average is not None
+            else None
+        ),
+        "critical_reviews": current_critical,
+        "critical_percent": current_critical_percent,
+        "critical_change_points": (
+            round(current_critical_percent - previous_critical_percent, 1)
+            if previous
+            else None
+        ),
+        "ios_reviews": ios,
+        "android_reviews": android,
+        "oldest_review_at": current[0].created_at.isoformat() if current else None,
+        "newest_review_at": current[-1].created_at.isoformat() if current else None,
+        "rating_distribution": {
+            str(rating): sum(row.rating == rating for row in current)
+            for rating in range(1, 6)
+        },
+        "series": series,
+        "versions": versions[:8],
     }
 
 class SyncRequest(BaseModel):
