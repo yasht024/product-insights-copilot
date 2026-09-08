@@ -891,6 +891,12 @@ async def export_reviews(
 app.include_router(api_router)
 
 from product_insights.api.reports import create_report_router
+from product_insights.reporting.delivery import sender_identity
+
+
+@app.get("/api/mail/sender")
+def get_mail_sender():
+    return sender_identity()
 
 app.include_router(create_report_router(require_owner, _store_reviews_query, _apply_review_filters))
 

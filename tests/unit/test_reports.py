@@ -109,6 +109,18 @@ def generate(client):
     return result.json()
 
 
+def test_public_sender_exposes_only_masked_confirmed_address(client, monkeypatch):
+    monkeypatch.setenv("REPORT_SENDER_EMAIL", "owner@example.com")
+    response = client.get("/api/mail/sender", headers={"X-Owner-Key": ""})
+    assert response.status_code == 200
+    assert response.json() == {"masked_email": "ow***@example.com", "can_switch_account": False}
+    assert "owner@example.com" not in response.text
+    monkeypatch.delenv("REPORT_SENDER_EMAIL")
+    assert client.get("/api/mail/sender").json()["masked_email"] is None
+    monkeypatch.setenv("REPORT_SENDER_EMAIL", "invalid\r\nvalue@example.com")
+    assert client.get("/api/mail/sender").json()["masked_email"] is None
+
+
 def test_report_meets_problem_statement_and_uses_only_current_safe_store_reviews(client):
     report = generate(client)
     assert report["review_count"] == 3

@@ -3,6 +3,7 @@
 import asyncio
 import json
 import os
+import re
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -10,6 +11,23 @@ import yaml
 from mcp import ClientSession
 from mcp.client.sse import sse_client
 from mcp.client.streamable_http import streamable_http_client
+
+
+def sender_identity() -> dict:
+    """Masked sender label, confirmed by the owner of the fixed MCP connection.
+
+    Never infer this from a recipient address or expose connector credentials.
+    The current MCP server has no profile or account-switching capability.
+    """
+    address = os.getenv("REPORT_SENDER_EMAIL", "").strip()
+    masked_address = None
+    if len(address) > 254 or not re.fullmatch(r"[^\s@]+@[^\s@]+\.[^\s@]+", address):
+        address = None
+    if address:
+        local, domain = address.rsplit("@", 1)
+        visible = local[:2] if len(local) > 2 else local[:1]
+        masked_address = visible + "*" * max(3, len(local) - len(visible)) + "@" + domain
+    return {"masked_email": masked_address, "can_switch_account": False}
 
 
 def settings() -> dict:

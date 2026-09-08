@@ -255,6 +255,10 @@ export interface DeliveryResult {
 }
 
 export const apiClient = {
+  async getMailSender(): Promise<{ masked_email: string | null; can_switch_account: boolean }> {
+    const res = await request('/mail/sender');
+    return res.json();
+  },
   async generateReport(workspaceId: string, days: number, platform: string): Promise<PulseReport> {
     const res = await request(`/workspaces/${workspaceId}/reports`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },

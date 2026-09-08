@@ -20,6 +20,15 @@ The hosted API uses the official MCP Python SDK with the existing MCP server in
 connector must expose `gmail_create_draft`, `gmail_send_email`, and
 `google_docs_append_text`; unavailable capabilities are disabled in the UI.
 
+The From field is read-only because the current MCP server uses one fixed Google
+account and exposes no profile or account-switching tools. Set
+`REPORT_SENDER_EMAIL` to that account's owner-confirmed email address. Only the first
+two characters and the domain are exposed in the public API and Reporting page;
+the remaining characters are replaced by stars. This does not change the sending account. Never
+infer it from the recipient configuration. If Gmail is reauthorized on the MCP
+server, update this label to match; the app does not provide an OAuth connection
+flow or accept a manually entered From header.
+
 Choose an editable Google Doc URL or ID, then publish to append the pulse. Email
 always includes the complete saved report and optionally the owner's introduction;
 once published, it also includes the Doc URL. Doc access follows the document's
