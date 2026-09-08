@@ -1,10 +1,32 @@
 const API_BASE = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/$/, '');
+const OWNER_KEY_STORAGE = 'product-insights-owner-key';
+
+function storedOwnerKey(): string | null {
+  try {
+    return typeof window === 'undefined' ? null : window.sessionStorage?.getItem(OWNER_KEY_STORAGE) || null;
+  } catch {
+    return null;
+  }
+}
+
+export const ownerSession = {
+  save(accessKey: string) {
+    window.sessionStorage.setItem(OWNER_KEY_STORAGE, accessKey);
+  },
+  clear() {
+    window.sessionStorage.removeItem(OWNER_KEY_STORAGE);
+  },
+};
 
 async function request(path: string, options?: RequestInit): Promise<Response> {
   let response: Response;
   try {
+    const headers = new Headers(options?.headers);
+    const ownerKey = storedOwnerKey();
+    if (ownerKey) headers.set('X-Owner-Key', ownerKey);
     response = await fetch(`${API_BASE}${path}`, {
       ...options,
+      headers,
       signal: AbortSignal.timeout(options?.method === 'POST' ? 300_000 : 15_000),
     });
   } catch {
@@ -186,7 +208,31 @@ export interface SyncStatus {
   status: 'success' | 'partial' | 'never';
 }
 
+export interface AccessStatus {
+  role: 'owner' | 'viewer';
+  permissions: {
+    scrape: boolean;
+    manage_reviews: boolean;
+    premium_tools: boolean;
+  };
+  team_access: 'owner_only';
+}
+
 export const apiClient = {
+  async getAccessStatus(): Promise<AccessStatus> {
+    const res = await request('/access/status');
+    return res.json();
+  },
+
+  async verifyOwnerAccess(accessKey: string): Promise<{ role: 'owner'; verified: true }> {
+    const res = await request('/access/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ access_key: accessKey }),
+    });
+    return res.json();
+  },
+
   async getWorkspaces(): Promise<Workspace[]> {
     const res = await request(`/workspaces`);
     return res.json();

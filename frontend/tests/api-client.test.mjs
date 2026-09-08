@@ -55,3 +55,21 @@ test('a broken route or offline backend surfaces an error instead of fabricating
   fetch.mock.mockImplementation(async () => { throw new TypeError('Failed to fetch'); });
   await assert.rejects(client.getWordCloud('ws_1', 30, 'All Platforms', 'all', 5), /Cannot connect/);
 });
+
+test('owner access is sent only from session storage and never bundled into the client', async (t) => {
+  t.mock.method(globalThis, 'fetch', async () => new Response('{"role":"owner","permissions":{"scrape":true,"manage_reviews":true,"premium_tools":true},"team_access":"owner_only"}', {
+    headers: { 'Content-Type': 'application/json' },
+  }));
+  const previousWindow = globalThis.window;
+  globalThis.window = {
+    location: { hostname: 'product-insights-copilot-one.vercel.app' },
+    sessionStorage: { getItem: () => 'private-owner-key', setItem() {}, removeItem() {} },
+  };
+  t.after(() => { globalThis.window = previousWindow; });
+  const client = await productionClient();
+  const status = await client.getAccessStatus();
+  assert.equal(status.role, 'owner');
+  assert.equal(fetch.mock.calls[0].arguments[1].headers.get('X-Owner-Key'), 'private-owner-key');
+  const source = await readFile(new URL('../src/api/client.ts', import.meta.url), 'utf8');
+  assert.doesNotMatch(source, /private-owner-key/);
+});

@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-from fastapi import FastAPI, APIRouter, Depends, Query, HTTPException
+from fastapi import FastAPI, APIRouter, Depends, Query, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
@@ -11,6 +11,7 @@ from sqlalchemy import or_, func
 import io
 import csv
 import re
+import secrets
 from datetime import UTC, datetime, timedelta
 from collections import Counter, defaultdict
 from statistics import median
@@ -32,6 +33,55 @@ app.add_middleware(
 )
 
 api_router = APIRouter(prefix="/api")
+
+def _owner_access_key() -> str | None:
+    return os.environ.get("OWNER_ACCESS_KEY")
+
+
+def _has_owner_access(request: Request) -> bool:
+    configured_key = _owner_access_key()
+    if not configured_key:
+        # Keep local development frictionless while hosted writes fail closed.
+        return not bool(os.environ.get("VERCEL"))
+    supplied_key = request.headers.get("X-Owner-Key", "")
+    return bool(supplied_key) and secrets.compare_digest(supplied_key, configured_key)
+
+
+def require_owner(request: Request) -> None:
+    if not _owner_access_key() and os.environ.get("VERCEL"):
+        raise HTTPException(status_code=503, detail="Owner access is not configured")
+    if not _has_owner_access(request):
+        raise HTTPException(status_code=403, detail="Owner access is required")
+
+
+class AccessVerifyRequest(BaseModel):
+    access_key: str = Field(min_length=12, max_length=256)
+
+
+@api_router.get("/access/status")
+def access_status(request: Request):
+    is_owner = _has_owner_access(request)
+    return {
+        "role": "owner" if is_owner else "viewer",
+        "permissions": {
+            "scrape": is_owner,
+            "manage_reviews": is_owner,
+            "premium_tools": is_owner,
+        },
+        "team_access": "owner_only",
+    }
+
+
+@api_router.post("/access/verify")
+def verify_access(payload: AccessVerifyRequest):
+    configured_key = _owner_access_key()
+    if not configured_key:
+        if os.environ.get("VERCEL"):
+            raise HTTPException(status_code=503, detail="Owner access is not configured")
+        return {"role": "owner", "verified": True}
+    if not secrets.compare_digest(payload.access_key, configured_key):
+        raise HTTPException(status_code=401, detail="The owner access key is invalid")
+    return {"role": "owner", "verified": True}
 
 @api_router.get("/health")
 def health_check(db: Session = Depends(get_db)):
@@ -630,6 +680,7 @@ async def sync_workspace(
     workspace_id: str,
     request: SyncRequest,
     db: Session = Depends(get_db),
+    _owner: None = Depends(require_owner),
 ):
     """Import public reviews newer than the user-selected cutoff."""
     workspace = db.get(Workspace, workspace_id)
@@ -767,7 +818,12 @@ class BulkActionRequest(BaseModel):
     value: str | None = None
 
 @api_router.post("/workspaces/{workspace_id}/reviews/bulk")
-async def bulk_action(workspace_id: str, request: BulkActionRequest, db: Session = Depends(get_db)):
+async def bulk_action(
+    workspace_id: str,
+    request: BulkActionRequest,
+    db: Session = Depends(get_db),
+    _owner: None = Depends(require_owner),
+):
     query = db.query(Review).filter(Review.workspace_id == workspace_id, Review.id.in_(request.review_ids))
     if request.action != "mark_status" or request.value not in {"Unread", "Reviewed", "Flagged", "Archived"}:
         raise HTTPException(status_code=422, detail="Unsupported review action")
@@ -779,7 +835,13 @@ class DraftRequest(BaseModel):
     tone: str = "concise"
 
 @api_router.post("/workspaces/{workspace_id}/reviews/{review_id}/draft")
-async def generate_draft(workspace_id: str, review_id: str, request: DraftRequest, db: Session = Depends(get_db)):
+async def generate_draft(
+    workspace_id: str,
+    review_id: str,
+    request: DraftRequest,
+    db: Session = Depends(get_db),
+    _owner: None = Depends(require_owner),
+):
     review = db.query(Review).filter(Review.id == review_id, Review.workspace_id == workspace_id).first()
     if not review:
         raise HTTPException(status_code=404, detail="Review not found")

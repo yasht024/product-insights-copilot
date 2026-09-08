@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { NavLink, Outlet, useLocation, useSearchParams } from 'react-router-dom';
 import { apiClient } from './api/client';
+import { useAccess } from './components/access';
 import ScrapeReviewsModal from './components/ScrapeReviewsModal';
 
 function relativeScrapeTime(value: string | null | undefined): string {
@@ -18,6 +19,7 @@ function relativeScrapeTime(value: string | null | undefined): string {
 }
 
 export default function Layout() {
+  const { status: accessStatus, canWrite, openAccess } = useAccess();
   const location = useLocation();
   const currentPath = location.pathname.substring(1) || 'dashboard';
   const [searchParams, setSearchParams] = useSearchParams();
@@ -40,6 +42,10 @@ export default function Layout() {
   const [isScrapeModalOpen, setIsScrapeModalOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showAppSelector, setShowAppSelector] = useState(false);
+  const openScrapeReviews = () => {
+    if (canWrite) setIsScrapeModalOpen(true);
+    else openAccess();
+  };
   const { data: syncStatus, isError: isSyncError, isPending: isSyncPending } = useQuery({
     queryKey: ['syncStatus', 'ws_1'],
     queryFn: () => apiClient.getSyncStatus('ws_1'),
@@ -102,9 +108,9 @@ export default function Layout() {
               { path: 'reviews-inbox', icon: 'inbox', label: 'Reviews Inbox', badge: inboxSummary?.unread.toLocaleString() ?? (isSummaryError ? '—' : '…') },
               { path: 'analytics', icon: 'monitoring', label: 'Analytics' },
               { path: 'word-cloud', icon: 'cloud', label: 'Word Cloud' },
-              { path: 'ideation', icon: 'lightbulb', label: 'Ideation' },
-              { path: 'reporting', icon: 'description', label: 'Reporting' },
-              { path: 'settings', icon: 'settings', label: 'Settings' },
+              { path: 'ideation', icon: 'lightbulb', label: 'Ideation', premium: true },
+              { path: 'reporting', icon: 'description', label: 'Reporting', premium: true },
+              { path: 'settings', icon: 'settings', label: 'Settings', premium: true },
             ].map(item => {
               return (
                 <NavLink 
@@ -122,6 +128,7 @@ export default function Layout() {
                   {item.badge && (
                     <span className="px-space-xs py-0.5 rounded-full bg-secondary-container text-on-secondary-container tabular-nums text-mono-metric">{item.badge}</span>
                   )}
+                  {item.premium && accessStatus.role !== 'owner' && <span className="material-symbols-outlined text-[16px] text-indigo-300" title="Pro access required">lock</span>}
                 </NavLink>
               );
             })}
@@ -138,12 +145,12 @@ export default function Layout() {
                 <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-tertiary-container ring-2 ring-surface-container-low"></span>
               </div>
               <div className="flex flex-col overflow-hidden">
-                <span className="font-body-sm text-body-sm font-medium text-on-surface truncate">Dev Lead</span>
-                <span className="font-label-caps text-label-caps text-tertiary truncate">Online</span>
+                <span className="font-body-sm text-body-sm font-medium text-on-surface truncate">{accessStatus.role === 'owner' ? 'Workspace Owner' : 'Public Viewer'}</span>
+                <span className="font-label-caps text-label-caps text-tertiary truncate">{accessStatus.role === 'owner' ? 'Pro access' : 'Read only'}</span>
               </div>
             </div>
-            <button className="text-on-surface-variant hover:text-on-surface p-space-2xs">
-              <span className="material-symbols-outlined text-[18px]">more_vert</span>
+            <button type="button" onClick={openAccess} aria-label="Manage workspace access" className="text-on-surface-variant hover:text-on-surface p-space-2xs">
+              <span className="material-symbols-outlined text-[18px]">{accessStatus.role === 'owner' ? 'verified_user' : 'lock'}</span>
             </button>
           </div>
         </div>
@@ -191,9 +198,9 @@ export default function Layout() {
                 ))}
               </div>
               <button 
-                onClick={() => setIsScrapeModalOpen(true)}
+                onClick={openScrapeReviews}
                 className="flex items-center gap-space-2xs px-space-sm py-1.5 rounded-xl bg-primary-container hover:bg-primary text-on-primary-container font-body-sm text-body-sm font-semibold transition-all shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
-                <span className="material-symbols-outlined text-[16px]">database</span>
+                <span className="material-symbols-outlined text-[16px]">{canWrite ? 'database' : 'lock'}</span>
                 <span className="hidden sm:inline">Scrape Reviews</span>
               </button>
               <div className="hidden sm:block h-4 w-px bg-surface-container-highest"></div>
@@ -211,20 +218,20 @@ export default function Layout() {
                   </div>
                 )}
               </div>
-              <div className="hidden sm:flex w-8 h-8 rounded-full bg-primary items-center justify-center">
+              <button type="button" onClick={openAccess} aria-label="Open access controls" className="hidden sm:flex w-8 h-8 rounded-full bg-primary items-center justify-center">
                 <span className="material-symbols-outlined text-on-primary text-[18px]">person</span>
-              </div>
+              </button>
             </div>
           </div>
         </header>
 
         <main className="w-full pt-16 bg-surface flex-1 flex flex-col min-w-0">
           <div className="flex flex-col w-full flex-1 min-w-0">
-            <Outlet context={{ openScrapeReviews: () => setIsScrapeModalOpen(true) }} />
+            <Outlet context={{ openScrapeReviews }} />
           </div>
         </main>
       </div>
-      <ScrapeReviewsModal isOpen={isScrapeModalOpen} onClose={() => setIsScrapeModalOpen(false)} />
+      {canWrite && <ScrapeReviewsModal isOpen={isScrapeModalOpen} onClose={() => setIsScrapeModalOpen(false)} />}
     </div>
   );
 }

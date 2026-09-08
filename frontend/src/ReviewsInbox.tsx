@@ -4,6 +4,7 @@ import { useSearchParams } from 'react-router-dom';
 import { apiClient, type Review } from './api/client';
 import { useToast } from './components/toast-context';
 import ScrapeReviewsModal from './components/ScrapeReviewsModal';
+import { useAccess } from './components/access';
 
 const workspaceId = 'ws_1';
 
@@ -30,6 +31,7 @@ function statusClass(status: string): string {
 }
 
 export default function ReviewsInbox() {
+  const { canWrite, openAccess } = useAccess();
   const [searchParams, setSearchParams] = useSearchParams();
   const [customDays, setCustomDays] = useState(searchParams.get('days') || '90');
   const [isScrapeOpen, setIsScrapeOpen] = useState(false);
@@ -162,12 +164,13 @@ export default function ReviewsInbox() {
 
   return (
     <main className="mx-auto flex w-full max-w-[1600px] flex-col gap-5 p-4 sm:p-6 lg:p-8">
-      {isScrapeOpen && <ScrapeReviewsModal isOpen onClose={() => setIsScrapeOpen(false)} initialDays={selectedDays || 90} />}
+      {canWrite && isScrapeOpen && <ScrapeReviewsModal isOpen onClose={() => setIsScrapeOpen(false)} initialDays={selectedDays || 90} />}
       <header className="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
         <div>
           <div className="mb-2 flex items-center gap-2">
             <span className="rounded border border-indigo-500/20 bg-indigo-500/10 px-2 py-0.5 tabular-nums text-[11px] font-semibold uppercase tracking-wider text-indigo-400">Stored reviews</span>
             <span className="tabular-nums text-xs text-zinc-500">Groww · iOS and Android</span>
+            {!canWrite && <span className="rounded-full border border-zinc-700 bg-zinc-900 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-zinc-400">Read only</span>}
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-zinc-100 lg:text-3xl">Reviews Inbox</h1>
           <p className="mt-1 max-w-3xl text-sm text-zinc-400">Reviews refresh every 30 seconds while this page is open. Scrape latest reviews to import new feedback from the stores.</p>
@@ -179,7 +182,7 @@ export default function ReviewsInbox() {
       </header>
 
       <div className="flex flex-wrap items-center gap-3">
-        <button type="button" onClick={() => setIsScrapeOpen(true)} className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500">Scrape latest reviews</button>
+        <button type="button" onClick={() => canWrite ? setIsScrapeOpen(true) : openAccess()} className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500"><span className="material-symbols-outlined text-[16px]">{canWrite ? 'database' : 'lock'}</span>Scrape latest reviews</button>
         <button type="button" disabled={isFetching} onClick={() => { void refetch(); void refetchSummary(); }} className="rounded-lg border border-zinc-700 px-4 py-2 text-sm text-zinc-200 disabled:opacity-50">Refresh now</button>
         <span role="status" className="text-xs text-zinc-500">{isError || isSummaryError ? 'Refresh failed. Displayed data may be out of date.' : isFetching ? 'Refreshing reviews…' : dataUpdatedAt ? `Updated ${new Date(dataUpdatedAt).toLocaleTimeString()}` : 'Connecting…'}</span>
       </div>
@@ -263,7 +266,7 @@ export default function ReviewsInbox() {
               { status: 'Flagged', icon: 'flag' },
               { status: 'Archived', icon: 'archive' },
             ].map((action) => (
-              <button key={action.status} type="button" disabled={!selectedIds.length || bulkActionMutation.isPending} onClick={() => bulkActionMutation.mutate({ ids: selectedIds, status: action.status })} className="flex items-center gap-1.5 rounded-lg bg-zinc-800 px-3 py-1.5 text-xs font-medium text-zinc-200 transition-colors hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-40">
+              <button key={action.status} type="button" disabled={!selectedIds.length || bulkActionMutation.isPending} onClick={() => canWrite ? bulkActionMutation.mutate({ ids: selectedIds, status: action.status }) : openAccess()} className="flex items-center gap-1.5 rounded-lg bg-zinc-800 px-3 py-1.5 text-xs font-medium text-zinc-200 transition-colors hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-40">
                 <span className="material-symbols-outlined text-[16px]">{action.icon}</span>{action.status}
               </button>
             ))}
@@ -305,7 +308,7 @@ export default function ReviewsInbox() {
                   <td className="px-4 py-3"><p className="line-clamp-3 max-w-2xl leading-relaxed text-zinc-400" title={review.text}>{review.text}</p></td>
                   <td className="px-4 py-3"><div className="tabular-nums text-xs text-zinc-300">{review.version || 'Unknown'}</div><div className="mt-1 text-xs text-zinc-500">{formatDate(review.created_at)}</div></td>
                   <td className="px-4 py-3"><span className={`inline-flex rounded-full px-2 py-1 tabular-nums text-[10px] font-bold uppercase ${statusClass(review.status)}`}>{review.status}</span></td>
-                  <td className="px-4 py-3 text-right"><button type="button" onClick={() => openReply(review)} className="rounded-lg p-2 text-zinc-400 transition-colors hover:bg-indigo-500/15 hover:text-indigo-300" title="Create reply suggestion"><span className="material-symbols-outlined text-[18px]">reply</span></button></td>
+                  <td className="px-4 py-3 text-right"><button type="button" onClick={() => canWrite ? openReply(review) : openAccess()} className="rounded-lg p-2 text-zinc-400 transition-colors hover:bg-indigo-500/15 hover:text-indigo-300" title={canWrite ? 'Create reply suggestion' : 'Owner access required'}><span className="material-symbols-outlined text-[18px]">{canWrite ? 'reply' : 'lock'}</span></button></td>
                 </tr>
               ))}
             </tbody>

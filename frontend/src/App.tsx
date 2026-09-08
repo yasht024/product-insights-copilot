@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { ToastProvider } from './components/Toast';
+import { AccessProvider, PremiumGate } from './components/access';
 
 const Layout = lazy(() => import('./Layout'));
 const Dashboard = lazy(() => import('./Dashboard'));
@@ -27,22 +28,24 @@ function App() {
   return (
     <ErrorBoundary>
       <ToastProvider>
-        <Router>
-          <Suspense fallback={<AppLoadingState />}>
+        <AccessProvider>
+          <Router>
+            <Suspense fallback={<AppLoadingState />}>
             <Routes>
               <Route element={<Layout />}>
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/reviews-inbox" element={<ReviewsInbox />} />
                 <Route path="/analytics" element={<Analytics />} />
                 <Route path="/word-cloud" element={<WordCloud />} />
-                <Route path="/ideation" element={<Ideation />} />
-                <Route path="/reporting" element={<Reporting />} />
-                <Route path="/settings" element={<Settings />} />
+                <Route path="/ideation" element={<PremiumGate feature="Ideation"><Ideation /></PremiumGate>} />
+                <Route path="/reporting" element={<PremiumGate feature="Reporting"><Reporting /></PremiumGate>} />
+                <Route path="/settings" element={<PremiumGate feature="Settings"><Settings /></PremiumGate>} />
                 <Route path="*" element={<Navigate to="/dashboard" replace />} />
               </Route>
             </Routes>
-          </Suspense>
-        </Router>
+            </Suspense>
+          </Router>
+        </AccessProvider>
       </ToastProvider>
     </ErrorBoundary>
   );

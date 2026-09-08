@@ -13,12 +13,17 @@ optional override for a separately hosted API; omitting it never enables demo da
    environment for Production, using the provider's TLS connection string.
    `POSTGRES_URL` is also supported. Use a separate database for Preview builds.
    Never put a database credential in a `VITE_` variable.
-3. Redeploy. `api/pyproject.toml` contains only dashboard runtime dependencies,
+3. Set **OWNER_ACCESS_KEY** to a private value of at least 12 characters. Public
+   visitors can read live insights, but the API rejects scraping, review status
+   changes, reply generation, and premium tools unless the request carries this
+   key. The browser keeps an unlocked key in session storage only.
+4. Redeploy. `api/pyproject.toml` contains only dashboard runtime dependencies,
    including the PostgreSQL driver. The full local AI pipeline is not needed.
-4. Confirm `/api/health` returns JSON with `status: "ok"`, then open the dashboard
+5. Confirm `/api/health` returns JSON with `status: "ok"`, unlock owner mode, then
+   open the dashboard
    and run **Scrape Reviews** to import real Google Play and Apple App Store reviews.
    A new database starts empty, with the Groww workspace and no synthetic reviews.
-5. Confirm the inbox and metrics contain the imported reviews; reload or redeploy
+6. Confirm the inbox and metrics contain the imported reviews; reload or redeploy
    and verify review IDs and statuses remain. The database, not the deployment,
    owns this state.
 
