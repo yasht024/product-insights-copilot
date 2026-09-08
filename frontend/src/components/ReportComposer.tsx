@@ -14,6 +14,7 @@ export default function ReportComposer() {
   const [report, setReport] = useState<PulseReport | null>(null);
   const [recipients, setRecipients] = useState<string[]>([]);
   const [recipientInput, setRecipientInput] = useState('');
+  const [senderDisplay, setSenderDisplay] = useState('');
   const [message, setMessage] = useState('');
   const [documentInput, setDocumentInput] = useState<string | null>(null);
   const [documentUrl, setDocumentUrl] = useState('');
@@ -115,6 +116,8 @@ export default function ReportComposer() {
 
         <section className="space-y-4 rounded-2xl border border-zinc-800 bg-zinc-950/60 p-5">
           <h2 className="flex items-center gap-2 font-semibold text-zinc-100"><Mail size={18} className="text-indigo-300" /> 2. Compose &amp; tag recipients</h2>
+          <label className="block space-y-2 text-xs text-zinc-400"><span>From (display only)</span><input className={control} type="text" maxLength={254} value={senderDisplay} disabled={!!busy} onChange={e => { setSenderDisplay(e.target.value); setConfirmSend(false); }} placeholder="Sender name or email" aria-describedby="report-sender-help" /></label>
+          <p id="report-sender-help" className="text-xs leading-5 text-zinc-500">Shown in this preview. Email is sent from the connected Gmail account.</p>
           <label htmlFor="report-recipients" className="block text-xs text-zinc-400">To — one or more email addresses</label>
           <div className="flex gap-2"><input id="report-recipients" className={control} type="text" inputMode="email" value={recipientInput} disabled={!!busy} placeholder="alex@company.com, team@company.com" onChange={e => { setRecipientInput(e.target.value); setConfirmSend(false); }} onKeyDown={e => { if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); addRecipients(); } }} /><button className={button} disabled={!!busy || !recipientInput.trim()} aria-label="Add recipients" onClick={addRecipients}><Plus size={16} /></button></div>
           <div className="flex flex-wrap gap-2" aria-label="Selected recipients">{recipients.map(email => <span key={email} className="inline-flex max-w-full items-center gap-2 break-all rounded-full border border-indigo-400/20 bg-indigo-500/10 px-3 py-1.5 text-xs text-indigo-200">{email}<button disabled={!!busy} aria-label={`Remove ${email}`} onClick={() => { setRecipients(recipients.filter(value => value !== email)); setConfirmSend(false); }}><X size={14} /></button></span>)}</div>
@@ -140,7 +143,7 @@ export default function ReportComposer() {
 
       <section className="overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950/60 lg:sticky lg:top-6">
         <div className="flex items-center justify-between gap-3 border-b border-zinc-800 p-5"><div><h2 className="font-semibold text-zinc-100">Email &amp; report preview</h2><p className="mt-1 text-xs text-zinc-500">{report ? `${report.word_count} / 250 report words · ${report.review_count.toLocaleString()} eligible reviews` : 'Your message and the generated weekly pulse appear here.'}</p></div><button aria-label="Download report as text" className={button} disabled={!report} onClick={download}><Download size={16} /></button></div>
-        <div className="space-y-3 border-b border-zinc-800 p-5 text-sm"><p className="break-words text-zinc-400"><span className="text-zinc-600">To: </span>{recipients.join(', ') || 'Add recipient tags'}</p><p className="text-zinc-300"><span className="text-zinc-600">Subject: </span>{report?.title || 'Groww Weekly Product Pulse'}</p>{message && <p className="whitespace-pre-wrap break-words pt-2 text-zinc-300">{message}</p>}</div>
+        <div className="space-y-3 border-b border-zinc-800 p-5 text-sm"><p className="break-words text-zinc-400"><span className="text-zinc-600">From (display only): </span>{senderDisplay.trim() || 'Connected Gmail account'}</p><p className="break-words text-zinc-400"><span className="text-zinc-600">To: </span>{recipients.join(', ') || 'Add recipient tags'}</p><p className="text-zinc-300"><span className="text-zinc-600">Subject: </span>{report?.title || 'Groww Weekly Product Pulse'}</p>{message && <p className="whitespace-pre-wrap break-words pt-2 text-zinc-300">{message}</p>}</div>
         {report ? <article className="m-4 space-y-6 rounded-xl bg-white p-6 text-zinc-900 sm:m-5 sm:p-8">
           <header className="border-b border-zinc-200 pb-5"><p className="text-xs font-semibold uppercase tracking-widest text-indigo-600">Groww · Weekly product pulse</p><h3 className="mt-2 text-xl font-bold">What users care about</h3><p className="mt-2 text-xs text-zinc-500">{report.period_start} to {report.period_end} · {report.platform}</p><p className="mt-2 text-sm">{report.review_count.toLocaleString()} eligible reviews · Average rating {report.average_rating}/5</p></header>
           <section><h4 className="mb-3 text-sm font-bold">Top themes</h4><ol className="space-y-2">{report.themes.map((theme, index) => <li key={theme.label} className="text-sm"><strong>{index + 1}. {theme.label}</strong><span className="text-zinc-500"> — {theme.count.toLocaleString()} reviews ({theme.share}%)</span></li>)}</ol></section>
