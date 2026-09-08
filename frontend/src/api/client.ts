@@ -228,6 +228,7 @@ export interface PulseReport {
   word_count: number;
   review_count: number;
   excluded_count: number;
+  source_review_count?: number;
   cluster_count: number;
   average_rating: number;
   days: number;
@@ -255,6 +256,10 @@ export interface DeliveryResult {
 }
 
 export const apiClient = {
+  async getLatestPublicReport(workspaceId: string): Promise<PulseReport | null> {
+    const res = await request(`/workspaces/${workspaceId}/reports/latest`);
+    return res.json();
+  },
   async getMailSender(): Promise<{ masked_email: string | null; can_switch_account: boolean }> {
     const res = await request('/mail/sender');
     return res.json();

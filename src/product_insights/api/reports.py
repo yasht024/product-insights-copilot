@@ -18,6 +18,47 @@ from product_insights.db.session import get_db
 from product_insights.reporting import delivery
 from product_insights.reporting.pulse import build_report
 
+public_report_router = APIRouter(prefix="/api/workspaces/{workspace_id}/reports")
+
+
+@public_report_router.get("/latest")
+def latest_public_report(workspace_id: str, db: Annotated[Session, Depends(get_db)]):
+    """Read an existing anonymous report without generation or delivery access."""
+    if db.get(Workspace, workspace_id) is None:
+        raise HTTPException(404, "Workspace not found")
+    row = (
+        db.query(PulseReport)
+        .filter(PulseReport.workspace_id == workspace_id)
+        .order_by(PulseReport.created_at.desc(), PulseReport.id.desc())
+        .first()
+    )
+    if row is None:
+        return None
+    report = json.loads(row.payload)
+    # Public preview contains the anonymous report only, never delivery data or Doc IDs.
+    fields = (
+        "id",
+        "title",
+        "content",
+        "themes",
+        "quotes",
+        "actions",
+        "word_count",
+        "review_count",
+        "excluded_count",
+        "cluster_count",
+        "average_rating",
+        "days",
+        "platform",
+        "period_start",
+        "period_end",
+        "method",
+    )
+    return {
+        **{key: report[key] for key in fields},
+        "source_review_count": report["review_count"] + report["excluded_count"],
+    }
+
 
 class ReportRequest(BaseModel):
     days: Literal[56, 70, 84] = 70

@@ -1,6 +1,7 @@
 """Report contents, permission boundaries, MCP payloads and retry semantics."""
 
-from contextlib import asynccontextmanager
+import json
+from contextlib import asynccontextmanager, contextmanager
 from datetime import UTC, datetime, timedelta
 from types import SimpleNamespace
 
@@ -12,7 +13,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 from product_insights.api.main import app
-from product_insights.db.models import Base, Review, Workspace
+from product_insights.db.models import Base, PulseReport, Review, Workspace
 from product_insights.db.session import get_db
 from product_insights.reporting import delivery
 from product_insights.reporting.pulse import build_report
@@ -107,6 +108,65 @@ def generate(client):
     result = client.post("/api/workspaces/ws_test/reports", json={})
     assert result.status_code == 200, result.text
     return result.json()
+
+
+def test_public_preview_reads_saved_report_without_private_delivery_data(client, monkeypatch):
+    report = generate(client)
+    with contextmanager(app.dependency_overrides[get_db])() as db:
+        row = db.get(PulseReport, report["id"])
+        row.document_id = "private-doc-id"
+        row.payload = json.dumps(
+            {
+                **report,
+                "recipients": ["private@example.com"],
+                "message": "Private introduction",
+                "document_id": "private-doc",
+            }
+        )
+        db.commit()
+        count_before = db.query(PulseReport).count()
+
+    async def forbidden(*args):
+        raise AssertionError("Public viewing must not call MCP")
+
+    monkeypatch.setattr(delivery, "deliver", forbidden)
+    response = client.get("/api/workspaces/ws_test/reports/latest", headers={"X-Owner-Key": ""})
+    assert response.status_code == 200
+    public = response.json()
+    assert public["content"] == report["content"]
+    assert public["source_review_count"] == 5
+    assert public["review_count"] == 3
+    assert len(public["quotes"]) == len(public["actions"]) == 3
+    assert not {"document_id", "recipients", "message"}.intersection(public)
+    assert "private@example.com" not in response.text
+    with contextmanager(app.dependency_overrides[get_db])() as db:
+        assert db.query(PulseReport).count() == count_before
+    assert (
+        client.post(
+            "/api/workspaces/ws_test/reports", json={}, headers={"X-Owner-Key": ""}
+        ).status_code
+        == 403
+    )
+    assert (
+        client.get(
+            f"/api/workspaces/ws_test/reports/{report['id']}", headers={"X-Owner-Key": ""}
+        ).status_code
+        == 403
+    )
+
+
+def test_public_preview_has_honest_empty_state_and_workspace_scope(client):
+    assert (
+        client.get("/api/workspaces/ws_test/reports/latest", headers={"X-Owner-Key": ""}).json()
+        is None
+    )
+    generate(client)
+    assert (
+        client.get(
+            "/api/workspaces/missing/reports/latest", headers={"X-Owner-Key": ""}
+        ).status_code
+        == 404
+    )
 
 
 def test_public_sender_exposes_only_masked_confirmed_address(client, monkeypatch):

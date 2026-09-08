@@ -3,6 +3,12 @@
 ## Weekly report delivery
 
 Reporting lets visitors compose a message and add recipient email tags locally.
+Everyone can read the latest saved weekly pulse, with a read-only lock badge,
+anonymous quotes, actions, and imported-versus-eligible review counts. The public
+`GET /api/workspaces/{workspace_id}/reports/latest` endpoint reads an existing
+snapshot; it never generates a report or calls MCP. It returns only report fields,
+excluding recipient lists, introductions, delivery receipts, and Google Doc IDs.
+If no report exists, the page displays an empty state until the owner generates one.
 Only an authenticated owner can generate reports, create Gmail drafts, send email,
 or append reports to Google Docs. The API enforces this independently of the UI.
 
