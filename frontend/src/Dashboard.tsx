@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useOutletContext, useSearchParams } from 'react-router-dom';
 import { Database, Info, RefreshCw, SlidersHorizontal, Star } from 'lucide-react';
-import { apiClient } from './api/client';
+import { apiClient, apiMode } from './api/client';
 import DashboardPreferencesModal, {
   type DashboardPreferences,
 } from './components/DashboardPreferencesModal';
@@ -112,12 +112,12 @@ export default function Dashboard() {
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
           <div>
             <div className="mb-1 flex items-center gap-2">
-              <span className="rounded border border-indigo-500/20 bg-indigo-500/10 px-2 py-0.5 tabular-nums text-[11px] font-semibold uppercase tracking-wider text-indigo-400">Database metrics</span>
+              <span className="rounded border border-indigo-500/20 bg-indigo-500/10 px-2 py-0.5 tabular-nums text-[11px] font-semibold uppercase tracking-wider text-indigo-400">{apiMode === 'demo' ? 'Demo metrics' : 'Database metrics'}</span>
               <span className="text-xs text-zinc-600">•</span>
               <span className="tabular-nums text-xs text-zinc-400">{platform}</span>
             </div>
             <h1 className="text-2xl font-bold tracking-tight text-zinc-100 lg:text-3xl">Executive Dashboard</h1>
-            <p className="mt-0.5 text-sm text-zinc-400">Metrics from imported store reviews. Refreshes every 30 seconds; scrape reviews to import the latest feedback.</p>
+            <p className="mt-0.5 text-sm text-zinc-400">{apiMode === 'demo' ? 'Explore a privacy-safe sample dataset with the same dashboard experience as the live workspace.' : 'Metrics from imported store reviews. Refreshes every 30 seconds; scrape reviews to import the latest feedback.'}</p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <button type="button" onClick={() => void refetch()} disabled={isFetching} className="flex items-center gap-2 rounded-xl border border-zinc-700 px-3 py-2 text-sm font-medium text-zinc-300 hover:bg-zinc-800 disabled:opacity-50">
@@ -142,14 +142,14 @@ export default function Dashboard() {
 
         {metrics && <div className="flex flex-wrap items-center gap-x-5 gap-y-2 rounded-xl border border-zinc-800 bg-zinc-900/50 px-4 py-3 text-xs text-zinc-400">
           <span className="flex items-center gap-1">
-            <MetricInfo label="data coverage" align="left">These dates and counts describe verified Groww store reviews currently stored locally that match the selected date, platform, and optional word-count filters. Changing the view does not scrape again.</MetricInfo>
+            <MetricInfo label="data coverage" align="left">{apiMode === 'demo' ? 'These dates and counts describe synthetic sample reviews bundled with the public demo. Filters and calculations behave like the live workspace.' : 'These dates and counts describe verified Groww store reviews currently stored locally that match the selected date, platform, and optional word-count filters. Changing the view does not scrape again.'}</MetricInfo>
             Data coverage
           </span>
           <span>Selected window: <strong className="text-zinc-200">last {viewDays} {viewDays === 1 ? 'day' : 'days'}</strong></span>
           <span>Text length: <strong className="text-zinc-200">{preferences.minimumWords ? `more than ${preferences.minimumWords} words` : 'all reviews'}</strong></span>
           <span><strong className="text-zinc-200">{metrics?.total_reviews.toLocaleString() || 0}</strong> matching unique reviews</span>
           <span>{formatReviewDate(metrics?.oldest_review_at)} → {formatReviewDate(metrics?.newest_review_at)}</span>
-          <span>Source: verified store-review rows</span>
+          <span>Source: {apiMode === 'demo' ? 'synthetic demo reviews' : 'verified store-review rows'}</span>
         </div>}
 
         {isError && <div role="alert" className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-rose-500/30 bg-rose-500/10 p-5 text-sm text-rose-300">
@@ -164,7 +164,7 @@ export default function Dashboard() {
 
         {metrics && !hasReviews && <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-indigo-500/20 bg-indigo-500/5 p-5">
           <div><h2 className="font-semibold text-zinc-100">No reviews match this view</h2><p className="mt-1 text-sm text-zinc-400">Try a longer date range, adjust your filters, or import recent store reviews.</p></div>
-          <button type="button" onClick={openScrapeReviews} className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500"><Database className="h-4 w-4" /> Scrape reviews</button>
+          <button type="button" onClick={openScrapeReviews} className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500"><Database className="h-4 w-4" /> {apiMode === 'demo' ? 'About demo data' : 'Scrape reviews'}</button>
         </div>}
 
         {metrics && <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">

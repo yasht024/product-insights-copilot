@@ -1,4 +1,13 @@
 const API_BASE = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/$/, '');
+const USE_PUBLIC_DEMO = Boolean(
+  import.meta.env.PROD
+  && !import.meta.env.VITE_API_BASE_URL
+  && typeof window !== 'undefined'
+  && !['localhost', '127.0.0.1'].includes(window.location.hostname),
+);
+
+export const apiMode: 'live' | 'demo' = USE_PUBLIC_DEMO ? 'demo' : 'live';
+const loadDemo = () => import('./demo');
 
 async function request(path: string, options?: RequestInit): Promise<Response> {
   let response: Response;
@@ -188,11 +197,13 @@ export interface SyncStatus {
 
 export const apiClient = {
   async getWorkspaces(): Promise<Workspace[]> {
+    if (USE_PUBLIC_DEMO) return (await loadDemo()).getWorkspaces();
     const res = await request(`/workspaces`);
     return res.json();
   },
 
   async getReviews(workspaceId: string, params: URLSearchParams): Promise<PaginatedReviews> {
+    if (USE_PUBLIC_DEMO) return (await loadDemo()).getReviews(params);
     const res = await request(`/workspaces/${workspaceId}/reviews?${params.toString()}`);
     return res.json();
   },
@@ -201,11 +212,13 @@ export const apiClient = {
     const summaryParams = new URLSearchParams(params);
     summaryParams.delete('page');
     summaryParams.delete('limit');
+    if (USE_PUBLIC_DEMO) return (await loadDemo()).getReviewSummary(summaryParams);
     const res = await request(`/workspaces/${workspaceId}/reviews/summary?${summaryParams.toString()}`);
     return res.json();
   },
 
   async getDashboardMetrics(workspaceId: string, options: DashboardMetricOptions): Promise<DashboardMetrics> {
+    if (USE_PUBLIC_DEMO) return (await loadDemo()).getDashboardMetrics(options);
     const params = new URLSearchParams({
       platform: options.platform,
       advocate_min: String(options.advocateMin),
@@ -218,6 +231,7 @@ export const apiClient = {
   },
 
   async getAnalytics(workspaceId: string, days: number, granularity: AnalyticsGranularity, platform: string): Promise<AnalyticsData> {
+    if (USE_PUBLIC_DEMO) return (await loadDemo()).getAnalytics(days, granularity, platform);
     const params = new URLSearchParams({ days: String(days), granularity, platform });
     const res = await request(`/workspaces/${workspaceId}/analytics?${params}`);
     return res.json();
@@ -230,6 +244,9 @@ export const apiClient = {
     sentiment: WordCloudSentiment,
     minFrequency: number,
   ): Promise<WordCloudData> {
+    if (USE_PUBLIC_DEMO) {
+      return (await loadDemo()).getWordCloud(days, platform, sentiment, minFrequency);
+    }
     const params = new URLSearchParams({
       days: String(days),
       platform,
@@ -242,6 +259,7 @@ export const apiClient = {
   },
 
   async bulkAction(workspaceId: string, reviewIds: string[], action: string, value?: string): Promise<{ success: boolean; updated_count: number }> {
+    if (USE_PUBLIC_DEMO) return (await loadDemo()).bulkAction(reviewIds, action, value);
     const res = await request(`/workspaces/${workspaceId}/reviews/bulk`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -251,6 +269,7 @@ export const apiClient = {
   },
 
   async generateDraft(workspaceId: string, reviewId: string, tone: string = 'concise'): Promise<{ draft: string }> {
+    if (USE_PUBLIC_DEMO) return (await loadDemo()).generateDraft(reviewId, tone);
     const res = await request(`/workspaces/${workspaceId}/reviews/${reviewId}/draft`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -259,11 +278,13 @@ export const apiClient = {
     return res.json();
   },
 
-  getExportUrl(workspaceId: string, params: URLSearchParams): string {
+  async getExportUrl(workspaceId: string, params: URLSearchParams): Promise<string> {
+    if (USE_PUBLIC_DEMO) return (await loadDemo()).getExportUrl(params);
     return `${API_BASE}/workspaces/${workspaceId}/reviews/export?${params.toString()}`;
   },
   
   async syncFeeds(workspaceId: string, days: number, maxReviewsPerStore: number): Promise<SyncResult> {
+    if (USE_PUBLIC_DEMO) return (await loadDemo()).syncFeeds(days, maxReviewsPerStore);
     const res = await request(`/workspaces/${workspaceId}/sync`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -273,6 +294,7 @@ export const apiClient = {
   },
 
   async getSyncStatus(workspaceId: string): Promise<SyncStatus> {
+    if (USE_PUBLIC_DEMO) return (await loadDemo()).getSyncStatus();
     const res = await request(`/workspaces/${workspaceId}/sync-status`);
     return res.json();
   },

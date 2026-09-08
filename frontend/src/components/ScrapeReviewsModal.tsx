@@ -1,7 +1,7 @@
 import { CheckCircle2, Database, Loader2, X } from 'lucide-react';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { apiClient, type SyncResult } from '../api/client';
+import { apiClient, apiMode, type SyncResult } from '../api/client';
 import { useToast } from './toast-context';
 
 interface ScrapeReviewsModalProps {
@@ -68,7 +68,7 @@ export default function ScrapeReviewsModal({ isOpen, onClose, initialDays = 30 }
         <div className="flex items-center justify-between border-b border-zinc-800 p-5">
           <div className="flex items-center gap-2">
             <Database className="h-5 w-5 text-indigo-400" />
-            <h2 className="text-lg font-bold text-zinc-100">Scrape recent reviews</h2>
+            <h2 className="text-lg font-bold text-zinc-100">{apiMode === 'demo' ? 'Public demo data' : 'Scrape recent reviews'}</h2>
           </div>
           <button type="button" onClick={handleClose} disabled={isScraping} aria-label="Close" className="rounded-lg p-1.5 text-zinc-400 hover:bg-zinc-800 hover:text-white disabled:opacity-50">
             <X className="h-5 w-5" />
@@ -77,10 +77,10 @@ export default function ScrapeReviewsModal({ isOpen, onClose, initialDays = 30 }
 
         <div className="flex flex-col gap-5 p-6">
           <p className="text-sm text-zinc-400">
-            Import public Groww reviews from Google Play and the Apple App Store. Existing review IDs are skipped, so increasing the limit later imports only the remaining reviews.
+            {apiMode === 'demo' ? 'This hosted demo uses a synthetic, privacy-safe dataset so every dashboard works without exposing a database or API. Run the project locally or connect a hosted API to import current store reviews.' : 'Import public Groww reviews from Google Play and the Apple App Store. Existing review IDs are skipped, so increasing the limit later imports only the remaining reviews.'}
           </p>
 
-          {!result && (
+          {apiMode !== 'demo' && !result && (
             <div className="flex flex-col gap-4">
               <label className="flex flex-col gap-2 text-sm font-medium text-zinc-200">
                 How many past days should we scrape?
@@ -112,14 +112,14 @@ export default function ScrapeReviewsModal({ isOpen, onClose, initialDays = 30 }
             </div>
           )}
 
-          {isScraping && (
+          {apiMode !== 'demo' && isScraping && (
             <div className="flex items-center gap-3 rounded-xl border border-indigo-500/20 bg-indigo-500/10 p-4 text-sm text-indigo-300">
               <Loader2 className="h-5 w-5 animate-spin" />
               Inspecting up to {maxReviewsPerStore} reviews per store from the last {parsedDays} days…
             </div>
           )}
 
-          {result && (
+          {apiMode !== 'demo' && result && (
             <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-4">
               <div className="mb-3 flex items-center gap-2 text-emerald-300">
                 <CheckCircle2 className="h-5 w-5" />
@@ -136,14 +136,14 @@ export default function ScrapeReviewsModal({ isOpen, onClose, initialDays = 30 }
             </div>
           )}
 
-          {errorMessage && <div role="alert" className="rounded-xl border border-rose-500/30 bg-rose-500/10 p-3 text-sm text-rose-300">{errorMessage}</div>}
+          {apiMode !== 'demo' && errorMessage && <div role="alert" className="rounded-xl border border-rose-500/30 bg-rose-500/10 p-3 text-sm text-rose-300">{errorMessage}</div>}
         </div>
 
         <div className="flex justify-end gap-3 border-t border-zinc-800 bg-zinc-900/50 p-5">
           <button type="button" onClick={handleClose} disabled={isScraping} className="rounded-xl px-4 py-2 text-sm font-medium text-zinc-300 hover:bg-zinc-800 hover:text-white disabled:opacity-50">
-            {result ? 'Close' : 'Cancel'}
+            {apiMode === 'demo' || result ? 'Close' : 'Cancel'}
           </button>
-          {!result && (
+          {apiMode !== 'demo' && !result && (
             <button type="button" onClick={handleScrape} disabled={isScraping || !isValid} className="flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-sm font-medium text-white shadow-lg shadow-indigo-600/20 transition-colors hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-50">
               {isScraping ? <Loader2 className="h-4 w-4 animate-spin" /> : <Database className="h-4 w-4" />}
               {isScraping ? 'Scraping…' : 'Run scrape'}
