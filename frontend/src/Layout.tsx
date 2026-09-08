@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { NavLink, Outlet, useLocation, useSearchParams } from 'react-router-dom';
-import { apiClient, apiMode } from './api/client';
+import { apiClient } from './api/client';
 import ScrapeReviewsModal from './components/ScrapeReviewsModal';
 
 function relativeScrapeTime(value: string | null | undefined): string {
@@ -74,7 +74,7 @@ export default function Layout() {
               </div>
               <div className="flex flex-col">
                 <span className="font-title-md text-title-md font-semibold text-on-surface tracking-tight">Insights Copilot</span>
-                <span className="font-label-caps text-label-caps text-on-surface-variant">v2.4 {apiMode === 'demo' ? 'Public Demo' : 'Enterprise'}</span>
+                <span className="font-label-caps text-label-caps text-on-surface-variant">v2.4 Enterprise</span>
               </div>
             </div>
           </div>
@@ -172,9 +172,9 @@ export default function Layout() {
                 <span className={`h-2 w-2 rounded-full ${isSyncError ? 'bg-rose-500' : syncStatus?.status === 'success' ? 'bg-emerald-500' : syncStatus?.status === 'partial' ? 'bg-amber-500' : 'bg-zinc-500'}`}></span>
                 <span
                   className="tabular-nums text-mono-metric text-on-surface-variant"
-                  title={apiMode === 'demo' ? 'Synthetic sample data for the public preview.' : syncTimestamp ? `${syncStatus?.status === 'partial' ? 'Partial scrape' : 'Successful scrape'} at ${syncTimestamp.toLocaleString()}` : 'Run a scrape to start tracking its status.'}
+                  title={syncTimestamp ? `${syncStatus?.status === 'partial' ? 'Partial scrape' : 'Successful scrape'} at ${syncTimestamp.toLocaleString()}` : 'Run a scrape to start tracking its status.'}
                 >
-                  {apiMode === 'demo' ? 'Privacy-safe demo data' : isSyncError ? 'Review service offline' : isSyncPending ? 'Connecting to review service…' : relativeScrapeTime(syncStatus?.last_synced_at)}
+                  {isSyncError ? 'Review service offline' : isSyncPending ? 'Connecting to review service…' : relativeScrapeTime(syncStatus?.last_synced_at)}
                 </span>
               </div>
             </div>
@@ -194,7 +194,7 @@ export default function Layout() {
                 onClick={() => setIsScrapeModalOpen(true)}
                 className="flex items-center gap-space-2xs px-space-sm py-1.5 rounded-xl bg-primary-container hover:bg-primary text-on-primary-container font-body-sm text-body-sm font-semibold transition-all shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
                 <span className="material-symbols-outlined text-[16px]">database</span>
-                <span className="hidden sm:inline">{apiMode === 'demo' ? 'Demo Data' : 'Scrape Reviews'}</span>
+                <span className="hidden sm:inline">Scrape Reviews</span>
               </button>
               <div className="hidden sm:block h-4 w-px bg-surface-container-highest"></div>
               <div className="relative">

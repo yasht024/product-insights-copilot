@@ -6,7 +6,7 @@ import {
   ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from 'recharts';
 import { AlertCircle, BarChart3, Download, RefreshCw, Star, TrendingDown, TrendingUp } from 'lucide-react';
-import { apiClient, apiMode, type AnalyticsData, type AnalyticsGranularity } from './api/client';
+import { apiClient, type AnalyticsData, type AnalyticsGranularity } from './api/client';
 
 const GRANULARITIES: { value: AnalyticsGranularity; label: string }[] = [
   { value: 'daily', label: 'Daily' }, { value: 'weekly', label: 'Weekly' },
@@ -75,7 +75,7 @@ export default function Analytics() {
 
   return <main className="mx-auto flex w-full max-w-[1500px] flex-col gap-6 p-4 sm:p-6 lg:p-8">
     <header className="flex flex-col justify-between gap-4 xl:flex-row xl:items-end">
-      <div><div className="mb-2 flex items-center gap-2 text-xs text-zinc-500"><span className={`h-2 w-2 rounded-full ${isError ? 'bg-rose-500' : 'bg-emerald-500'}`} /><span>{isError ? 'Review service offline' : apiMode === 'demo' ? 'Public demo dataset' : 'Live database · refreshes every 30 seconds'}</span></div><h1 className="text-2xl font-bold tracking-tight text-zinc-100 lg:text-3xl">Analytics &amp; Trends</h1><p className="mt-1 max-w-3xl text-sm text-zinc-400">Review volume, ratings, platform mix, and version performance computed from {apiMode === 'demo' ? 'synthetic sample reviews' : 'imported store reviews'}.</p></div>
+      <div><div className="mb-2 flex items-center gap-2 text-xs text-zinc-500"><span className={`h-2 w-2 rounded-full ${isError ? 'bg-rose-500' : 'bg-emerald-500'}`} /><span>{isError ? 'Review service offline' : 'Live database · refreshes every 30 seconds'}</span></div><h1 className="text-2xl font-bold tracking-tight text-zinc-100 lg:text-3xl">Analytics &amp; Trends</h1><p className="mt-1 max-w-3xl text-sm text-zinc-400">Review volume, ratings, platform mix, and version performance computed from imported store reviews.</p></div>
       <div className="flex flex-wrap items-center gap-2">
         <div className="flex rounded-xl border border-zinc-800 bg-zinc-900 p-1" aria-label="Analytics granularity">{GRANULARITIES.map((option) => <button key={option.value} type="button" onClick={() => setGranularity(option.value)} className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${granularity === option.value ? 'bg-indigo-600 text-white' : 'text-zinc-400 hover:bg-zinc-800 hover:text-white'}`}>{option.label}</button>)}</div>
         <select aria-label="Analytics date range" value={days} onChange={(event) => setDays(Number(event.target.value))} className="rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-2 text-sm text-zinc-200 outline-none focus:border-indigo-500">{RANGES.map((range) => <option key={range} value={range}>Last {range} days</option>)}</select>
@@ -88,7 +88,7 @@ export default function Analytics() {
     {isLoading && <LoadingState />}
     {data && <>
       <div className="flex flex-wrap gap-x-5 gap-y-2 rounded-xl border border-zinc-800 bg-zinc-900/50 px-4 py-3 text-xs text-zinc-400"><span><strong className="text-zinc-200">{platform}</strong></span><span>{data.total_reviews.toLocaleString()} reviews in the last {days} days</span><span>Coverage: {data.oldest_review_at ? dateTimeLabel(data.oldest_review_at) : 'No matching reviews'}{data.newest_review_at ? ` → ${dateTimeLabel(data.newest_review_at)}` : ''}</span><span className="ml-auto">Updated {new Date(dataUpdatedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' })}</span></div>
-      {data.total_reviews === 0 ? <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-10 text-center"><BarChart3 className="mx-auto h-9 w-9 text-zinc-600" /><h2 className="mt-4 text-lg font-semibold text-zinc-100">No reviews in this analytics window</h2><p className="mt-1 text-sm text-zinc-400">Choose a longer range or change the platform filter{apiMode === 'demo' ? '.' : ', or scrape recent reviews.'}</p></div> : <>
+      {data.total_reviews === 0 ? <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-10 text-center"><BarChart3 className="mx-auto h-9 w-9 text-zinc-600" /><h2 className="mt-4 text-lg font-semibold text-zinc-100">No reviews in this analytics window</h2><p className="mt-1 text-sm text-zinc-400">Choose a longer range, change the platform filter, or scrape recent reviews.</p></div> : <>
         <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <KpiCard label="Review volume" value={data.total_reviews.toLocaleString()} detail={`${data.reviews_per_day.toLocaleString()} reviews per day`} change={`${signed(data.velocity_change_percent, '%')} vs prior ${days} days`} positive={data.velocity_change_percent == null ? undefined : data.velocity_change_percent >= 0} icon={<BarChart3 className="h-5 w-5" />} />
           <KpiCard label="Average rating" value={data.average_rating == null ? '—' : `${data.average_rating.toFixed(2)} ★`} detail={data.previous_average_rating == null ? 'No prior rating baseline' : `${data.previous_average_rating.toFixed(2)} ★ in prior period`} change={`${signed(data.rating_change, ' pts')} vs prior period`} positive={data.rating_change == null ? undefined : data.rating_change >= 0} icon={<Star className="h-5 w-5" />} />

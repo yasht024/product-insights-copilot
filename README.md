@@ -48,6 +48,10 @@ and `npm run dev:frontend --prefix frontend`. Vite proxies `/api` to port 8000;
 to the deployed backend or set `VITE_API_BASE_URL` to its public API URL
 (including `/api`) when building. Text and icon fonts are bundled locally.
 
+For the existing Vercel website, follow [the full-stack deployment setup](docs/deploy-dashboard.md).
+The Vercel project must build from the repository root and have a persistent
+`DATABASE_URL`. Production always uses the real API; there is no automatic demo fallback.
+
 ```powershell
 product-insights config-check
 product-insights config-check --production

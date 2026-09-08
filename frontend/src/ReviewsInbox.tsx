@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
-import { apiClient, apiMode, type Review } from './api/client';
+import { apiClient, type Review } from './api/client';
 import { useToast } from './components/toast-context';
 import ScrapeReviewsModal from './components/ScrapeReviewsModal';
 
@@ -166,20 +166,20 @@ export default function ReviewsInbox() {
       <header className="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
         <div>
           <div className="mb-2 flex items-center gap-2">
-            <span className="rounded border border-indigo-500/20 bg-indigo-500/10 px-2 py-0.5 tabular-nums text-[11px] font-semibold uppercase tracking-wider text-indigo-400">{apiMode === 'demo' ? 'Demo reviews' : 'Stored reviews'}</span>
+            <span className="rounded border border-indigo-500/20 bg-indigo-500/10 px-2 py-0.5 tabular-nums text-[11px] font-semibold uppercase tracking-wider text-indigo-400">Stored reviews</span>
             <span className="tabular-nums text-xs text-zinc-500">Groww · iOS and Android</span>
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-zinc-100 lg:text-3xl">Reviews Inbox</h1>
-          <p className="mt-1 max-w-3xl text-sm text-zinc-400">{apiMode === 'demo' ? 'Search, filter, export, and manage a privacy-safe sample dataset.' : 'Reviews refresh every 30 seconds while this page is open. Scrape latest reviews to import new feedback from the stores.'}</p>
+          <p className="mt-1 max-w-3xl text-sm text-zinc-400">Reviews refresh every 30 seconds while this page is open. Scrape latest reviews to import new feedback from the stores.</p>
         </div>
-        <button type="button" onClick={async () => { window.location.href = await apiClient.getExportUrl(workspaceId, effectiveSearchParams); }} className="flex w-fit items-center gap-2 rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:border-indigo-500/50 hover:text-white">
+        <button type="button" onClick={() => { window.location.href = apiClient.getExportUrl(workspaceId, effectiveSearchParams); }} className="flex w-fit items-center gap-2 rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:border-indigo-500/50 hover:text-white">
           <span className="material-symbols-outlined text-[17px]">download</span>
           Export filtered CSV
         </button>
       </header>
 
       <div className="flex flex-wrap items-center gap-3">
-        <button type="button" onClick={() => setIsScrapeOpen(true)} className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500">{apiMode === 'demo' ? 'About demo data' : 'Scrape latest reviews'}</button>
+        <button type="button" onClick={() => setIsScrapeOpen(true)} className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500">Scrape latest reviews</button>
         <button type="button" disabled={isFetching} onClick={() => { void refetch(); void refetchSummary(); }} className="rounded-lg border border-zinc-700 px-4 py-2 text-sm text-zinc-200 disabled:opacity-50">Refresh now</button>
         <span role="status" className="text-xs text-zinc-500">{isError || isSummaryError ? 'Refresh failed. Displayed data may be out of date.' : isFetching ? 'Refreshing reviews…' : dataUpdatedAt ? `Updated ${new Date(dataUpdatedAt).toLocaleTimeString()}` : 'Connecting…'}</span>
       </div>

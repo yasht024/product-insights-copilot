@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { saveAs } from 'file-saver';
 import {
   apiClient,
-  apiMode,
   type WordCloudSentiment,
   type WordCloudTerm,
 } from './api/client';
@@ -104,7 +103,7 @@ export default function WordCloud() {
       <header className="flex flex-col justify-between gap-4 rounded-2xl border border-zinc-800 bg-zinc-900/50 p-5 xl:flex-row xl:items-end">
         <div className="max-w-3xl">
           <div className="mb-2 flex flex-wrap items-center gap-2 text-xs">
-            <span className="rounded border border-indigo-500/25 bg-indigo-500/10 px-2 py-0.5 font-semibold uppercase tracking-wider text-indigo-300">{apiMode === 'demo' ? 'Demo review language' : 'Live review language'}</span>
+            <span className="rounded border border-indigo-500/25 bg-indigo-500/10 px-2 py-0.5 font-semibold uppercase tracking-wider text-indigo-300">Live review language</span>
             <span className="flex items-center gap-1 text-zinc-500"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />Updated {updatedLabel}</span>
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-zinc-100 lg:text-3xl">Word Cloud &amp; Topics</h1>
@@ -160,7 +159,7 @@ export default function WordCloud() {
       <section className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_320px]">
         <div className="rounded-2xl border border-zinc-800 bg-zinc-900/50 p-5">
           <div className="mb-4 flex items-center justify-between gap-3">
-            <div><h2 className="font-semibold text-zinc-100">{apiMode === 'demo' ? 'Sample term cloud' : 'Live term cloud'}</h2><p className="text-xs text-zinc-500">Size shows review mentions; color shows average star rating.</p></div>
+            <div><h2 className="font-semibold text-zinc-100">Live term cloud</h2><p className="text-xs text-zinc-500">Size shows review mentions; color shows average star rating.</p></div>
             <span className="text-xs tabular-nums text-zinc-500">Top {terms.length}</span>
           </div>
           <div className="flex min-h-[360px] flex-wrap content-center items-center justify-center gap-3 rounded-xl border border-zinc-800/80 bg-zinc-950/70 p-5">
