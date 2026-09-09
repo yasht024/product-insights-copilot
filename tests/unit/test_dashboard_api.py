@@ -191,6 +191,7 @@ def test_analytics_uses_live_reviews_and_selected_platform() -> None:
     assert all_data["critical_percent"] == 50.0
     assert all_data["rating_change"] == 0.5
     assert sum(point["total"] for point in all_data["series"]) == 2
+    assert sum(point["critical_reviews"] for point in all_data["series"]) == 1
     assert all_data["versions"] == [{"version": "2.0", "reviews": 2, "average_rating": 3.5}]
     assert ios_data["total_reviews"] == 1
     assert ios_data["android_reviews"] == 0

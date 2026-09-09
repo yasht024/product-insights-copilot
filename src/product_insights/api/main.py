@@ -577,6 +577,7 @@ async def get_analytics(
                 "android": values["android"],
                 "total": values["ios"] + values["android"],
                 "average_rating": round(sum(ratings) / len(ratings), 2) if ratings else None,
+                "critical_reviews": sum(rating <= 3 for rating in ratings),
                 "critical_percent": (
                     round(sum(rating <= 3 for rating in ratings) / len(ratings) * 100, 1)
                     if ratings

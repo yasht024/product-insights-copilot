@@ -1,4 +1,4 @@
-import { useMemo, useState, type ReactNode } from 'react';
+import { useMemo, type ReactNode } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
 import {
@@ -21,6 +21,10 @@ function compact(value: number) {
 
 function signed(value: number | null, suffix = '') {
   return value == null ? 'No prior-period data' : `${value > 0 ? '+' : ''}${value.toFixed(1)}${suffix}`;
+}
+
+function percentChange(current: number, previous: number | undefined) {
+  return previous ? (current - previous) / previous * 100 : null;
 }
 
 function dateLabel(value: string, granularity: AnalyticsGranularity) {
@@ -59,16 +63,34 @@ function exportAnalytics(data: AnalyticsData) {
 }
 
 export default function Analytics() {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const platform = searchParams.get('platform') || 'All Platforms';
-  const [days, setDays] = useState(90);
-  const [granularity, setGranularity] = useState<AnalyticsGranularity>('weekly');
+  const requestedDays = Number(searchParams.get('days'));
+  const days = RANGES.includes(requestedDays) ? requestedDays : 90;
+  const requestedGranularity = searchParams.get('granularity');
+  const granularity: AnalyticsGranularity = GRANULARITIES.some((option) => option.value === requestedGranularity)
+    ? requestedGranularity as AnalyticsGranularity : 'weekly';
+  const updateView = (key: 'days' | 'granularity', value: string) => {
+    setSearchParams((current) => {
+      const next = new URLSearchParams(current);
+      next.set(key, value);
+      return next;
+    });
+  };
   const { data, error, isLoading, isFetching, isError, refetch, dataUpdatedAt } = useQuery({
     queryKey: ['analytics', 'ws_1', days, granularity, platform],
     queryFn: () => apiClient.getAnalytics('ws_1', days, granularity, platform),
     refetchInterval: 30_000, retry: 1,
   });
   const chartData = useMemo(() => data?.series.map((point) => ({ ...point, label: dateLabel(point.period, granularity) })) ?? [], [data, granularity]);
+  const latestPeriod = data?.series.at(-1);
+  const previousPeriod = data?.series.at(-2);
+  const periodLabel = granularity === 'daily' ? 'day' : granularity === 'weekly' ? 'week' : granularity === 'monthly' ? 'month' : 'quarter';
+  const volumeChange = latestPeriod ? percentChange(latestPeriod.total, previousPeriod?.total) : null;
+  const ratingChange = latestPeriod?.average_rating != null && previousPeriod?.average_rating != null
+    ? latestPeriod.average_rating - previousPeriod.average_rating : null;
+  const criticalChange = latestPeriod && previousPeriod
+    ? latestPeriod.critical_percent - previousPeriod.critical_percent : null;
   const distribution = useMemo(() => data ? [5, 4, 3, 2, 1].map((rating) => ({
     rating: `${rating} star`, count: data.rating_distribution[String(rating) as '1' | '2' | '3' | '4' | '5'], fill: rating >= 4 ? '#10b981' : rating === 3 ? '#f59e0b' : '#f43f5e',
   })) : [], [data]);
@@ -77,8 +99,8 @@ export default function Analytics() {
     <header className="flex flex-col justify-between gap-4 xl:flex-row xl:items-end">
       <div><div className="mb-2 flex items-center gap-2 text-xs text-zinc-500"><span className={`h-2 w-2 rounded-full ${isError ? 'bg-rose-500' : 'bg-emerald-500'}`} /><span>{isError ? 'Review service offline' : 'Live database · refreshes every 30 seconds'}</span></div><h1 className="text-2xl font-bold tracking-tight text-zinc-100 lg:text-3xl">Analytics &amp; Trends</h1><p className="mt-1 max-w-3xl text-sm text-zinc-400">Review volume, ratings, platform mix, and version performance computed from imported store reviews.</p></div>
       <div className="flex flex-wrap items-center gap-2">
-        <div className="flex rounded-xl border border-zinc-800 bg-zinc-900 p-1" aria-label="Analytics granularity">{GRANULARITIES.map((option) => <button key={option.value} type="button" onClick={() => setGranularity(option.value)} className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${granularity === option.value ? 'bg-indigo-600 text-white' : 'text-zinc-400 hover:bg-zinc-800 hover:text-white'}`}>{option.label}</button>)}</div>
-        <select aria-label="Analytics date range" value={days} onChange={(event) => setDays(Number(event.target.value))} className="rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-2 text-sm text-zinc-200 outline-none focus:border-indigo-500">{RANGES.map((range) => <option key={range} value={range}>Last {range} days</option>)}</select>
+        <div className="flex rounded-xl border border-zinc-800 bg-zinc-900 p-1" aria-label="Analytics granularity">{GRANULARITIES.map((option) => <button key={option.value} type="button" aria-pressed={granularity === option.value} onClick={() => updateView('granularity', option.value)} className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${granularity === option.value ? 'bg-indigo-600 text-white' : 'text-zinc-400 hover:bg-zinc-800 hover:text-white'}`}>{option.label}</button>)}</div>
+        <select aria-label="Analytics date range" value={days} onChange={(event) => updateView('days', event.target.value)} className="rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-2 text-sm text-zinc-200 outline-none focus:border-indigo-500">{RANGES.map((range) => <option key={range} value={range}>Last {range} days</option>)}</select>
         <button type="button" onClick={() => void refetch()} disabled={isFetching} className="flex items-center gap-2 rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-2 text-sm font-medium text-zinc-300 hover:bg-zinc-800 disabled:opacity-50"><RefreshCw className={`h-4 w-4 ${isFetching ? 'animate-spin' : ''}`} />{isFetching ? 'Refreshing' : 'Refresh'}</button>
         <button type="button" onClick={() => data && exportAnalytics(data)} disabled={!data} className="flex items-center gap-2 rounded-xl bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-40"><Download className="h-4 w-4" />Export CSV</button>
       </div>
@@ -88,12 +110,13 @@ export default function Analytics() {
     {isLoading && <LoadingState />}
     {data && <>
       <div className="flex flex-wrap gap-x-5 gap-y-2 rounded-xl border border-zinc-800 bg-zinc-900/50 px-4 py-3 text-xs text-zinc-400"><span><strong className="text-zinc-200">{platform}</strong></span><span>{data.total_reviews.toLocaleString()} reviews in the last {days} days</span><span>Coverage: {data.oldest_review_at ? dateTimeLabel(data.oldest_review_at) : 'No matching reviews'}{data.newest_review_at ? ` → ${dateTimeLabel(data.newest_review_at)}` : ''}</span><span className="ml-auto">Updated {new Date(dataUpdatedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' })}</span></div>
+      {data.total_reviews > 0 && data.series.length < 2 && <p className="rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-3 text-xs text-amber-300">Only one {periodLabel} is available in this data range. Choose a longer date range to see a period-over-period comparison.</p>}
       {data.total_reviews === 0 ? <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-10 text-center"><BarChart3 className="mx-auto h-9 w-9 text-zinc-600" /><h2 className="mt-4 text-lg font-semibold text-zinc-100">No reviews in this analytics window</h2><p className="mt-1 text-sm text-zinc-400">Choose a longer range, change the platform filter, or scrape recent reviews.</p></div> : <>
-        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          <KpiCard label="Review volume" value={data.total_reviews.toLocaleString()} detail={`${data.reviews_per_day.toLocaleString()} reviews per day`} change={`${signed(data.velocity_change_percent, '%')} vs prior ${days} days`} positive={data.velocity_change_percent == null ? undefined : data.velocity_change_percent >= 0} icon={<BarChart3 className="h-5 w-5" />} />
-          <KpiCard label="Average rating" value={data.average_rating == null ? '—' : `${data.average_rating.toFixed(2)} ★`} detail={data.previous_average_rating == null ? 'No prior rating baseline' : `${data.previous_average_rating.toFixed(2)} ★ in prior period`} change={`${signed(data.rating_change, ' pts')} vs prior period`} positive={data.rating_change == null ? undefined : data.rating_change >= 0} icon={<Star className="h-5 w-5" />} />
-          <KpiCard label="Critical reviews" value={`${data.critical_percent.toFixed(1)}%`} detail={`${data.critical_reviews.toLocaleString()} reviews rated 1–3 stars`} change={`${signed(data.critical_change_points, ' pts')} vs prior period`} positive={data.critical_change_points == null ? undefined : data.critical_change_points <= 0} icon={<AlertCircle className="h-5 w-5" />} />
-          <KpiCard label="Platform mix" value={`${data.ios_reviews.toLocaleString()} / ${data.android_reviews.toLocaleString()}`} detail="iOS / Android reviews" change={`${(data.ios_reviews / data.total_reviews * 100).toFixed(1)}% iOS · ${(data.android_reviews / data.total_reviews * 100).toFixed(1)}% Android`} icon={<TrendingUp className="h-5 w-5" />} />
+        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4" aria-label={`${periodLabel} analytics summary`}>
+          <KpiCard label={`Latest ${periodLabel} review volume`} value={(latestPeriod?.total ?? 0).toLocaleString()} detail={`${latestPeriod ? dateLabel(latestPeriod.period, granularity) : 'No period'} · ${data.total_reviews.toLocaleString()} in range`} change={`${signed(volumeChange, '%')} vs previous ${periodLabel}`} positive={volumeChange == null ? undefined : volumeChange >= 0} icon={<BarChart3 className="h-5 w-5" />} />
+          <KpiCard label={`Latest ${periodLabel} rating`} value={latestPeriod?.average_rating == null ? '—' : `${latestPeriod.average_rating.toFixed(2)} ★`} detail={`Range average ${data.average_rating?.toFixed(2) ?? '—'} ★`} change={`${signed(ratingChange, ' pts')} vs previous ${periodLabel}`} positive={ratingChange == null ? undefined : ratingChange >= 0} icon={<Star className="h-5 w-5" />} />
+          <KpiCard label={`Latest ${periodLabel} critical share`} value={`${(latestPeriod?.critical_percent ?? 0).toFixed(1)}%`} detail={`${latestPeriod?.critical_reviews ?? 0} of ${latestPeriod?.total ?? 0} reviews rated 1–3 stars`} change={`${signed(criticalChange, ' pts')} vs previous ${periodLabel}`} positive={criticalChange == null ? undefined : criticalChange <= 0} icon={<AlertCircle className="h-5 w-5" />} />
+          <KpiCard label={`Latest ${periodLabel} platform mix`} value={`${(latestPeriod?.ios ?? 0).toLocaleString()} / ${(latestPeriod?.android ?? 0).toLocaleString()}`} detail="iOS / Android reviews in latest period" change={latestPeriod?.total ? `${(latestPeriod.ios / latestPeriod.total * 100).toFixed(1)}% iOS · ${(latestPeriod.android / latestPeriod.total * 100).toFixed(1)}% Android` : 'No reviews in latest period'} icon={<TrendingUp className="h-5 w-5" />} />
         </section>
 
         <section className="grid gap-4 xl:grid-cols-5">

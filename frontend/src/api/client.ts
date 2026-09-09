@@ -123,6 +123,7 @@ export interface AnalyticsPoint {
   android: number;
   total: number;
   average_rating: number | null;
+  critical_reviews: number;
   critical_percent: number;
 }
 
