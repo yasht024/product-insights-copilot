@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { saveAs } from 'file-saver';
 import {
   apiClient,
@@ -9,6 +9,7 @@ import {
 } from './api/client';
 
 const workspaceId = 'ws_1';
+const platforms = ['All Platforms', 'iOS', 'Android'] as const;
 
 function polarityLabel(value: number): string {
   if (value >= 0.25) return 'Positive';
@@ -48,8 +49,19 @@ function MetricCard({ label, value, detail, tone = 'text-zinc-100' }: {
 }
 
 export default function WordCloud() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [days, setDays] = useState(30);
-  const [platform, setPlatform] = useState('All Platforms');
+  const requestedPlatform = searchParams.get('platform');
+  const platform = platforms.includes(requestedPlatform as (typeof platforms)[number])
+    ? requestedPlatform as (typeof platforms)[number]
+    : 'All Platforms';
+  const setPlatform = (value: string) => {
+    setSearchParams((current) => {
+      const next = new URLSearchParams(current);
+      next.set('platform', value);
+      return next;
+    });
+  };
   const [sentiment, setSentiment] = useState<WordCloudSentiment>('all');
   const [minFrequency, setMinFrequency] = useState(5);
   const [selectedTermName, setSelectedTermName] = useState<string | null>(null);
